@@ -1,0 +1,375 @@
+{% extends "base.html" %}
+{% block title %}
+Appointments
+{% endblock %}
+
+{% block content %}
+
+<style>
+:root{
+    --primary:#2563eb;
+    --primary2:#4f46e5;
+    --success:#22c55e;
+    --warning:#f59e0b;
+    --danger:#ef4444;
+    --dark:#0f172a;
+    --muted:#64748b;
+    --card:#ffffff;
+}
+
+body{
+    background:linear-gradient(135deg,#eef4ff,#f8faff);
+        }
+    .page-header{
+    background:linear-gradient(135deg,#2563eb,#4f46e5);
+    padding:28px;
+    border-radius:24px;
+    margin-bottom:25px;
+    color:#fff;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:15px;
+    box-shadow:0 20px 40px rgba(37,99,235,.25);
+}
+
+.page-title h2{
+    font-size:30px;
+    font-weight:800;
+    margin:0;
+    color:#fff;
+}
+
+.page-title p{
+    color:rgba(255,255,255,.85);
+    margin-top:6px;
+        }
+.search-box input{
+    width:300px;
+    height:52px;
+    border:none;
+    outline:none;
+    border-radius:14px;
+    padding:0 16px;
+    background:rgba(255,255,255,.95);
+    font-size:14px;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:18px;
+    margin-bottom:25px;
+}
+
+.stat-card{
+    background:#fff;
+    border-radius:22px;
+    padding:22px;
+    box-shadow:0 12px 30px rgba(0,0,0,.06);
+    transition:.3s;
+}
+
+.stat-card:hover{
+    transform:translateY(-4px);
+}
+
+.stat-card h4{
+    color:#64748b;
+    margin-bottom:8px;
+}
+
+.stat-card h2{
+    font-size:32px;
+    font-weight:800;
+    color:#0f172a;
+}
+    
+.table-card{
+    background:#fff;
+    border-radius:24px;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    box-shadow:0 15px 35px rgba(0,0,0,.06);
+}
+
+table{
+    width:100%;
+    min-width:900px;
+    border-collapse:collapse;
+}
+
+thead{
+    background:#f8fafc;
+}
+
+th{
+    padding:18px;
+    font-size:13px;
+    text-transform:uppercase;
+    color:#64748b;
+    white-space:nowrap;
+}
+
+td{
+    padding:18px;
+    border-bottom:1px solid #f1f5f9;
+    white-space:nowrap;
+}
+
+tr:hover{
+    background:#f8fbff;
+}
+
+.badge{
+    padding:8px 14px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:700;
+}
+
+.pending{
+    background:#fff7ed;
+    color:#c2410c;
+}
+
+.confirmed{
+    background:#ecfdf5;
+    color:#15803d;
+}
+
+.completed{
+    background:#eff6ff;
+    color:#1d4ed8;
+}
+
+.cancelled{
+    background:#fef2f2;
+    color:#dc2626;
+}
+
+.actions{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+.btn{
+    text-decoration:none;
+    padding:9px 14px;
+    border-radius:12px;
+    font-size:12px;
+    font-weight:700;
+    transition:.25s;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+}
+
+.btn-view{
+    background:#eef2ff;
+    color:#4338ca;
+}
+
+.btn-confirm{
+    background:#22c55e;
+    color:#fff;
+}
+
+.btn-complete{
+    background:#2563eb;
+    color:#fff;
+}
+
+.btn-cancel{
+    background:#ef4444;
+    color:#fff;
+} 
+
+@media(max-width:768px){
+
+    .page-header{
+        padding:20px;
+    }
+
+    .page-title h2{
+        font-size:24px;
+    }
+
+    .search-box input{
+        width:100%;
+    }
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    table{
+        min-width:850px;
+    }
+
+    .btn{
+        padding:7px 10px;
+        font-size:11px;
+    }
+}
+
+@media(max-width:480px){
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .page-title h2{
+        font-size:22px;
+    }
+
+    table{
+        min-width:800px;
+    }
+}    
+</style>
+
+<div class="page-header">
+    <div class="page-title">
+        <h2>Appointments</h2>
+        <p>Manage patient bookings</p>
+    </div>
+
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search patient...">
+    </div>
+</div>
+
+<div class="stats">
+    <div class="stat-card">
+        <h4>Total</h4>
+        <h2>{{ appointments|length }}</h2>
+    </div>
+
+    <div class="stat-card">
+        <h4>Pending</h4>
+        <h2>{{ pending_count }}</h2>
+    </div>
+
+    <div class="stat-card">
+        <h4>Confirmed</h4>
+        <h2>{{ confirmed_count }}</h2>
+    </div>
+
+    <div class="stat-card">
+        <h4>Completed</h4>
+        <h2>{{ completed_count }}</h2>
+    </div>
+</div>
+<div style="
+background:#eff6ff;
+color:#1d4ed8;
+padding:12px;
+border-radius:12px;
+margin-bottom:12px;
+font-size:13px;
+font-weight:600;
+">
+📱 Mobile User: সম্পূর্ণ টেবিল দেখতে ডানে-বামে Swipe করুন
+</div>
+
+<div class="table-card">
+
+{% if appointments %}
+
+<table>
+
+<thead>
+<tr>
+    <th>Patient</th>
+    <th>Phone</th>
+    <th>Doctor</th>
+    <th>Chamber</th>
+    <th>Status</th>
+    <th>Date</th>
+    <th>Actions</th>
+</tr>
+</thead>
+
+<tbody id="appointmentTable">
+
+{% for a in appointments %}
+
+<tr class="row-item">
+
+    <td>{{ a.patient_name }}</td>
+    <td>{{ a.patient_phone }}</td>
+    <td>{{ a.doctor.name if a.doctor else "-" }}</td>
+
+    <!-- FIXED: Chamber column -->
+    <td>{{ a.chamber.chamber_name if a.chamber else "No Chamber" }}</td>
+
+    <td>
+        <span class="badge {{ a.status }}">
+            {{ a.status }}
+        </span>
+    </td>
+
+    <td>{{ a.created_at.strftime('%d-%m-%Y') }}</td>
+
+    <td>
+        <div class="actions">
+
+            <!-- OPEN PAGE -->
+            <a href="{{ url_for('chamber_panel.confirm_page', id=a.id) }}" class="btn btn-view">
+                Open
+            </a>
+
+            <!-- CONFIRM (POST ROUTE PAGE হওয়া উচিত, direct link না) -->
+            {% if a.status == "pending" %}
+            <a href="{{ url_for('chamber_panel.confirm_submit', id=a.id) }}" class="btn btn-confirm">
+                Confirm
+            </a>
+            {% endif %}
+
+            <!-- UPDATE (এইটা তোমার existing update route অনুযায়ী) -->
+            <a href="{{ url_for('chamber_panel.update_appointment', appointment_id=a.id, status='completed') }}" class="btn btn-complete">
+                Done
+            </a>
+
+            <a href="{{ url_for('chamber_panel.update_appointment', appointment_id=a.id, status='cancelled') }}" class="btn btn-cancel">
+                Cancel
+            </a>
+
+        </div>
+    </td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+{% else %}
+
+<div class="empty">
+    <h3>No Appointments Found</h3>
+</div>
+
+{% endif %}
+
+</div>
+
+<script>
+document.getElementById("searchInput").addEventListener("keyup", function () {
+    let value = this.value.toLowerCase();
+
+    document.querySelectorAll(".row-item").forEach(row => {
+        row.style.display = row.innerText.toLowerCase().includes(value)
+            ? "table-row"
+            : "none";
+    });
+});
+</script>
+
+{% endblock %}
