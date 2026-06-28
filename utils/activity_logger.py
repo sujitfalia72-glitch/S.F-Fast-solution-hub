@@ -1,35 +1,36 @@
 # utils/activity_logger.py
 
 import logging
-from flask import request, session
+from flask import request
 
 logger = logging.getLogger(__name__)
 
 
-def log_activity(action, details=None):
+def log_activity(
+    actor_id=None,
+    target_id=None,
+    action="",
+    role=None,
+    meta=None
+):
     """
-    Log user activity safely.
-
-    Example:
-        log_activity("Delete User")
-        log_activity("Approve Booking", {"booking_id": 12})
+    Production Activity Logger
     """
 
     try:
-        user_id = session.get("user_id")
-        role = session.get("role")
-
         logger.info(
             {
-                "user_id": user_id,
+                "actor_id": actor_id,
+                "target_id": target_id,
                 "role": role,
                 "action": action,
-                "details": details,
+                "meta": meta or {},
                 "ip": request.remote_addr,
                 "method": request.method,
                 "path": request.path,
+                "user_agent": request.headers.get("User-Agent"),
             }
         )
 
     except Exception as e:
-        logger.error(f"Activity Logger Error: {e}")
+        logger.exception(f"Activity Logger Error: {e}")
