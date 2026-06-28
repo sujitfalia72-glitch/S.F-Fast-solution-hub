@@ -33,33 +33,66 @@ from models.work_application import WorkApplication
 from models.notification import Notification
 
 # ================= ROUTES =================
+# ================= ROUTES =================
+
+print("Loading routes.auth")
 from routes.auth import auth
+
+print("Loading routes.owner")
 from routes.owner import owner
+
+print("Loading routes.admin")
 from routes.admin import admin_bp
+
+print("Loading routes.super_admin")
 from routes.super_admin import super_admin
+
+print("Loading routes.user")
 from routes.user import user
+
+print("Loading routes.main")
 from routes.main import main
+
+print("Loading routes.work_routes")
 from routes.work_routes import work
+
+print("Loading routes.notification")
 from routes.notification import notification_bp
+
+print("Loading routes.live_media")
 from routes.live_media import live_media_bp
+
+print("Loading routes.booking")
 from routes.booking import booking
+
+print("Loading routes.profile")
 from routes.profile import profile_bp
+
+print("Loading routes.admin_tools")
 from routes.admin_tools import admin_tools
+
+print("Loading routes.owner_tools")
 from routes.owner_tools import owner_tools
+
+print("Loading routes.application_routes")
 from routes.application_routes import application_bp
+
+print("Loading routes.verification")
 from routes.verification import verification
 
-# Chamber
+print("Loading routes.chamber.chamber")
 from routes.chamber.chamber import chamber_panel
+
+print("Loading routes.chamber.auth")
 from routes.chamber.auth import chamber
 
-# Admin Chamber
+print("Loading routes.admin_panel.chambers")
 from routes.admin_panel.chambers import admin_chambers
 
-# Doctor
+print("Loading routes.doctor")
 from routes.doctor import doctor_bp
 
-
+print("✅ All route imports completed")
 # ==================================================
 # LOGIN MANAGER
 # ==================================================
