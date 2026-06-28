@@ -102,14 +102,6 @@ def create_app():
     app = Flask(__name__)
 
     # ================= CONFIG =================
-    import traceback
-
-try:
-    # আপনার app initialization
-    pass
-except Exception:
-    traceback.print_exc()
-    raise
     app.config.from_object(Config)
 
     app.secret_key = os.environ.get(
