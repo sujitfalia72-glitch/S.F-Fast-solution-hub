@@ -1,2 +1,2 @@
 from .doctor import Doctor
-from .doctor_rating import DoctorRating
+from .rating import DoctorRating
