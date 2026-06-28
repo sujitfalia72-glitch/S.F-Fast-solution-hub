@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>👑 S.F WORKS HUB - OWNER CONTROL PANEL</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial, sans-serif;
+    background:#f1f5f9;
+}
+
+/* ================= SIDEBAR ================= */
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    width:270px;
+    height:100vh;
+    background:#0f172a;
+    padding:20px;
+    overflow-y:auto;
+    z-index:999;
+}
+
+.logo{
+    color:#22c55e;
+    font-size:24px;
+    font-weight:bold;
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.sidebar a{
+    display:block;
+    text-decoration:none;
+    color:#cbd5e1;
+    padding:13px 15px;
+    border-radius:12px;
+    margin-bottom:10px;
+    transition:0.3s;
+    font-size:15px;
+}
+
+.sidebar a:hover{
+    background:#2563eb;
+    color:#fff;
+}
+
+/* ================= MAIN ================= */
+
+.main{
+    margin-left:270px;
+    padding:20px;
+}
+
+/* ================= TOPBAR ================= */
+
+.topbar{
+    background:#fff;
+    padding:18px;
+    border-radius:15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.05);
+}
+
+/* ================= STATS ================= */
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.card-box{
+    background:#fff;
+    padding:20px;
+    border-radius:16px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.05);
+    text-align:center;
+}
+
+.card-box h6{
+    color:#64748b;
+}
+
+.card-box h2{
+    margin-top:10px;
+    font-size:30px;
+    color:#111827;
+}
+
+/* ================= USER GRID ================= */
+
+.user-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(380px,1fr));
+    gap:18px;
+}
+
+/* ================= USER CARD ================= */
+
+.user-card{
+    background:#fff;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 3px 12px rgba(0,0,0,0.06);
+}
+
+.user-card .card-body{
+    padding:20px;
+}
+
+.profile-top{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+}
+
+.profile-left{
+    display:flex;
+    gap:15px;
+}
+
+.avatar{
+    width:65px;
+    height:65px;
+    border-radius:50%;
+    background:#2563eb;
+    color:#fff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:24px;
+    font-weight:bold;
+}
+
+.user-info h5{
+    margin-bottom:4px;
+}
+
+.user-info p{
+    margin-bottom:6px;
+    color:#64748b;
+    font-size:14px;
+}
+
+.action-buttons a{
+    margin-bottom:6px;
+}
+
+/* ================= SECTION ================= */
+
+.section-box{
+    background:#fff;
+    padding:20px;
+    border-radius:16px;
+    margin-bottom:25px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.05);
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:900px){
+
+    .sidebar{
+        width:100%;
+        height:auto;
+        position:relative;
+    }
+
+    .main{
+        margin-left:0;
+    }
+
+    .topbar{
+        flex-direction:column;
+        gap:10px;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- ================= SIDEBAR ================= -->
+
+<div class="sidebar">
+
+    <div class="logo">
+        👑 OWNER PANEL
+    </div>
+
+    <a href="/owner/dashboard">
+        <i class="fa fa-chart-line"></i>
+        Dashboard
+    </a>
+
+    <a href="#" onclick="showSection('users')">
+        <i class="fa fa-users"></i>
+        User Control
+    </a>
+
+    <a href="#" onclick="showSection('approvals')">
+        <i class="fa fa-user-shield"></i>
+        Admin Approval
+    </a>
+
+    <a href="#" onclick="loadWorksSection('')">
+        <i class="fa fa-briefcase"></i>
+        Work Control
+    </a>
+    <a href="{{ url_for('application.owner_applications') }}" class="btn">
+    📋 View Applications
+    </a>
+
+    <a href="{{ url_for('booking.owner_bookings') }}">
+        <i class="fa fa-calendar-check"></i>
+        Booking Control
+    </a>
+
+    <a href="{{ url_for('owner.withdraw_list') }}" class="btn">
+    💸 Withdraw Control
+    </a>
+
+    <a href="/owner/notification/broadcast"
+   class="btn btn-danger rounded-pill px-4 shadow-sm">
+
+    📢 Send Live Notification
+
+    </a>
+    <a href="/live"
+   class="menu-item">
+
+    <i class="fa-solid fa-tv"></i>
+
+    Live Dashboard
+
+</a>
+
+<a href="/live/create"
+   class="menu-item">
+
+    <i class="fa-solid fa-upload"></i>
+
+    Upload Media
+
+</a>
+
+<a href="/live/tv"
+   class="menu-item">
+
+    <i class="fa-solid fa-circle-play"></i>
+
+    Watch Live TV
+
+</a>
+
+    <a class="sidebar-btn"
+   href="{{ url_for('owner.headline_control') }}">
+   📢 Running Headline
+    </a>
+
+    <a class="sidebar-btn" href="/verification/admin/requests">
+    <i class="fa-solid fa-badge-check"></i>
+    Verification Requests
+    </a>
+
+    <a href="/logout">
+        <i class="fa fa-right-from-bracket"></i>
+        Logout
+    </a>
+
+</div>
+
+<!-- ================= MAIN ================= -->
+
+<div class="main">
+
+    <!-- TOPBAR -->
+
+    <div class="topbar">
+
+        <div>
+            <h3>
+                🚀 S.F WORKS HUB OWNER DASHBOARD
+            </h3>
+
+            <small class="text-muted">
+                Full Production Control Panel
+            </small>
+        </div>
+
+        <a href="/logout"
+           class="btn btn-danger">
+           Logout
+        </a>
+
+    </div>
+
+    <!-- ================= STATS ================= -->
+
+    <div class="cards">
+
+        <div class="card-box">
+            <h6>Total Users</h6>
+            <h2>{{ total_users }}</h2>
+        </div>
+
+        <div class="card-box">
+            <h6>Total Works</h6>
+            <h2>{{ total_works }}</h2>
+        </div>
+
+        <div class="card-box">
+            <h6>Approved Works</h6>
+            <h2>{{ approved_works }}</h2>
+        </div>
+
+        <div class="card-box">
+            <h6>Pending Works</h6>
+            <h2>{{ pending_works }}</h2>
+        </div>
+
+    </div>
+
+    <!-- ================= ADMIN APPROVAL ================= -->
+
+    <div id="approvalSection"
+         class="section-box"
+         style="display:none;">
+
+        <h4 class="mb-4">
+            ✅ Admin & Super Admin Approval
+        </h4>
+
+        <div class="user-grid">
+
+            {% for user in pending_admins %}
+
+            <div class="user-card">
+
+                <div class="card-body">
+
+                    <div class="profile-left">
+
+                        <div class="avatar">
+                            {{ user.name[0] }}
+                        </div>
+
+                        <div class="user-info">
+
+                            <h5>{{ user.name }}</h5>
+
+                            <p>
+                                📞 {{ user.phone }}
+                            </p>
+
+                            <span class="badge bg-dark">
+                                {{ user.role }}
+                            </span>
+
+                            <span class="badge bg-warning">
+                                Pending
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+                    <form method="POST"
+                          action="/owner/approve/{{ user.id }}">
+                        <input type="hidden"
+                               name="csrf_token"
+                               value="{{ csrf_token() }}">
+
+
+                        <button class="btn btn-success w-100">
+
+                            ✅ Approve {{ user.role }}
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+    <!-- ================= USER CONTROL ================= -->
+
+    <div id="userSection"
+         class="section-box">
+
+        <h4 class="mb-4">
+            👥 User Management System
+        </h4>
+
+        <div class="user-grid">
+
+            {% for user in latest_users %}
+
+            <div class="user-card">
+
+                <div class="card-body">
+
+                    <div class="profile-top">
+
+                        <div class="profile-left">
+
+                            <div class="avatar">
+
+                                {{ user.name[0] }}
+
+                            </div>
+
+                            <div class="user-info">
+
+                                <h5>{{ user.name }}</h5>
+
+                                <p>
+                                    📞 {{ user.phone }}
+                                </p>
+
+                                <span class="badge bg-dark">
+                                    {{ user.role }}
+                                </span>
+
+                                {% if user.status == "blocked" %}
+
+                                <span class="badge bg-danger">
+                                    Blocked
+                                </span>
+
+                                {% elif user.status == "pending" %}
+
+                                <span class="badge bg-warning">
+                                    Pending
+                                </span>
+
+                                {% else %}
+
+                                <span class="badge bg-success">
+                                    Active
+                                </span>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                        <!-- ACTION BUTTONS -->
+
+                        <div class="action-buttons text-end">
+
+    <a href="/owner/user/{{ user.id }}"
+       class="btn btn-dark btn-sm">
+       👁 View
+    </a>
+
+    <br><br>
+
+    <a href="/owner/user/edit/{{ user.id }}"
+       class="btn btn-primary btn-sm">
+       ✏ Edit
+    </a>
+
+    <br><br>
+
+    {% if user.status != "blocked" %}
+
+    <form method="POST"
+          action="{{ url_for('owner.block_user', id=user.id) }}"
+          style="display:inline;">
+
+        <input type="hidden"
+               name="csrf_token"
+               value="{{ csrf_token() }}">
+
+        <button type="submit"
+                class="btn btn-warning btn-sm"
+                onclick="return confirm('Block this user?')">
+
+            🚫 Block
+
+        </button>
+
+    </form>
+
+    {% else %}
+
+    <form method="POST"
+          action="{{ url_for('owner.unblock_user', id=user.id) }}"
+          style="display:inline;">
+
+        <input type="hidden"
+               name="csrf_token"
+               value="{{ csrf_token() }}">
+
+        <button type="submit"
+                class="btn btn-success btn-sm"
+                onclick="return confirm('Unblock this user?')">
+
+            ✅ Unblock
+
+        </button>
+
+    </form>
+
+    {% endif %}
+
+    <br><br>
+
+    <form method="POST"
+          action="{{ url_for('owner.delete_user', id=user.id) }}"
+          style="display:inline;">
+
+        <input type="hidden"
+               name="csrf_token"
+               value="{{ csrf_token() }}">
+
+        <button type="submit"
+                class="btn btn-danger btn-sm"
+                onclick="return confirm('Delete this user permanently?')">
+
+            🗑 Delete
+
+        </button>
+
+    </form>
+
+</div>
+
+<hr>
+
+                    <!-- ================= APPROVAL ================= -->
+
+                    {% if user.role in ['admin', 'super_admin']
+                       and user.status == 'pending' %}
+
+                    <form method="POST"
+                          action="/owner/approve/{{ user.id }}">
+                        <input type="hidden"
+                               name="csrf_token"
+                               value="{{ csrf_token() }}">
+
+
+                        <button class="btn btn-success btn-sm w-100">
+
+                            ✅ Approve {{ user.role }}
+
+                        </button>
+
+                    </form>
+
+                    <hr>
+
+                    {% endif %}
+
+                    <!-- ================= TRANSFER ================= -->
+
+                    <form method="POST"
+                          action="/owner/transfer">
+                        <input type="hidden"
+                               name="csrf_token"
+                               value="{{ csrf_token() }}">
+
+
+                        <input type="hidden"
+                               name="user_id"
+                               value="{{ user.id }}">
+
+                        <label class="mb-2">
+
+                            🔁 Transfer Controller
+
+                        </label>
+
+                        <select name="new_controller"
+                                class="form-select mb-3"
+                                required>
+
+                            <option value="">
+                                Select Admin
+                            </option>
+
+                            {% for admin in latest_users %}
+
+                                {% if admin.role in ['admin', 'super_admin'] %}
+
+                                <option value="{{ admin.id }}">
+
+                                    {{ admin.name }}
+                                    ({{ admin.role }})
+
+                                </option>
+
+                                {% endif %}
+
+                            {% endfor %}
+
+                        </select>
+
+                        <button type="submit"
+                                class="btn btn-warning w-100">
+
+                            🔁 Transfer User
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+    <!-- ================= WORK SECTION ================= -->
+
+    <div id="workSection"
+         class="section-box">
+
+    </div>
+
+</div>
+
+<!-- ================= SCRIPT ================= -->
+
+<script>
+
+function showSection(type){
+
+    document.getElementById("userSection").style.display = "none";
+
+    document.getElementById("approvalSection").style.display = "none";
+
+    document.getElementById("workSection").style.display = "none";
+
+    if(type === "users"){
+
+        document.getElementById("userSection").style.display = "block";
+
+    }
+
+    if(type === "approvals"){
+
+        document.getElementById("approvalSection").style.display = "block";
+
+    }
+
+}
+
+function loadWorksSection(status=""){
+
+    document.getElementById("userSection").style.display = "none";
+
+    document.getElementById("approvalSection").style.display = "none";
+
+    document.getElementById("workSection").style.display = "block";
+
+    let url = "/owner/works/partial";
+
+    if(status){
+
+        url += "?status=" + status;
+
+    }
+
+    fetch(url)
+
+    .then(res => res.text())
+
+    .then(html => {
+
+        document.getElementById("workSection").innerHTML = html;
+
+    })
+
+    .catch(err => {
+
+        console.log(err);
+
+    });
+
+}
+
+window.onload = function(){
+
+    showSection('users');
+
+};
+
+</script>
+
+</body>
+                </html>

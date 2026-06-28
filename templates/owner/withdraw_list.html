@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Withdraw Control Panel</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<style>
+
+body{
+    background:#f4f7fc;
+}
+
+.header-card{
+    background:linear-gradient(135deg,#4f46e5,#7c3aed);
+    color:white;
+    border-radius:20px;
+    padding:25px;
+    margin-bottom:25px;
+    box-shadow:0 10px 25px rgba(0,0,0,.12);
+}
+
+.withdraw-card{
+    background:white;
+    border-radius:18px;
+    padding:20px;
+    margin-bottom:18px;
+    box-shadow:0 5px 18px rgba(0,0,0,.08);
+    transition:.2s;
+}
+
+.withdraw-card:hover{
+    transform:translateY(-2px);
+}
+
+.status-badge{
+    padding:6px 12px;
+    border-radius:30px;
+    font-size:12px;
+    font-weight:700;
+}
+
+.pending{ background:#fff3cd; color:#856404; }
+.approved{ background:#d1e7dd; color:#0f5132; }
+.rejected{ background:#f8d7da; color:#842029; }
+.paid{ background:#cfe2ff; color:#084298; }
+
+.info-box{
+    background:#f8fafc;
+    border-radius:12px;
+    padding:12px;
+    margin-top:10px;
+    border:1px solid #edf2f7;
+}
+
+.info-box div{
+    margin-bottom:6px;
+}
+
+.amount{
+    font-size:24px;
+    font-weight:800;
+    color:#16a34a;
+}
+
+.section-title{
+    font-size:15px;
+    font-weight:700;
+    margin-bottom:10px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container py-4">
+
+<div class="header-card">
+
+    <h3 class="mb-2">
+        <i class="fa-solid fa-money-bill-transfer"></i>
+        Withdraw Control Panel
+    </h3>
+
+    <p class="mb-0">
+        Manage and process withdrawal requests
+    </p>
+
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-{{ category }}">
+    {{ message }}
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+
+{% for w in withdraws %}
+
+<div class="withdraw-card">
+
+    <div class="d-flex justify-content-between align-items-start flex-wrap">
+
+        <div>
+
+            <h5 class="mb-2">Withdraw #{{ w.id }}</h5>
+
+            {% if w.status == "pending" %}
+                <span class="status-badge pending">Pending</span>
+            {% elif w.status == "approved" %}
+                <span class="status-badge approved">Approved</span>
+            {% else %}
+                <span class="status-badge rejected">Rejected</span>
+            {% endif %}
+
+            {% if w.payment_status == "paid" %}
+                <span class="status-badge paid">Paid</span>
+            {% endif %}
+
+        </div>
+
+        <div class="text-end">
+
+            <div class="amount">₹{{ w.amount }}</div>
+
+            <small class="text-muted">{{ w.created_at }}</small>
+
+        </div>
+
+    </div>
+
+    <hr>
+
+    <div class="row">
+
+        <!-- ================= USER INFO ================= -->
+        <div class="col-md-6">
+
+            <div class="info-box">
+
+                <div class="section-title">User Information</div>
+
+                <div><strong>User ID:</strong> {{ w.user_id }}</div>
+
+                <div><strong>Status:</strong> {{ w.status }}</div>
+
+                <div><strong>Method:</strong> {{ w.payment_method or "-" }}</div>
+
+            </div>
+
+            <!-- ✅ PAYMENT DETAILS (NEW ADDED) -->
+            <div class="info-box mt-2">
+
+                <div class="section-title">Payment Details</div>
+
+                <div>
+                    <strong>Method:</strong>
+                    {{ w.payment_method or "-" }}
+                </div>
+
+                <div>
+                    <strong>Account Name:</strong>
+                    {{ w.payment_account_name or "-" }}
+                </div>
+
+                <div>
+                    <strong>Account Number:</strong>
+                    {{ w.payment_account_number or w.payment_account or "-" }}
+                </div>
+
+                <div>
+                    <strong>IFSC Code:</strong>
+                    {{ w.ifsc or "-" }}
+                </div>
+
+                <div>
+                    <strong>UPI ID:</strong>
+                    {{ w.upi_id or "-" }}
+                </div>
+
+            </div>
+
+            <!-- ✅ AMOUNT BOX (NEW ADDED) -->
+            <div class="info-box mt-2">
+
+                <div class="section-title">Withdrawal Info</div>
+
+                <div>
+                    <strong>Requested Amount:</strong>
+                    ₹{{ w.amount }}
+                </div>
+
+                <div>
+                    <strong>Net Payable:</strong>
+                    ₹{{ w.amount }}
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ================= PROCESS INFO ================= -->
+        <div class="col-md-6">
+
+            <div class="info-box">
+
+                <div class="section-title">Processing Info</div>
+
+                <div>
+                    <strong>Approved By:</strong>
+                    {{ w.approved_by or "-" }}
+                </div>
+
+                <div>
+                    <strong>Processed At:</strong>
+                    {{ w.processed_at or "-" }}
+                </div>
+
+            </div>
+
+            {% if w.payment_status == "paid" %}
+
+            <div class="info-box mt-2">
+
+                <div class="section-title">Payment Info</div>
+
+                <div><strong>Paid At:</strong> {{ w.paid_at }}</div>
+
+                <div><strong>Paid By:</strong> {{ w.paid_by }}</div>
+
+                <div><strong>UTR:</strong> {{ w.utr_number or "-" }}</div>
+
+                <div><strong>Note:</strong> {{ w.admin_note or "-" }}</div>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    <hr>
+
+    <!-- ================= ACTIONS ================= -->
+
+    {% if w.status == "pending" %}
+
+    <div class="d-flex gap-2">
+
+        <a href="/owner/withdraw/approve/{{ w.id }}"
+           class="btn btn-success">
+            Approve
+        </a>
+
+        <a href="/owner/withdraw/reject/{{ w.id }}"
+           class="btn btn-danger">
+            Reject
+        </a>
+
+    </div>
+
+    {% endif %}
+
+    {% if w.status == "approved" and w.payment_status != "paid" %}
+
+    <form method="POST" action="/owner/withdraw/paid/{{ w.id }}" class="mt-3">
+        <input type="hidden"
+            name="csrf_token"
+            value="{{ csrf_token() }}">
+
+        <div class="row">
+
+            <div class="col-md-4 mb-2">
+                <input type="text" name="utr_number" class="form-control" placeholder="UTR Number">
+            </div>
+
+            <div class="col-md-5 mb-2">
+                <input type="text" name="admin_note" class="form-control" placeholder="Admin Note">
+            </div>
+
+            <div class="col-md-3 mb-2">
+                <button type="submit" class="btn btn-primary w-100">
+                    Mark Paid
+                </button>
+            </div>
+
+        </div>
+
+    </form>
+
+    {% endif %}
+
+</div>
+
+{% else %}
+
+<div class="alert alert-secondary text-center">
+    No Withdrawal Requests Found
+</div>
+
+{% endfor %}
+
+</div>
+
+</body>
+</html>
