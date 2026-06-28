@@ -26,8 +26,7 @@ from extensions import (
 )
 
 from utils.decorators import (
-    admin_required,
-    role_required
+    admin_required
 )
 
 from utils.activity_logger import (
