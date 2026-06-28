@@ -68,8 +68,6 @@ from routes.booking import booking
 print("Loading routes.profile")
 from routes.profile import profile_bp
 
-print("Loading routes.admin_tools")
-from routes.admin_tools import admin_tools
 
 print("Before routes.profile")
 from routes.profile import profile_bp
