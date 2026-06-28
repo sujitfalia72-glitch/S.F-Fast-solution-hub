@@ -1,0 +1,740 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+
+body{
+    background:#0f172a;
+    overflow-x:hidden;
+}
+
+/* =====================================================
+   PAGE
+===================================================== */
+
+.page-title{
+    color:#fff;
+    font-weight:700;
+}
+
+.page-subtitle{
+    color:rgba(255,255,255,0.7);
+}
+
+/* =====================================================
+   MEDIA GRID
+===================================================== */
+
+.media-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:25px;
+}
+
+.media-card{
+    background:#111827;
+    border-radius:24px;
+    overflow:hidden;
+    color:#fff;
+    transition:0.3s;
+    border:1px solid rgba(255,255,255,0.05);
+    box-shadow:0 10px 35px rgba(0,0,0,0.25);
+}
+
+.media-card:hover{
+    transform:translateY(-5px);
+}
+
+.media-thumb{
+    width:100%;
+    height:240px;
+    object-fit:cover;
+    background:#000;
+}
+
+.media-body{
+    padding:20px;
+}
+
+.media-type{
+    background:#2563eb;
+    color:#fff;
+    padding:5px 12px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:600;
+    text-transform:uppercase;
+}
+
+.watch-btn{
+    border:none;
+    width:100%;
+    padding:14px;
+    border-radius:16px;
+    background:linear-gradient(135deg,#2563eb,#1d4ed8);
+    color:#fff;
+    font-weight:600;
+    transition:0.3s;
+}
+
+.watch-btn:hover{
+    transform:scale(1.02);
+}
+
+/* =====================================================
+   LIVE PLAYER
+===================================================== */
+
+.live-tv-box{
+
+    position:fixed;
+
+    right:20px;
+    bottom:20px;
+
+    width:420px;
+    height:240px;
+
+    background:#000;
+
+    border-radius:22px;
+
+    overflow:hidden;
+
+    z-index:9999;
+
+    box-shadow:0 15px 50px rgba(0,0,0,0.6);
+
+    resize:both;
+
+    min-width:220px;
+    min-height:120px;
+
+    max-width:1200px;
+    max-height:900px;
+
+    border:1px solid rgba(255,255,255,0.08);
+
+    display:none;
+}
+
+/* HEADER */
+
+.live-header{
+
+    height:55px;
+
+    background:#111827;
+
+    color:#fff;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 15px;
+
+    cursor:move;
+
+    user-select:none;
+}
+
+/* BADGE */
+
+.live-badge{
+
+    background:red;
+
+    color:#fff;
+
+    padding:5px 12px;
+
+    border-radius:30px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    animation:pulse 1s infinite;
+}
+
+@keyframes pulse{
+
+    0%{opacity:1;}
+    50%{opacity:0.5;}
+    100%{opacity:1;}
+
+}
+
+/* CONTENT */
+
+.live-content{
+
+    width:100%;
+    height:calc(100% - 55px);
+
+    background:#000;
+}
+
+.live-content video,
+.live-content iframe,
+.live-content img{
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    border:none;
+}
+
+/* CONTROLS */
+
+.live-controls{
+    display:flex;
+    gap:10px;
+}
+
+.live-btn{
+
+    width:34px;
+    height:34px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#1e293b;
+
+    color:#fff;
+
+    transition:0.3s;
+}
+
+.live-btn:hover{
+    background:#2563eb;
+}
+
+/* =====================================================
+   FORCE POPUP
+===================================================== */
+
+.force-popup{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,0.85);
+
+    z-index:99999;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:20px;
+
+    backdrop-filter:blur(5px);
+}
+
+.popup-box{
+
+    position:relative;
+
+    width:100%;
+    max-width:900px;
+
+    border-radius:25px;
+
+    overflow:hidden;
+
+    background:#111827;
+
+    box-shadow:0 20px 60px rgba(0,0,0,0.5);
+}
+
+.popup-media{
+
+    width:100%;
+
+    max-height:85vh;
+
+    object-fit:contain;
+
+    background:#000;
+}
+
+/* CLOSE */
+
+.popup-close{
+
+    position:absolute;
+
+    top:15px;
+    right:15px;
+
+    width:45px;
+    height:45px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:red;
+
+    color:#fff;
+
+    font-size:20px;
+
+    z-index:999;
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:768px){
+
+    .live-tv-box{
+
+        width:95%;
+
+        height:220px;
+
+        right:10px;
+        bottom:10px;
+    }
+
+    .media-thumb{
+        height:190px;
+    }
+
+}
+
+</style>
+
+<div class="container-fluid py-4">
+
+    <!-- =====================================================
+         TITLE
+    ====================================================== -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+
+        <div>
+
+            <h2 class="page-title">
+                📺 Live TV & Media Center
+            </h2>
+
+            <p class="page-subtitle mb-0">
+                Watch videos, live streams, banners, audio and announcements
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- =====================================================
+         MEDIA GRID
+    ====================================================== -->
+
+    <div class="media-grid">
+
+        {% for media in medias %}
+
+        <div class="media-card">
+
+            {% if media.thumbnail %}
+
+            <img src="{{ media.thumbnail }}"
+                 class="media-thumb">
+
+            {% else %}
+
+            <img src="/static/images/default.png"
+                 class="media-thumb">
+
+            {% endif %}
+
+            <div class="media-body">
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+
+                    <h5 class="fw-bold mb-0">
+
+                        {{ media.title }}
+
+                    </h5>
+
+                    <span class="media-type">
+
+                        {{ media.media_type }}
+
+                    </span>
+
+                </div>
+
+                <p class="text-light opacity-75 small mb-4">
+
+                    {{ media.description[:120] if media.description else "No description available." }}
+
+                </p>
+
+                <button class="watch-btn"
+                        onclick="openLivePlayer(
+                            '{{ media.stream_url if media.is_live else media.file_url }}',
+                            '{{ media.media_type }}',
+                            '{{ media.title }}'
+                        )">
+
+                    ▶ Watch Now
+
+                </button>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+<!-- =====================================================
+     FLOATING PLAYER
+===================================================== -->
+
+<div class="live-tv-box"
+     id="livePlayer">
+
+    <!-- HEADER -->
+
+    <div class="live-header"
+         id="dragHeader">
+
+        <div class="d-flex align-items-center gap-2">
+
+            <span class="live-badge">
+
+                ● LIVE
+
+            </span>
+
+            <span id="liveTitle">
+
+                Live TV
+
+            </span>
+
+        </div>
+
+        <!-- CONTROLS -->
+
+        <div class="live-controls">
+
+            <!-- MINIMIZE -->
+
+            <button class="live-btn"
+                    onclick="minimizePlayer()">
+
+                <i class="fa fa-minus"></i>
+
+            </button>
+
+            <!-- RESTORE -->
+
+            <button class="live-btn"
+                    onclick="restorePlayer()">
+
+                <i class="fa fa-window-restore"></i>
+
+            </button>
+
+            <!-- FULLSCREEN -->
+
+            <button class="live-btn"
+                    onclick="fullscreenPlayer()">
+
+                <i class="fa fa-expand"></i>
+
+            </button>
+
+            <!-- CLOSE -->
+
+            <button class="live-btn"
+                    onclick="closePlayer()">
+
+                <i class="fa fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- CONTENT -->
+
+    <div class="live-content"
+         id="liveContent">
+
+    </div>
+
+</div>
+
+<!-- =====================================================
+     FORCE SHOW POPUP
+===================================================== -->
+
+{% for media in medias %}
+
+    {% if media.force_show %}
+
+    <div class="force-popup"
+         id="popup{{ media.id }}">
+
+        <div class="popup-box">
+
+            {% if media.allow_skip %}
+
+            <button class="popup-close"
+                    onclick="closePopup('{{ media.id }}')">
+
+                ✕
+
+            </button>
+
+            {% endif %}
+
+            <!-- BANNER -->
+
+            {% if media.media_type == "banner" %}
+
+            <img src="{{ media.file_url }}"
+                 class="popup-media">
+
+            <!-- VIDEO -->
+
+            {% elif media.media_type == "video" %}
+
+            <video autoplay
+                   controls
+                   class="popup-media">
+
+                <source src="{{ media.file_url }}">
+
+            </video>
+
+            <!-- AUDIO -->
+
+            {% elif media.media_type == "audio" %}
+
+            <div class="p-5 text-center bg-dark">
+
+                <audio autoplay
+                       controls
+                       style="width:100%;">
+
+                    <source src="{{ media.file_url }}">
+
+                </audio>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+{% endfor %}
+
+<script>
+
+/* =====================================================
+   OPEN PLAYER
+===================================================== */
+
+function openLivePlayer(url, type, title){
+
+    const player = document.getElementById("livePlayer");
+
+    const content = document.getElementById("liveContent");
+
+    document.getElementById("liveTitle").innerText = title;
+
+    player.style.display = "block";
+
+    player.style.height = "240px";
+
+    if(type === "video" || type === "live_tv"){
+
+        content.innerHTML = `
+            <video controls autoplay>
+                <source src="${url}">
+            </video>
+        `;
+    }
+
+    else if(type === "audio"){
+
+        content.innerHTML = `
+            <div class="d-flex align-items-center justify-content-center h-100 bg-dark">
+
+                <audio controls autoplay style="width:90%;">
+
+                    <source src="${url}">
+
+                </audio>
+
+            </div>
+        `;
+    }
+
+    else if(type === "banner"){
+
+        content.innerHTML = `
+            <img src="${url}">
+        `;
+    }
+
+    else{
+
+        content.innerHTML = `
+            <iframe src="${url}"
+                    allowfullscreen>
+            </iframe>
+        `;
+    }
+
+}
+
+/* =====================================================
+   CLOSE PLAYER
+===================================================== */
+
+function closePlayer(){
+
+    document.getElementById("livePlayer").style.display = "none";
+
+    document.getElementById("liveContent").innerHTML = "";
+
+}
+
+/* =====================================================
+   MINIMIZE
+===================================================== */
+
+function minimizePlayer(){
+
+    document.getElementById("livePlayer").style.height = "55px";
+
+}
+
+/* =====================================================
+   RESTORE
+===================================================== */
+
+function restorePlayer(){
+
+    document.getElementById("livePlayer").style.height = "240px";
+
+}
+
+/* =====================================================
+   FULLSCREEN
+===================================================== */
+
+function fullscreenPlayer(){
+
+    const player = document.getElementById("livePlayer");
+
+    if(player.requestFullscreen){
+
+        player.requestFullscreen();
+
+    }
+
+}
+
+/* =====================================================
+   CLOSE POPUP
+===================================================== */
+
+function closePopup(id){
+
+    document
+        .getElementById("popup"+id)
+        .style.display = "none";
+
+}
+
+/* =====================================================
+   DRAG PLAYER
+===================================================== */
+
+dragElement(document.getElementById("livePlayer"));
+
+function dragElement(elmnt) {
+
+    let pos1 = 0,
+        pos2 = 0,
+        pos3 = 0,
+        pos4 = 0;
+
+    document.getElementById("dragHeader").onmousedown = dragMouseDown;
+
+    function dragMouseDown(e) {
+
+        e = e || window.event;
+
+        e.preventDefault();
+
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+
+        document.onmouseup = closeDragElement;
+
+        document.onmousemove = elementDrag;
+    }
+
+    function elementDrag(e) {
+
+        e = e || window.event;
+
+        e.preventDefault();
+
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+
+        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+
+        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+
+        elmnt.style.bottom = "auto";
+        elmnt.style.right = "auto";
+    }
+
+    function closeDragElement() {
+
+        document.onmouseup = null;
+        document.onmousemove = null;
+
+    }
+
+}
+
+</script>
+
+{% endblock %}
