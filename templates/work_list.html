@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Available Works • S.F Works Hub</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ================= GLOBAL ================= */
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+    font-family:'Inter',sans-serif;
+    background:#0f172a;
+    color:white;
+    min-height:100vh;
+}
+
+/* ================= TOPBAR ================= */
+.topbar{
+    width:100%;
+    height:75px;
+    background:rgba(15,23,42,0.95);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid rgba(255,255,255,0.06);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 22px;
+    position:sticky;
+    top:0;
+    z-index:999;
+}
+
+.logo-area{display:flex;align-items:center;gap:12px;}
+
+.logo-box{
+    width:45px;height:45px;border-radius:50%;
+    background:linear-gradient(135deg,#2563eb,#38bdf8);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:18px;
+}
+
+.brand{font-size:22px;font-weight:800;}
+
+.top-btn{
+    background:#1e293b;
+    color:white;
+    border:none;
+    padding:10px 14px;
+    border-radius:12px;
+    cursor:pointer;
+}
+
+/* ================= FLASH ================= */
+.flash-container{
+    max-width:900px;
+    margin:15px auto;
+    padding:0 20px;
+}
+
+.flash{
+    padding:12px 16px;
+    border-radius:12px;
+    margin-bottom:10px;
+    background:#1e293b;
+    border-left:5px solid #38bdf8;
+}
+
+/* success color */
+.flash.success{border-left-color:#22c55e;}
+
+/* danger */
+.flash.danger{border-left-color:#ef4444;}
+
+/* info */
+.flash.info{border-left-color:#f59e0b;}
+
+/* ================= HERO ================= */
+.hero{text-align:center;padding:45px 20px 25px;}
+.hero h1{font-size:42px;font-weight:800;}
+.hero p{color:#94a3b8;max-width:750px;margin:auto;line-height:1.7;}
+
+/* ================= GRID ================= */
+.container{max-width:1250px;margin:auto;padding:0 20px 40px;}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(330px,1fr));
+    gap:22px;
+}
+
+.card{
+    background:#111827;
+    border-radius:26px;
+    border:1px solid rgba(255,255,255,0.06);
+    overflow:hidden;
+}
+
+.card-top{padding:24px;}
+
+.work-status{
+    display:inline-block;
+    background:rgba(34,197,94,0.15);
+    color:#4ade80;
+    padding:6px 10px;
+    border-radius:20px;
+    font-size:12px;
+    margin-bottom:10px;
+}
+
+.title{font-size:22px;font-weight:800;}
+.desc{color:#94a3b8;margin-top:8px;font-size:14px;}
+
+/* meta */
+.meta-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    padding:24px;
+}
+
+.meta-box{
+    background:#1e293b;
+    padding:12px;
+    border-radius:12px;
+}
+
+/* contact */
+.contact{
+    margin:0 24px 24px;
+    background:#1e293b;
+    padding:14px;
+    border-radius:12px;
+}
+
+/* actions */
+.actions{
+    display:flex;
+    gap:12px;
+    padding:0 24px 24px;
+}
+
+.btn{
+    flex:1;
+    padding:12px;
+    border:none;
+    border-radius:12px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.apply-btn{
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+    color:white;
+}
+
+.details-btn{
+    background:#1e293b;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-decoration:none;
+}
+.pagination{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    margin-top:40px;
+    flex-wrap:wrap;
+}
+
+.pagination a{
+    text-decoration:none;
+    color:white;
+    background:#1e293b;
+    padding:10px 16px;
+    border-radius:10px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.pagination a:hover{
+    background:#2563eb;
+}
+/* mobile */
+@media(max-width:768px){
+    .meta-grid{grid-template-columns:1fr;}
+    .actions{flex-direction:column;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+    <div class="logo-area">
+        <div class="logo-box">SF</div>
+        <div class="brand">S.F Works Hub</div>
+    </div>
+
+    <button class="top-btn" onclick="window.location.href='/user/dashboard'">
+        Dashboard
+    </button>
+</div>
+
+<!-- FLASH MESSAGES (FIXED ✔️) -->
+<div class="flash-container">
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="flash {{ category }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+</div>
+
+<!-- HERO -->
+<div class="hero">
+    <h1>💼 Available Works</h1>
+    <p>Discover active work opportunities and apply instantly.</p>
+</div>
+
+<!-- WORKS -->
+<div class="container">
+
+{% if works and works|length > 0 %}
+
+<div class="grid">
+
+{% for w in works %}
+
+<div class="card">
+
+    <div class="card-top">
+        <div class="work-status">✅ Active Work</div>
+        <div class="title">{{ w.title }}</div>
+        <div class="desc">{{ w.description or 'No description available.' }}</div>
+    </div>
+
+    <div class="meta-grid">
+        <div class="meta-box">👷 {{ w.workers }}</div>
+        <div class="meta-box">💰 {{ w.salary }}</div>
+        <div class="meta-box">📅 {{ w.date }}</div>
+        <div class="meta-box">⏰ {{ w.time }}</div>
+    </div>
+
+    <div class="contact">
+        📞 {{ w.phone or 'Not Available' }}
+    </div>
+
+    <!-- FIXED FORM ✔️ -->
+<div class="actions">
+
+    <form method="POST"
+          action="{{ url_for('application.apply_work', work_id=w.id) }}">
+
+        <button type="submit" class="btn apply-btn">
+            Apply Now
+        </button>
+
+    </form>
+
+    <a href="{{ url_for('work.work_details', id=w.id) }}"
+       class="btn details-btn">
+        View Details
+    </a>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% else %}
+
+<div style="text-align:center;margin-top:60px;">
+    <h2>No Works Available</h2>
+</div>
+
+{% endif %}
+
+<!-- PAGINATION -->
+{% if pagination.pages > 1 %}
+
+<div class="pagination">
+
+    {% if pagination.has_prev %}
+    <a href="{{ url_for('work.work_list', page=pagination.prev_num) }}">
+        Previous
+    </a>
+    {% endif %}
+
+    {% for p in pagination.iter_pages() %}
+
+        {% if p %}
+            <a href="{{ url_for('work.work_list', page=p) }}">
+                {{ p }}
+            </a>
+        {% else %}
+            <span style="padding:10px;">
+                ...
+            </span>
+        {% endif %}
+
+    {% endfor %}
+
+    {% if pagination.has_next %}
+    <a href="{{ url_for('work.work_list', page=pagination.next_num) }}">
+        Next
+    </a>
+    {% endif %}
+
+</div>
+
+{% endif %}
+
+</div>
+
+</body>
+</html>
