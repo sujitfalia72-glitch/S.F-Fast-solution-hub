@@ -229,9 +229,9 @@ def create_app():
             "connect-src 'self' ws: wss:;"
         )
 
-        return response
+    return response
 
-return app
+        return app
 
 
 # ==================================================
