@@ -57,26 +57,30 @@ def login_required():
 # =========================================
 # USER BOOKINGS
 # =========================================
-
 @booking.route("/my-bookings")
 def my_bookings():
 
     if not login_required():
         return redirect("/auth/login")
-bookings = (
-    Booking.query.options(
-        joinedload(Booking.work)
+
+    bookings = (
+        Booking.query.options(
+            joinedload(Booking.work)
+        )
+        .filter_by(
+            user_id=session.get("user_id"),
+            is_deleted=False
+        )
+        .order_by(
+            Booking.id.desc()
+        )
+        .all()
     )
-    .filter_by(
-        user_id=session.get("user_id"),
-        is_deleted=False
+
+    return render_template(
+        "my_bookings.html",
+        bookings=bookings
     )
-    .order_by(
-        Booking.id.desc()
-    )
-    .all()
-)
-    
 
 
 # =========================================
