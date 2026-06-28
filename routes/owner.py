@@ -8,7 +8,7 @@ from flask import (
     flash,
     jsonify
 )
-from utils.notification import send_notification
+from utils.notification_helper import send_notification
 from functools import wraps
 from sqlalchemy import func
 from datetime import datetime, timedelta
