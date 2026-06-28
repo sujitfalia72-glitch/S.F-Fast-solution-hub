@@ -71,8 +71,9 @@ from routes.profile import profile_bp
 print("Loading routes.admin_tools")
 from routes.admin_tools import admin_tools
 
-print("Loading routes.owner_tools")
-from routes.owner_tools import owner_tools
+print("Before routes.profile")
+from routes.profile import profile_bp
+print("After routes.profile")
 
 print("Loading routes.application_routes")
 from routes.application_routes import application_bp
