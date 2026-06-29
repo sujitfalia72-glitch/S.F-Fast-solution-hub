@@ -14,7 +14,7 @@ from models.chamber import Chamber
 from models.doctor.doctor import Doctor
 from models.appointment import Appointment
 from models.doctor import DoctorRating
-from models.chamber_rating import ChamberRating
+
 from models.chamber_profile import ChamberProfile
 
 
