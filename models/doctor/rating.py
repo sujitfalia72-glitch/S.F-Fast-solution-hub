@@ -43,11 +43,7 @@ class DoctorRating(db.Model):
     # =========================
     doctor = db.relationship(
         "Doctor",
-        backref=db.backref(
-            "ratings",
-            lazy="dynamic",
-            cascade="all, delete-orphan"
-        )
+        back_populates="ratings"
     )
 
     # =========================
