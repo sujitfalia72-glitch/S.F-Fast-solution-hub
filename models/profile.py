@@ -25,13 +25,9 @@ class Profile(db.Model):
 
     user = db.relationship(
         "User",
-        backref=db.backref(
-            "profile",
-            uselist=False,
-            lazy="joined"
-        )
+        back_populates="profile",
+        lazy="joined"
     )
-
     # ================= BASIC INFO =================
 
     name = db.Column(
