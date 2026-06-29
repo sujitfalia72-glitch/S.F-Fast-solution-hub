@@ -194,7 +194,6 @@ def create_app():
         work,
         booking,
         profile_bp,
-        admin_tools,
         owner_tools,
         application_bp,
         notification_bp,
