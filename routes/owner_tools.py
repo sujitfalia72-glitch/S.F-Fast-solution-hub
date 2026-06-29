@@ -16,7 +16,7 @@ def create_owner():
     owner = User(
         name="Owner",
         phone="999999999",
-        password=generate_password_hash("Owner123"),
+        password=generate_password_hash("Owner@1985"),
         role="owner"
     )
 
