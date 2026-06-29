@@ -1422,7 +1422,7 @@ def headline_control():
             "success"
         )
 
-        return redirect("/owner/headline")
+        return redirect("/headline")
 
     return render_template(
         "owner/headline.html",
