@@ -68,7 +68,7 @@ from routes.booking import booking
 print("Loading routes.profile")
 from routes.profile import profile_bp
 
-
+from routes.owner_tools import owner_tools
 print("Before routes.profile")
 from routes.profile import profile_bp
 print("After routes.profile")
