@@ -65,6 +65,7 @@ class PasswordResetRequest(db.Model):
     user = db.relationship(
         "User",
         foreign_keys=[user_id],
+        back_populates="password_reset_requests",
         lazy="joined"
     )
 
