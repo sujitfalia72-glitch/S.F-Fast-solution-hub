@@ -68,7 +68,7 @@ class Doctor(db.Model):
     # =========================
     ratings = db.relationship(
         "DoctorRating",
-        backref="doctor",
+        back_populates="doctor",
         lazy=True,
         cascade="all, delete-orphan"
     )
