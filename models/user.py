@@ -210,6 +210,7 @@ class User(UserMixin, db.Model):
 
     password_reset_requests = db.relationship(
         "PasswordResetRequest",
+        foreign_keys="PasswordResetRequest.user_id",
         back_populates="user",
         lazy=True
     )
