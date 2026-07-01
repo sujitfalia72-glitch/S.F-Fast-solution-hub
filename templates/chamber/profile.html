@@ -256,7 +256,67 @@ textarea{
 .stat p{
     color:#64748b;
 }
+    
+.upload-box{
 
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+
+}
+
+.upload-box input[type=file]{
+
+    display:none;
+
+}
+
+.upload-label{
+
+    display:inline-block;
+
+    background:linear-gradient(
+        135deg,
+        #2563eb,
+        #4f46e5
+    );
+
+    color:white;
+
+    padding:12px 18px;
+
+    border-radius:14px;
+
+    cursor:pointer;
+
+    text-align:center;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.upload-label:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 8px 20px rgba(
+        37,
+        99,
+        235,
+        .25
+    );
+
+}
+
+.file-name{
+
+    font-size:13px;
+
+    color:#64748b;
+
+}
 /* MOBILE */
 
 @media(max-width:768px){
@@ -372,6 +432,45 @@ textarea{
                 name="area"
                 value="{{ profile.area }}">
             </div>
+            <div class="form-group upload-box">
+
+    <label class="upload-label" for="profile_image">
+        📷 Change Profile Photo
+    </label>
+
+    <input
+        id="profile_image"
+        type="file"
+        name="profile_image"
+        accept="image/*">
+
+    <span
+        class="file-name"
+        id="profileFileName">
+        No file selected
+    </span>
+
+</div>
+
+<div class="form-group upload-box">
+
+    <label class="upload-label" for="cover_image">
+        🖼 Change Cover Photo
+    </label>
+
+    <input
+        id="cover_image"
+        type="file"
+        name="cover_image"
+        accept="image/*">
+
+    <span
+        class="file-name"
+        id="coverFileName">
+        No file selected
+    </span>
+
+</div>
 
         </div>
 
@@ -425,6 +524,33 @@ textarea{
     </div>
 
 </div>
+    <script>
+
+document
+.getElementById("profile_image")
+.onchange=function(){
+
+document
+.getElementById("profileFileName")
+.innerText=this.files.length
+?this.files[0].name
+:"No file selected";
+
+};
+
+document
+.getElementById("cover_image")
+.onchange=function(){
+
+document
+.getElementById("coverFileName")
+.innerText=this.files.length
+?this.files[0].name
+:"No file selected";
+
+};
+
+    </script>
 
 </form>
 
