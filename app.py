@@ -15,7 +15,7 @@ from flask_login import LoginManager
 from flask_migrate import Migrate
 from werkzeug.security import generate_password_hash
 from sqlalchemy import text
-import socket_events
+
 import cloudinary
 
 from config import Config
