@@ -11,7 +11,6 @@ socketio = SocketIO(
         "CORS_ORIGINS",
         "*"
     ),
-    async_mode="gevent",
     ping_timeout=20,
     ping_interval=25
 )
