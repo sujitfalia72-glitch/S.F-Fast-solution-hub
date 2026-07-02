@@ -499,11 +499,16 @@ enctype="multipart/form-data">
                 value="{{ doctor.experience if doctor else '' }}">
 
             </div>
-            <input
+            <div class="form-group">
+                <label>Consultation Fee (₹)</label>
+
+        <input
             type="number"
             name="consultation_fee"
+            value="{{ doctor.consultation_fee if doctor else 0 }}"
+            min="0"
             placeholder="Consultation Fee">
-
+            </div>
             <div class="form-group">
 
                 <label>
