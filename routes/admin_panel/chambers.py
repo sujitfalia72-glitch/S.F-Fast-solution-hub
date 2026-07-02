@@ -312,7 +312,13 @@ def edit_doctor(doctor_id):
         doctor.specialization = request.form.get("specialization")
         doctor.hospital = request.form.get("hospital")
         doctor.experience = request.form.get("experience")
+        doctor.consultation_fee = request.form.get(
+            "consultation_fee",
+            type=int,
+            default=0
+        )
         doctor.about = request.form.get("about")
+        
 
         def upload(file, folder):
             if file and file.filename:
@@ -448,6 +454,11 @@ def create_doctor(chamber_id):
             specialization=request.form.get("specialization"),
             hospital=request.form.get("hospital"),
             experience=request.form.get("experience"),
+            consultation_fee=request.form.get(
+               "consultation_fee",
+               type=int,
+               default=0
+        ),
             about=request.form.get("about"),
             profile_photo=profile_photo_url,
             cover_photo=cover_photo_url
