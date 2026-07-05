@@ -658,6 +658,24 @@ def confirm_submit(id):
         url_for("chamber_panel.appointments")
         )
 
+@chamber_panel.route("/confirm/<int:id>", methods=["GET"])
+def confirm_page(id):
+
+    chamber_id = session.get("chamber_id")
+
+    if not chamber_id:
+        return redirect(url_for("chamber.login"))
+
+    a = Appointment.query.filter_by(
+        id=id,
+        chamber_id=chamber_id
+    ).first_or_404()
+
+    return render_template(
+        "chamber/confirm_page.html",
+        a=a
+    )
+
 @chamber_panel.route(
     "/rate/<int:chamber_id>",
     methods=["POST"]
