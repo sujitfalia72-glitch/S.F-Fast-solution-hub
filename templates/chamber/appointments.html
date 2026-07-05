@@ -325,9 +325,17 @@ font-weight:600;
 
             <!-- CONFIRM (POST ROUTE PAGE হওয়া উচিত, direct link না) -->
             {% if a.status == "pending" %}
-            <a href="{{ url_for('chamber_panel.confirm_submit', id=a.id) }}" class="btn btn-confirm">
-                Confirm
-            </a>
+            <form 
+            action="{{ url_for('chamber_panel.confirm_submit', id=a.id) }}"
+                method="POST"
+                style="display:inline;">
+
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <button type="submit" class="btn btn-confirm">
+        Confirm
+    </button>
+            </form>
             {% endif %}
 
             <!-- UPDATE (এইটা তোমার existing update route অনুযায়ী) -->
