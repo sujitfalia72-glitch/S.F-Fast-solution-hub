@@ -672,7 +672,7 @@ def confirm_page(id):
     ).first_or_404()
 
     return render_template(
-        "chamber/confirm_page.html",
+        "chamber/confirm.html",
         a=a
     )
 
