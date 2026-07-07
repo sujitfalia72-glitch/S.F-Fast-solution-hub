@@ -177,6 +177,14 @@ Confirm Appointment
                     {{ a.chamber.profile.phone if a.chamber and a.chamber.profile else a.chamber.phone }}
                 </div>
             </div>
+            <div class="info-box">
+                <div class="info-label">
+                    Consultation Fee
+                </div>
+                <div class="info-value">
+                    ₹ {{ a.doctor.consultation_fee if a.doctor else 0 }}
+                </div>
+            </div>
 
             <div class="info-box">
                 <div class="info-label">
