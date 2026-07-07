@@ -303,6 +303,7 @@ font-weight:600;
     <td>{{ a.patient_name }}</td>
     <td>{{ a.patient_phone }}</td>
     <td>{{ a.doctor.name if a.doctor else "-" }}</td>
+    <th>Consultation Fee</th>
 
     <!-- FIXED: Chamber column -->
     <td>{{ a.chamber.chamber_name if a.chamber else "No Chamber" }}</td>
@@ -316,6 +317,11 @@ font-weight:600;
     <td>{{ a.created_at.strftime('%d-%m-%Y') }}</td>
 
     <td>
+
+        <td>
+    ₹ {{ a.doctor.consultation_fee if a.doctor else 0 }}
+        </td>
+    
         <div class="actions">
 
             <!-- OPEN PAGE -->
