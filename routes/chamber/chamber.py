@@ -609,6 +609,8 @@ def save_appointment():
     )
 
 
+
+
 @chamber_panel.route("/confirm/submit/<int:id>", methods=["POST"])
 def confirm_submit(id):
 
@@ -622,11 +624,10 @@ def confirm_submit(id):
         chamber_id=chamber_id
     ).first_or_404()
 
-    confirmed_date = request.form.get("confirmed_date")
-    confirmed_time = request.form.get("confirmed_time")
-    confirmation_note = request.form.get("confirmation_note")
-
     try:
+        confirmed_date = request.form.get("confirmed_date")
+        confirmed_time = request.form.get("confirmed_time")
+        confirmation_note = request.form.get("confirmation_note")
 
         if confirmed_date:
             appointment.confirmed_date = datetime.strptime(
@@ -640,24 +641,19 @@ def confirm_submit(id):
 
         db.session.commit()
 
-        flash(
-            "Appointment confirmed successfully.",
-            "success"
-        )
+        flash("Appointment confirmed successfully.", "success")
 
-    except Exception:
-
+    except Exception as e:
         db.session.rollback()
 
-        flash(
-            "Failed to confirm appointment.",
-            "danger"
-        )
+        print("CONFIRM ERROR:", e)
+        import traceback
+        traceback.print_exc()
 
-    return redirect(
-        url_for("chamber_panel.appointments")
-        )
+        flash(str(e), "danger")
 
+    return redirect(url_for("chamber_panel.appointments"))
+    
 @chamber_panel.route("/confirm/<int:id>", methods=["GET"])
 def confirm_page(id):
 
