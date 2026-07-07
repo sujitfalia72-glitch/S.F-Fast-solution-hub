@@ -231,14 +231,8 @@ def doctor_details(doctor_id):
 
     doctor = Doctor.query.get_or_404(doctor_id)
 
-    # Doctor View
     doctor.views = (doctor.views or 0) + 1
     db.session.add(doctor)
-
-    # Chamber View
-    if doctor.chamber:
-        doctor.chamber.views = (doctor.chamber.views or 0) + 1
-        db.session.add(doctor.chamber)
 
     avg_rating = db.session.query(
         func.avg(DoctorRating.rating)
