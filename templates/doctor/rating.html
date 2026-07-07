@@ -163,6 +163,10 @@ body{
         method="POST"
         action="{{ url_for('doctor.rate_doctor', doctor_id=doctor_id) }}"
     >
+        <input type="hidden"
+            name="csrf_token"
+            value="{{ csrf_token() }}">
+
 
         <div class="star-rating">
 
