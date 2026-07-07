@@ -60,6 +60,18 @@ My Appointments
     opacity:.9;
     margin-top:5px;
 }
+.fee-label{
+    font-size:12px;
+    color:rgba(255,255,255,.8);
+    font-weight:600;
+    margin-top:12px;
+}
+
+.fee-value{
+    font-size:22px;
+    font-weight:800;
+    color:#fff;
+}    
 
 .card-body{
     padding:20px;
@@ -160,13 +172,12 @@ My Appointments
 <div class="chamber-name">
     🏥 {{ chamber.chamber_name if chamber else "-" }}
 </div>
-    <div class="info">
-    <div class="label">Consultation Fee</div>
-    <div class="value">
-        💰 ₹ {{ a.doctor.consultation_fee if a.doctor else 0 }}
-    </div>
-    </div>
+    <div class="fee-label">
+    Consultation Fee
+</div>
 
+<div class="fee-value">
+    💰 ₹ {{ a.doctor.consultation_fee if a.doctor else 0 }}
 </div>
 
 <div class="card-body">
