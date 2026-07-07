@@ -160,6 +160,12 @@ My Appointments
 <div class="chamber-name">
     🏥 {{ chamber.chamber_name if chamber else "-" }}
 </div>
+    <div class="info">
+    <div class="label">Consultation Fee</div>
+    <div class="value">
+        💰 ₹ {{ a.doctor.consultation_fee if a.doctor else 0 }}
+    </div>
+    </div>
 
 </div>
 
