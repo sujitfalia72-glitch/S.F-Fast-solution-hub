@@ -229,10 +229,11 @@ body{
         Admin Approval
     </a>
 
-    <a href="#" onclick="loadWorksSection('')">
-        <i class="fa fa-briefcase"></i>
-        Work Control
+    <a href="{{ url_for('owner.all_works_partial') }}">
+    <i class="fa fa-briefcase"></i>
+    Work Control
     </a>
+    
     <a href="{{ url_for('application.owner_applications') }}" class="btn">
     📋 View Applications
     </a>
