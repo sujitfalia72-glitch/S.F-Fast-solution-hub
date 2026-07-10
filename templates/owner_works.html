@@ -88,42 +88,81 @@
             <hr>
 
             <!-- ACTION BUTTONS -->
-            <div class="d-flex flex-wrap gap-2">
+<div class="d-flex flex-wrap gap-2">
 
-                {% if w.status not in ['approved', 'deleted'] %}
-                <a href="/owner/work/approve/{{ w.id }}"
-                   class="btn btn-success btn-sm action-btn">
-                    ✔ Approve
-                </a>
-                {% endif %}
+    {% if w.status not in ['approved', 'deleted'] %}
+    <form
+        action="{{ url_for('owner.approve_work', id=w.id) }}"
+        method="POST"
+        style="display:inline;"
+    >
+        <button
+            type="submit"
+            class="btn btn-success btn-sm action-btn"
+            onclick="return confirm('Approve this work?');"
+        >
+            ✔ Approve
+        </button>
+    </form>
+    {% endif %}
 
-                {% if w.status not in ['rejected', 'deleted'] %}
-                <a href="/owner/work/reject/{{ w.id }}"
-                   class="btn btn-danger btn-sm action-btn">
-                    ❌ Reject
-                </a>
-                {% endif %}
 
-                <a href="/owner/work/edit/{{ w.id }}"
-                   class="btn btn-primary btn-sm action-btn">
-                    ✏ Edit
-                </a>
+    {% if w.status not in ['rejected', 'deleted'] %}
+    <form
+        action="{{ url_for('owner.reject_work', id=w.id) }}"
+        method="POST"
+        style="display:inline;"
+    >
+        <button
+            type="submit"
+            class="btn btn-danger btn-sm action-btn"
+            onclick="return confirm('Reject this work?');"
+        >
+            ❌ Reject
+        </button>
+    </form>
+    {% endif %}
 
-                <a href="/owner/work/delete/{{ w.id }}"
-                   class="btn btn-dark btn-sm action-btn"
-                   onclick="return confirm('Delete this work?')">
-                    🗑 Delete
-                </a>
 
-            </div>
+    <a
+        href="{{ url_for('owner.edit_work', id=w.id) }}"
+        class="btn btn-primary btn-sm action-btn"
+    >
+        ✏ Edit
+    </a>
 
-        </div>
 
-    </div>
+    {% if w.status != "deleted" %}
+    <form
+        action="{{ url_for('owner.delete_work', id=w.id) }}"
+        method="POST"
+        style="display:inline;"
+        onsubmit="return confirm('Delete this work?');"
+    >
+        <button
+            type="submit"
+            class="btn btn-dark btn-sm action-btn"
+        >
+            🗑 Delete
+        </button>
+    </form>
+    {% endif %}
 
-</div>
 
-{% endfor %}
+    {% if w.status == "deleted" %}
+    <form
+        action="{{ url_for('owner.restore_work', id=w.id) }}"
+        method="POST"
+        style="display:inline;"
+    >
+        <button
+            type="submit"
+            class="btn btn-warning btn-sm action-btn"
+        >
+            ♻ Restore
+        </button>
+    </form>
+    {% endif %}
 
 </div>
 
