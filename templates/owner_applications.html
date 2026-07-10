@@ -193,7 +193,7 @@ body{
                 </div>
 
                 <div>
-                    💰 ₹ {{ "{:,}".format(app.expected_salary) if app.expected_salary else 'Not set' }}
+                    💰 ₹ {{ "{:,}".format(app.expected_salary|int) if app.expected_salary else "Not set" }}
                 </div>
 
                 <div>
