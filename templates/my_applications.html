@@ -163,7 +163,7 @@ body{
 
         <div class="label">Expected Salary</div>
         <div class="value">
-         ₹ {{ "{:,}".format(a.expected_salary) if a.expected_salary else "Not given" }}
+         ₹ {{ "{:,}".format(a.expected_salary|int) if a.expected_salary else "Not given" }}
         </div>
 
         <div class="label">Applied IP</div>
