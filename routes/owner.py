@@ -109,9 +109,9 @@ def transfer_user():
 # =================================================
 # 📋 ALL WORKS
 # =================================================
-@owner.route('/owner/works')
+@owner.route("/owner/works/partial")
 @owner_only
-def all_works():
+def all_works_partial():
 
     # ================= GET FILTER =================
     status = request.args.get("status", "").strip()
