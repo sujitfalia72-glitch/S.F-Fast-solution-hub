@@ -60,7 +60,7 @@
                     <h5 class="fw-bold mb-1">{{ w.title }}</h5>
 
                     <div class="small text-muted">
-                        👷 {{ w.workers_needed }} workers<br>
+                        👷 {{ w.workers }} workers
                         💰 {{ w.salary }}<br>
                         📅 {{ w.date }} ⏰ {{ w.time }}<br>
                         📞 {{ w.phone }}
@@ -241,3 +241,10 @@ function loadWorks(){
 }
 
 </script>
+        </div>
+    </div>
+</div>
+
+{% endfor %}
+
+</div>
