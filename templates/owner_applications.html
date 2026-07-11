@@ -222,58 +222,76 @@ body{
             </div>
 
             <div style="
-                margin-top:15px;
-                display:flex;
-                gap:8px;
-                flex-wrap:wrap;
-            ">
+    margin-top:15px;
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+">
 
-                <a
-                    class="btn view"
-                    href="{{ url_for(
-                        'application.application_details',
-                        id=app.id
-                    ) }}"
-                >
-                    👁 View
-                </a>
+    <!-- VIEW -->
+    <a
+        class="btn view"
+        href="{{ url_for('application.application_details', id=app.id) }}"
+    >
+        👁 View
+    </a>
 
-                {% if status == "applied" %}
-                <form action="{{ url_for('application.approve_application', id=app.id) }}"
-      method="POST"
-                    <input type="hidden"
+    {% if status == "applied" %}
+
+    <!-- APPROVE -->
+    <form
+        action="{{ url_for('application.approve_application', id=app.id) }}"
+        method="POST"
+        style="display:inline;"
+    >
+        <input
+            type="hidden"
             name="csrf_token"
-            value="{{ csrf_token() }}">
-      style="display:inline;">
-    <button type="submit" class="btn approve">
-        ✅ Approve
-    </button>
-</form>
+            value="{{ csrf_token() }}"
+        >
 
-<form action="{{ url_for('application.reject_application', id=app.id) }}"
-      method="POST"
-    <input type="hidden"
+        <button
+            type="submit"
+            class="btn approve"
+            onclick="return confirm('Approve this application?');"
+        >
+            ✅ Approve
+        </button>
+    </form>
+
+    <!-- REJECT -->
+    <form
+        action="{{ url_for('application.reject_application', id=app.id) }}"
+        method="POST"
+        style="display:inline;"
+    >
+        <input
+            type="hidden"
             name="csrf_token"
-            value="{{ csrf_token() }}">
-      style="display:inline;">
-    <button type="submit" class="btn reject">
-        ❌ Reject
-    </button>
-</form>
-{% endif %}
+            value="{{ csrf_token() }}"
+        >
 
-                <a
-                    class="btn delete"
-                    href="{{ url_for(
-                        'application.delete_application',
-                        id=app.id
-                    ) }}"
-                >
-                    🗑 Delete
-                </a>
+        <button
+            type="submit"
+            class="btn reject"
+            onclick="return confirm('Reject this application?');"
+        >
+            ❌ Reject
+        </button>
+    </form>
+
+    {% endif %}
+
+    <!-- DELETE -->
+    <a
+        class="btn delete"
+        href="{{ url_for('application.delete_application', id=app.id) }}"
+        onclick="return confirm('Delete this application?');"
+    >
+        🗑 Delete
+    </a>
 
             </div>
-
         </div>
 
     {% endfor %}
