@@ -258,7 +258,7 @@ def login():
 
     if user.must_change_password:
 
-        session.clear()
+        login_user(user)
 
         session["user_id"] = user.id
         session["role"] = user.role
@@ -283,7 +283,7 @@ def login():
     # SESSION SECURITY
     # =====================
 
-    session.clear()
+    login_user(user)
 
     session.permanent = True
 
