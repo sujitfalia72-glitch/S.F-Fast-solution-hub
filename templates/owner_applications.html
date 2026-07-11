@@ -241,6 +241,9 @@ body{
                 {% if status == "applied" %}
                 <form action="{{ url_for('application.approve_application', id=app.id) }}"
       method="POST"
+                    <input type="hidden"
+            name="csrf_token"
+            value="{{ csrf_token() }}">
       style="display:inline;">
     <button type="submit" class="btn approve">
         ✅ Approve
@@ -249,6 +252,9 @@ body{
 
 <form action="{{ url_for('application.reject_application', id=app.id) }}"
       method="POST"
+    <input type="hidden"
+            name="csrf_token"
+            value="{{ csrf_token() }}">
       style="display:inline;">
     <button type="submit" class="btn reject">
         ❌ Reject
