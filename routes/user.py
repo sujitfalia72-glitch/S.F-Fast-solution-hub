@@ -445,6 +445,7 @@ def wallet():
     return render_template(
         "wallet.html",
         user=user,
+        payment=payment,
         wallet_balance=wallet_balance,
         transactions=transactions,
         total_credit=total_credit,
