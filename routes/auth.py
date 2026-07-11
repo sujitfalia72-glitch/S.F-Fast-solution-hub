@@ -8,7 +8,7 @@ from flask import (
     flash
 )
 from functools import wraps
-
+from flask_login import logout_user
 from models.user import User
 from models.profile import Profile
 
@@ -539,14 +539,27 @@ def logout():
             user = db.session.get(User, user_id)
 
             if user:
+
                 user.is_online = False
                 user.last_seen = datetime.now(UTC)
 
                 db.session.commit()
 
     except Exception:
+
         db.session.rollback()
 
+    # Flask-Login logout
+    logout_user()
+
+    # Clear custom session
     session.clear()
 
-    return redirect(url_for("auth.login"))
+    flash(
+        "Logged out successfully.",
+        "success"
+    )
+
+    return redirect(
+        url_for("auth.login")
+    )
