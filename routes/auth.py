@@ -8,7 +8,7 @@ from flask import (
     flash
 )
 from functools import wraps
-from flask_login import logout_user
+from flask_login import login_user, logout_user
 from models.user import User
 from models.profile import Profile
 
@@ -260,8 +260,9 @@ def login():
 
         login_user(user)
 
+        session.permanent = True
         session["user_id"] = user.id
-        session["role"] = user.role
+        session["role"] = (user.role or "").lower().strip()
 
         return redirect(
             url_for("auth.change_password")
