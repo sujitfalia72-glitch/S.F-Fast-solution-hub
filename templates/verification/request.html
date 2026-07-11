@@ -181,6 +181,9 @@
             </div>
 
             <form method="POST">
+                <input type="hidden"
+                    name="csrf_token"
+                    value="{{ csrf_token() }}">
 
                 <h4 class="section-title">
                     Choose Verification Plan
