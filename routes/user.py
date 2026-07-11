@@ -422,6 +422,12 @@ def wallet():
         per_page=per_page,
         error_out=False
     )
+    # ================= PAYMENT METHOD =================
+
+    payment = UserPaymentMethod.query.filter_by(
+        user_id=user_id,
+        is_default=True
+    ).first()
     # ================= CALCULATIONS =================
 
     wallet_balance = float(user.wallet_balance or 0)
