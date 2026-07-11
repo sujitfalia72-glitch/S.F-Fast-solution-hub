@@ -14,6 +14,31 @@ Share your personal referral link with friends, family, or colleagues.
 When they join S.F Works Hub using your link, your network grows and you become eligible for referral rewards and future benefits.
 </p>
     </div>
+    <div class="referral-label">
+
+    <label class="fw-bold mb-2">
+        🔗 Your Personal Referral Link
+    </label>
+
+</div>
+
+<div class="referral-input-box">
+
+    <input
+        type="text"
+        id="refLink"
+        value="{{ url_for('auth.signup', ref=session['user_id'], ref_id=session['user_id'], _external=True) }}"
+        readonly
+    >
+
+    <button
+        class="copy-btn"
+        onclick="copyReferralLink()"
+    >
+        📋 Copy Referral Link
+    </button>
+
+</div>
 
     <div class="referral-input-box">
 
@@ -209,8 +234,20 @@ When they join S.F Works Hub using your link, your network grows and you become 
     margin-bottom:20px;
 
     box-shadow:0 10px 25px rgba(37,99,235,.25);
-}    
+}
+    
+.referral-label{
 
+    margin-top:20px;
+    margin-bottom:8px;
+}
+
+.referral-label label{
+
+    font-size:16px;
+    font-weight:700;
+    color:#374151;
+ }
 </style>
 
 <script>
