@@ -239,17 +239,21 @@ body{
                 </a>
 
                 {% if status == "applied" %}
+                <form action="{{ url_for('application.approve_application', id=app.id) }}"
+      method="POST"
+      style="display:inline;">
+    <button type="submit" class="btn approve">
+        ✅ Approve
+    </button>
+</form>
 
-<a class="btn approve"
-   href="{{ url_for('application.approve_application', id=app.id) }}">
-    ✅ Approve
-</a>
-
-<a class="btn reject"
-   href="{{ url_for('application.reject_application', id=app.id) }}">
-    ❌ Reject
-</a>
-
+<form action="{{ url_for('application.reject_application', id=app.id) }}"
+      method="POST"
+      style="display:inline;">
+    <button type="submit" class="btn reject">
+        ❌ Reject
+    </button>
+</form>
 {% endif %}
 
                 <a
