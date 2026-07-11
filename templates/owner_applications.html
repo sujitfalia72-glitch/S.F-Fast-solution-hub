@@ -173,7 +173,7 @@ body{
 
     {% for app in applications.items %}
 
-        {% set status = (app.status or 'pending') | lower %}
+        {% set status = (app.status or 'applied') | lower %}
 
         <div class="card">
 
@@ -238,29 +238,19 @@ body{
                     👁 View
                 </a>
 
-                {% if status == "pending" %}
+                {% if status == "applied" %}
 
-                <a
-                    class="btn approve"
-                    href="{{ url_for(
-                        'application.approve_application',
-                        id=app.id
-                    ) }}"
-                >
-                    ✅ Approve
-                </a>
+<a class="btn approve"
+   href="{{ url_for('application.approve_application', id=app.id) }}">
+    ✅ Approve
+</a>
 
-                <a
-                    class="btn reject"
-                    href="{{ url_for(
-                        'application.reject_application',
-                        id=app.id
-                    ) }}"
-                >
-                    ❌ Reject
-                </a>
+<a class="btn reject"
+   href="{{ url_for('application.reject_application', id=app.id) }}">
+    ❌ Reject
+</a>
 
-                {% endif %}
+{% endif %}
 
                 <a
                     class="btn delete"
