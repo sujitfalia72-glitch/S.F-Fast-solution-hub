@@ -72,6 +72,59 @@ def approve_user(id):
 
     return redirect('/owner/dashboard')
 
+@owner.route("/owner/approve/<int:id>", methods=["POST"])
+@owner_only
+def approve_user(id):
+    user = User.query.get_or_404(id)
+
+    # Only Admin/Super Admin requests can be approved
+    if user.role not in ("admin", "super_admin"):
+        flash("This account does not require approval.", "warning")
+        return redirect(url_for("owner.approval_requests"))
+
+    # Already approved
+    if user.status == "active":
+        flash("This account is already approved.", "info")
+        return redirect(url_for("owner.approval_requests"))
+
+    user.status = "active"
+
+    db.session.commit()
+
+    send_notification(
+        user_id=user.id,
+        title="Account Approved",
+        message="Your account has been approved successfully.",
+        type="success",
+        icon="check-circle",
+        priority="high"
+    )
+
+    flash("Account approved successfully.", "success")
+
+    return redirect(url_for("owner.approval_requests"))
+
+
+@owner.route("/owner/reject/<int:id>", methods=["POST"])
+@owner_only
+def reject_user(id):
+
+    user = User.query.get_or_404(id)
+
+    user.status = "rejected"
+
+    db.session.commit()
+
+    send_notification(
+        user_id=user.id,
+        title="Account Rejected",
+        message="Your account request has been rejected.",
+        type="error",
+        icon="times-circle",
+        priority="high"
+    )
+
+    return redirect(url_for("owner.approval_requests"))
 
 # =================================================
 # 🔁 TRANSFER USER
