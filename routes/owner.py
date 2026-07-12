@@ -46,46 +46,97 @@ def owner_only(f):
 # =================================================
 # 👤 APPROVE ADMIN / SUPER ADMIN
 # =================================================
-@owner.route('/owner/approve/<int:id>', methods=["POST"])
+
+@owner.route("/owner/approval-requests")
 @owner_only
-def approve_user(id):
+def approval_requests():
 
-    user = User.query.get(id)
-
-    if not user:
-        return "User not found"
-
-    if user.role not in ["admin", "super_admin"]:
-        return "No approval needed"
-
-    user.status = "active"
-    db.session.commit()
-    send_notification(
-        user_id=user.id,
-        title="Account Approved",
-        message="Your account has been approved.",
-        type="success",
-        icon="check-circle",
-        priority="high"
+    page = request.args.get(
+        "page",
+        1,
+        type=int
     )
-    
 
-    return redirect('/owner/dashboard')
+    status = request.args.get(
+        "status",
+        "all"
+    )
+
+    search = request.args.get(
+        "search",
+        ""
+    ).strip()
+
+    query = User.query.filter(
+        User.role.in_(["admin", "super_admin"]),
+        User.is_deleted == False
+    )
+
+    # -----------------------------
+    # STATUS FILTER
+    # -----------------------------
+    if status != "all":
+        query = query.filter(
+            User.status == status
+        )
+
+    # -----------------------------
+    # SEARCH
+    # -----------------------------
+    if search:
+
+        query = query.filter(
+            or_(
+                User.name.ilike(f"%{search}%"),
+                User.phone.ilike(f"%{search}%"),
+                User.email.ilike(f"%{search}%")
+            )
+        )
+
+    # -----------------------------
+    # NEWEST FIRST
+    # -----------------------------
+    query = query.order_by(
+        User.created_at.desc()
+    )
+
+    users = query.paginate(
+        page=page,
+        per_page=50,
+        error_out=False
+    )
+
+    return render_template(
+        "owner/approval_requests.html",
+        users=users,
+        status=status,
+        search=search
+    )
+
+
+# ===========================================================
+# APPROVE USER
+# ===========================================================
 
 @owner.route("/owner/approve/<int:id>", methods=["POST"])
 @owner_only
 def approve_user(id):
+
     user = User.query.get_or_404(id)
 
-    # Only Admin/Super Admin requests can be approved
     if user.role not in ("admin", "super_admin"):
-        flash("This account does not require approval.", "warning")
-        return redirect(url_for("owner.approval_requests"))
 
-    # Already approved
-    if user.status == "active":
-        flash("This account is already approved.", "info")
-        return redirect(url_for("owner.approval_requests"))
+        flash(
+            "Approval not required.",
+            "warning"
+        )
+
+        return redirect(
+            url_for(
+                "owner.approval_requests",
+                page=request.args.get("page", 1)
+            )
+        )
 
     user.status = "active"
 
@@ -100,16 +151,42 @@ def approve_user(id):
         priority="high"
     )
 
-    flash("Account approved successfully.", "success")
+    flash(
+        "Account approved successfully.",
+        "success"
+    )
 
-    return redirect(url_for("owner.approval_requests"))
+    return redirect(
+        url_for(
+            "owner.approval_requests",
+            page=request.args.get("page", 1)
+        )
+    )
 
+
+# ===========================================================
+# REJECT USER
+# ===========================================================
 
 @owner.route("/owner/reject/<int:id>", methods=["POST"])
 @owner_only
 def reject_user(id):
 
     user = User.query.get_or_404(id)
+
+    if user.role not in ("admin", "super_admin"):
+
+        flash(
+            "Approval not required.",
+            "warning"
+        )
+
+        return redirect(
+            url_for(
+                "owner.approval_requests",
+                page=request.args.get("page", 1)
+            )
+        )
 
     user.status = "rejected"
 
@@ -118,13 +195,23 @@ def reject_user(id):
     send_notification(
         user_id=user.id,
         title="Account Rejected",
-        message="Your account request has been rejected.",
-        type="error",
-        icon="times-circle",
+        message="Sorry, your account request has been rejected.",
+        type="danger",
+        icon="x-circle",
         priority="high"
     )
 
-    return redirect(url_for("owner.approval_requests"))
+    flash(
+        "Account rejected successfully.",
+        "danger"
+    )
+
+    return redirect(
+        url_for(
+            "owner.approval_requests",
+            page=request.args.get("page", 1)
+        )
+    )
 
 # =================================================
 # 🔁 TRANSFER USER
