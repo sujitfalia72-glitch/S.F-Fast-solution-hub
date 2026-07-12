@@ -740,6 +740,11 @@ Rejected
                 action="{{ url_for('owner.approve_work', id=w.id) }}"
                 method="POST"
             >
+                <input
+                    type="hidden"
+                    name="csrf_token"
+                    value="{{ csrf_token() }}"
+                 >
 
                 <button
                     type="submit"
@@ -769,6 +774,11 @@ Rejected
                 action="{{ url_for('owner.reject_work', id=w.id) }}"
                 method="POST"
             >
+                <input
+                    type="hidden"
+                    name="csrf_token"
+                    value="{{ csrf_token() }}"
+                 >
 
                 <button
                     type="submit"
