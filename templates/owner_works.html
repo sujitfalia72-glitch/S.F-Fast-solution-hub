@@ -379,20 +379,29 @@ placeholder="Search by title, description, phone, salary..."
 <div class="col-lg-4">
 
 <select
-
-class="form-select filter-select"
-
-id="statusFilter"
-
+    class="form-select filter-select"
+    id="statusFilter"
 >
 
-<option value="all">All Status</option>
+<option value="all"
+{% if current_status=="" or current_status=="all" %}selected{% endif %}>
+All Status
+</option>
 
-<option value="pending">Pending</option>
+<option value="pending"
+{% if current_status=="pending" %}selected{% endif %}>
+Pending
+</option>
 
-<option value="approved">Approved</option>
+<option value="approved"
+{% if current_status=="approved" %}selected{% endif %}>
+Approved
+</option>
 
-<option value="rejected">Rejected</option>
+<option value="rejected"
+{% if current_status=="rejected" %}selected{% endif %}>
+Rejected
+</option>
 
 </select>
 
@@ -790,39 +799,26 @@ id="statusFilter"
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    // ================= SEARCH =================
-
     const searchInput = document.getElementById("searchInput");
-
     const statusFilter = document.getElementById("statusFilter");
 
-    function filterWorks(){
+    // ================= SEARCH =================
+
+    function filterWorks() {
 
         const keyword = searchInput.value.toLowerCase().trim();
 
-        const status = statusFilter.value;
-
         const cards = document.querySelectorAll(".work-item");
 
-        cards.forEach(function(card){
+        cards.forEach(function (card) {
 
             const text = card.innerText.toLowerCase();
 
-            const workStatus = card.dataset.status;
-
-            const matchSearch =
-                keyword === "" ||
-                text.includes(keyword);
-
-            const matchStatus =
-                status === "all" ||
-                workStatus === status;
-
-            if(matchSearch && matchStatus){
+            if (keyword === "" || text.includes(keyword)) {
 
                 card.style.display = "";
 
-            }else{
+            } else {
 
                 card.style.display = "none";
 
@@ -832,19 +828,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-    searchInput.addEventListener(
-        "keyup",
-        filterWorks
-    );
+    searchInput.addEventListener("keyup", filterWorks);
 
-    statusFilter.addEventListener(
-        "change",
-        filterWorks
-    );
+    // ================= STATUS FILTER =================
+
+    statusFilter.addEventListener("change", function () {
+
+        window.location =
+            "{{ url_for('owner.all_works_partial') }}?status=" +
+            this.value;
+
+    });
 
 });
 
 </script>
 
 {% endblock %}
-    
