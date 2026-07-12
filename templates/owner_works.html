@@ -1,250 +1,850 @@
-<div class="container-fluid">
+{% extends "owner/base.html" %}
 
-<!-- ================= HEADER BAR ================= -->
-<div class="card p-3 mb-3 shadow-sm">
+{% block title %}Owner Work Control{% endblock %}
 
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+{% block content %}
 
-        <h4 class="mb-0 fw-bold">📋 Owner Work Control</h4>
+<style>
 
-        <!-- SEARCH -->
-        <input
-            type="text"
-            id="workSearch"
-            class="form-control"
-            placeholder="🔍 Search works..."
-            style="max-width:280px;"
-        >
+:root{
 
-    </div>
+    --primary:#2563eb;
+    --secondary:#4f46e5;
+    --success:#16a34a;
+    --danger:#dc2626;
+    --warning:#d97706;
 
-    <!-- FILTER -->
-    <div class="mt-3 d-flex flex-wrap gap-2">
+    --dark:#0f172a;
+    --card:rgba(255,255,255,.14);
+    --border:rgba(255,255,255,.18);
 
-        <button class="btn btn-outline-secondary btn-sm" onclick="loadWorks()">All</button>
-        <button class="btn btn-outline-warning btn-sm" onclick="filterWorks('pending')">Pending</button>
-        <button class="btn btn-outline-success btn-sm" onclick="filterWorks('approved')">Approved</button>
-        <button class="btn btn-outline-danger btn-sm" onclick="filterWorks('rejected')">Rejected</button>
-        <button class="btn btn-outline-dark btn-sm" onclick="filterWorks('deleted')">Deleted</button>
+    --text:#f8fafc;
+    --muted:#cbd5e1;
 
-    </div>
+}
+
+body{
+
+    background:
+    linear-gradient(
+        135deg,
+        #0f172a,
+        #1e3a8a,
+        #2563eb
+    );
+
+}
+
+.owner-page{
+
+    padding:25px;
+
+}
+
+.glass{
+
+    background:var(--card);
+
+    backdrop-filter:blur(18px);
+
+    -webkit-backdrop-filter:blur(18px);
+
+    border:1px solid var(--border);
+
+    border-radius:24px;
+
+    box-shadow:
+    0 20px 45px rgba(0,0,0,.25);
+
+}
+
+.page-header{
+
+    padding:30px;
+
+    margin-bottom:25px;
+
+}
+
+.page-title{
+
+    color:white;
+
+    font-size:30px;
+
+    font-weight:700;
+
+}
+
+.page-sub{
+
+    color:#dbeafe;
+
+}
+
+.stat-card{
+
+    padding:25px;
+
+    transition:.35s;
+
+    height:100%;
+
+}
+
+.stat-card:hover{
+
+    transform:translateY(-5px);
+
+}
+
+.stat-icon{
+
+    width:65px;
+
+    height:65px;
+
+    border-radius:18px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:28px;
+
+    color:white;
+
+    margin-bottom:15px;
+
+}
+
+.bg-blue{
+
+    background:#2563eb;
+
+}
+
+.bg-green{
+
+    background:#16a34a;
+
+}
+
+.bg-orange{
+
+    background:#d97706;
+
+}
+
+.bg-red{
+
+    background:#dc2626;
+
+}
+
+.stat-title{
+
+    color:#cbd5e1;
+
+}
+
+.stat-value{
+
+    color:white;
+
+    font-size:34px;
+
+    font-weight:700;
+
+}
+
+.toolbar{
+
+    padding:22px;
+
+    margin-bottom:25px;
+
+}
+
+.search-input{
+
+    border:none;
+
+    border-radius:14px;
+
+    height:52px;
+
+}
+
+.search-input:focus{
+
+    box-shadow:none;
+
+}
+
+.filter-select{
+
+    border:none;
+
+    border-radius:14px;
+
+    height:52px;
+
+}
+
+.filter-select:focus{
+
+    box-shadow:none;
+
+}
+
+.work-card{
+
+    transition:.35s;
+
+}
+
+.work-card:hover{
+
+    transform:translateY(-8px);
+
+}
+
+</style>
+
+<div class="container-fluid owner-page">
+
+<div class="glass page-header">
+
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+<div>
+
+<h2 class="page-title">
+
+<i class="bi bi-kanban-fill me-2"></i>
+
+Owner Work Control
+
+</h2>
+
+<p class="page-sub mb-0">
+
+Manage all submitted works professionally
+
+</p>
 
 </div>
 
+<span class="badge bg-light text-dark rounded-pill px-4 py-3">
 
-<!-- ================= EMPTY STATE ================= -->
-{% if works|length == 0 %}
-<div class="text-center p-5 bg-light rounded shadow-sm">
-    <h4>😕 No works found</h4>
-    <p class="text-muted">Try changing filter or search</p>
+{{ works|length }} Total Works
+
+</span>
+
 </div>
-{% endif %}
 
+</div>
 
-<!-- ================= WORK GRID ================= -->
-<div class="row" id="worksContainer">
+<div class="row g-4 mb-4">
+
+<div class="col-lg-3 col-md-6">
+
+<div class="glass stat-card">
+
+<div class="stat-icon bg-blue">
+
+<i class="bi bi-folder-fill"></i>
+
+</div>
+
+<div class="stat-title">
+
+Total
+
+</div>
+
+<div class="stat-value">
+
+{{ works|length }}
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="glass stat-card">
+
+<div class="stat-icon bg-orange">
+
+<i class="bi bi-hourglass-split"></i>
+
+</div>
+
+<div class="stat-title">
+
+Pending
+
+</div>
+
+<div class="stat-value">
+
+{{ works|selectattr('status','equalto','pending')|list|length }}
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="glass stat-card">
+
+<div class="stat-icon bg-green">
+
+<i class="bi bi-check-circle-fill"></i>
+
+</div>
+
+<div class="stat-title">
+
+Approved
+
+</div>
+
+<div class="stat-value">
+
+{{ works|selectattr('status','equalto','approved')|list|length }}
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="glass stat-card">
+
+<div class="stat-icon bg-red">
+
+<i class="bi bi-x-circle-fill"></i>
+
+</div>
+
+<div class="stat-title">
+
+Rejected
+
+</div>
+
+<div class="stat-value">
+
+{{ works|selectattr('status','equalto','rejected')|list|length }}
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="glass toolbar">
+
+<div class="row g-3">
+
+<div class="col-lg-8">
+
+<input
+
+type="text"
+
+id="searchInput"
+
+class="form-control search-input"
+
+placeholder="Search by title, description, phone, salary..."
+
+>
+
+</div>
+
+<div class="col-lg-4">
+
+<select
+
+class="form-select filter-select"
+
+id="statusFilter"
+
+>
+
+<option value="all">All Status</option>
+
+<option value="pending">Pending</option>
+
+<option value="approved">Approved</option>
+
+<option value="rejected">Rejected</option>
+
+</select>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="row g-4" id="workContainer">
+    {% if works %}
 
 {% for w in works %}
 
-<div class="col-lg-6 col-md-12 mb-4 work-card">
+<div
+    class="col-xl-6 col-lg-6 col-md-12 work-item"
+    data-status="{{ w.status }}"
+>
 
-    <div class="card border-0 shadow-sm work-box">
+<div class="glass p-4 h-100 work-card">
 
-        <!-- TOP -->
-        <div class="card-body">
+    <!-- ================= HEADER ================= -->
 
-            <div class="d-flex justify-content-between align-items-start">
+    <div class="d-flex justify-content-between align-items-start mb-3">
 
-                <div>
+        <div>
 
-                    <h5 class="fw-bold mb-1">{{ w.title }}</h5>
+            <h4 class="text-white fw-bold mb-1">
 
-                    <div class="small text-muted">
-                        👷 {{ w.workers }} workers
-                        💰 {{ w.salary }}<br>
-                        📅 {{ w.date }} ⏰ {{ w.time }}<br>
-                        📞 {{ w.phone }}
-                    </div>
+                {{ w.title }}
 
-                </div>
+            </h4>
 
-                <!-- STATUS BADGE -->
-                <div>
+            <small class="text-light">
 
-                    {% if w.status == "pending" %}
-                        <span class="badge bg-warning text-dark">PENDING</span>
-                    {% elif w.status == "approved" %}
-                        <span class="badge bg-success">APPROVED</span>
-                    {% elif w.status == "rejected" %}
-                        <span class="badge bg-danger">REJECTED</span>
-                    {% elif w.status == "deleted" %}
-                        <span class="badge bg-dark">DELETED</span>
-                    {% endif %}
+                Work ID : #{{ w.id }}
+
+            </small>
+
+        </div>
+
+        {% if w.status=="approved" %}
+
+        <span class="badge bg-success px-3 py-2">
+
+            <i class="bi bi-check-circle-fill me-1"></i>
+
+            Approved
+
+        </span>
+
+        {% elif w.status=="rejected" %}
+
+        <span class="badge bg-danger px-3 py-2">
+
+            <i class="bi bi-x-circle-fill me-1"></i>
+
+            Rejected
+
+        </span>
+
+        {% else %}
+
+        <span class="badge bg-warning text-dark px-3 py-2">
+
+            <i class="bi bi-hourglass-split me-1"></i>
+
+            Pending
+
+        </span>
+
+        {% endif %}
+
+    </div>
+
+    <!-- ================= DESCRIPTION ================= -->
+
+    <div class="mb-4">
+
+        <label class="text-info small fw-semibold">
+
+            Description
+
+        </label>
+
+        <div class="text-white mt-1">
+
+            {{ w.description }}
+
+        </div>
+
+    </div>
+
+    <!-- ================= DETAILS ================= -->
+
+    <div class="row g-3">
+
+        <div class="col-md-6">
+
+            <div class="glass p-3">
+
+                <small class="text-secondary">
+
+                    <i class="bi bi-people-fill me-1"></i>
+
+                    Workers
+
+                </small>
+
+                <div class="text-white fw-semibold mt-1">
+
+                    {{ w.workers or "-" }}
 
                 </div>
 
             </div>
 
-            <hr>
-
-            <!-- ACTION BUTTONS -->
-<div class="d-flex flex-wrap gap-2">
-
-    {% if w.status not in ['approved', 'deleted'] %}
-    <form
-        action="{{ url_for('owner.approve_work', id=w.id) }}"
-        method="POST"
-        style="display:inline;"
-    >
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <button
-            type="submit"
-            class="btn btn-success btn-sm action-btn"
-            onclick="return confirm('Approve this work?');"
-        >
-            ✔ Approve
-        </button>
-    </form>
-    {% endif %}
-
-
-    {% if w.status not in ['rejected', 'deleted'] %}
-    <form
-        action="{{ url_for('owner.reject_work', id=w.id) }}"
-        method="POST"
-        style="display:inline;"
-    >
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <button
-            type="submit"
-            class="btn btn-danger btn-sm action-btn"
-            onclick="return confirm('Reject this work?');"
-        >
-            ❌ Reject
-        </button>
-    </form>
-    {% endif %}
-
-
-    <a
-        href="{{ url_for('owner.edit_work', id=w.id) }}"
-        class="btn btn-primary btn-sm action-btn"
-    >
-        ✏ Edit
-    </a>
-
-
-    {% if w.status != "deleted" %}
-    <form
-        action="{{ url_for('owner.delete_work', id=w.id) }}"
-        method="POST"
-        style="display:inline;"
-        onsubmit="return confirm('Delete this work?');"
-    >
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <button
-            type="submit"
-            class="btn btn-dark btn-sm action-btn"
-        >
-            🗑 Delete
-        </button>
-    </form>
-    {% endif %}
-
-
-    {% if w.status == "deleted" %}
-    <form
-        action="{{ url_for('owner.restore_work', id=w.id) }}"
-        method="POST"
-        style="display:inline;"
-    >
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <button
-            type="submit"
-            class="btn btn-warning btn-sm action-btn"
-        >
-            ♻ Restore
-        </button>
-    </form>
-    {% endif %}
-
-</div>
-
-</div>
-
-
-<!-- ================= STYLE UPGRADE ================= -->
-<style>
-
-.work-box{
-    transition:0.25s;
-    border-radius:14px;
-}
-
-.work-box:hover{
-    transform:translateY(-4px);
-    box-shadow:0 10px 25px rgba(0,0,0,0.12);
-}
-
-.action-btn{
-    border-radius:10px;
-    font-size:13px;
-    padding:6px 12px;
-}
-
-</style>
-
-
-<!-- ================= SCRIPT ================= -->
-
-<script>
-
-// 🔍 SEARCH (SMOOTH FILTER)
-document.getElementById("workSearch").addEventListener("keyup", function () {
-
-    let value = this.value.toLowerCase();
-
-    document.querySelectorAll(".work-card").forEach(card => {
-
-        card.style.display =
-            card.innerText.toLowerCase().includes(value)
-            ? "block"
-            : "none";
-
-    });
-
-});
-
-
-// 📂 FILTER (SAFE AJAX)
-function filterWorks(status){
-
-    fetch(`/owner/works?status=${status}`)
-    .then(res => res.text())
-    .then(html => {
-
-        const doc = new DOMParser().parseFromString(html, "text/html");
-        const newCards = doc.querySelector("#worksContainer");
-
-        if(newCards){
-            document.querySelector("#worksContainer").innerHTML = newCards.innerHTML;
-        }
-
-    });
-
-}
-
-
-// 🔄 FULL RESET
-function loadWorks(){
-    window.location.href = "/owner/works";
-}
-
-</script>
         </div>
+
+        <div class="col-md-6">
+
+            <div class="glass p-3">
+
+                <small class="text-success">
+
+                    <i class="bi bi-cash-stack me-1"></i>
+
+                    Salary
+
+                </small>
+
+                <div class="text-white fw-semibold mt-1">
+
+                    {{ w.salary or "-" }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="glass p-3">
+
+                <small class="text-warning">
+
+                    <i class="bi bi-calendar-event me-1"></i>
+
+                    Date
+
+                </small>
+
+                <div class="text-white fw-semibold mt-1">
+
+                    {{ w.date or "-" }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="glass p-3">
+
+                <small class="text-primary">
+
+                    <i class="bi bi-clock-fill me-1"></i>
+
+                    Time
+
+                </small>
+
+                <div class="text-white fw-semibold mt-1">
+
+                    {{ w.time or "-" }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="glass p-3">
+
+                <small class="text-danger">
+
+                    <i class="bi bi-telephone-fill me-1"></i>
+
+                    Phone
+
+                </small>
+
+                <div class="text-white fw-semibold mt-1">
+
+                    {{ w.phone or "-" }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="glass p-3">
+
+                <small class="text-info">
+
+                    <i class="bi bi-phone-fill me-1"></i>
+
+                    Mobile
+
+                </small>
+
+                <div class="text-white fw-semibold mt-1">
+
+                    {{ w.mobile or "-" }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="glass p-3">
+
+                <small class="text-light">
+
+                    <i class="bi bi-person-fill me-1"></i>
+
+                    Posted By
+
+                </small>
+
+                <div class="text-white fw-semibold mt-1">
+
+                    {{ w.user.name if w.user else "Unknown" }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="glass p-3">
+
+                <small class="text-light">
+
+                    <i class="bi bi-calendar3 me-1"></i>
+
+                    Created
+
+                </small>
+
+                <div class="text-white fw-semibold mt-1">
+
+                    {{ w.created_at.strftime("%d %b %Y %I:%M %p") }}
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
+
+    <!-- ================= ACTION AREA START ================= -->
+        <hr class="border-light opacity-25 my-4">
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+        <div>
+
+            <span class="badge bg-secondary me-2">
+
+                Edit Count :
+                {{ w.edit_count }}
+
+            </span>
+
+            {% if w.is_active %}
+
+            <span class="badge bg-success">
+
+                Active
+
+            </span>
+
+            {% else %}
+
+            <span class="badge bg-warning text-dark">
+
+                Inactive
+
+            </span>
+
+            {% endif %}
+
+        </div>
+
+        <div class="d-flex gap-2 flex-wrap">
+
+            {% if w.status != "approved" %}
+
+            <form
+                action="{{ url_for('owner.approve_work', id=w.id) }}"
+                method="POST"
+            >
+
+                <button
+                    class="btn btn-success"
+                    onclick="return confirm('Approve this work?')"
+                >
+
+                    <i class="bi bi-check-circle-fill me-1"></i>
+
+                    Approve
+
+                </button>
+
+            </form>
+
+            {% endif %}
+
+            {% if w.status != "rejected" %}
+
+            <form
+                action="{{ url_for('owner.reject_work', id=w.id) }}"
+                method="POST"
+            >
+
+                <button
+                    class="btn btn-danger"
+                    onclick="return confirm('Reject this work?')"
+                >
+
+                    <i class="bi bi-x-circle-fill me-1"></i>
+
+                    Reject
+
+                </button>
+
+            </form>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
 </div>
 
 {% endfor %}
 
+{% else %}
+
+<div class="col-12">
+
+    <div class="glass p-5 text-center">
+
+        <i class="bi bi-folder2-open display-3 text-light"></i>
+
+        <h3 class="text-white mt-4">
+
+            No Work Available
+
+        </h3>
+
+        <p class="text-light mb-0">
+
+            There are no work records to display.
+
+        </p>
+
+    </div>
+
 </div>
+
+{% endif %}
+
+    </div>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    // ================= SEARCH =================
+
+    const searchInput = document.getElementById("searchInput");
+
+    const statusFilter = document.getElementById("statusFilter");
+
+    function filterWorks(){
+
+        const keyword = searchInput.value.toLowerCase().trim();
+
+        const status = statusFilter.value;
+
+        const cards = document.querySelectorAll(".work-item");
+
+        cards.forEach(function(card){
+
+            const text = card.innerText.toLowerCase();
+
+            const workStatus = card.dataset.status;
+
+            const matchSearch =
+                keyword === "" ||
+                text.includes(keyword);
+
+            const matchStatus =
+                status === "all" ||
+                workStatus === status;
+
+            if(matchSearch && matchStatus){
+
+                card.style.display = "";
+
+            }else{
+
+                card.style.display = "none";
+
+            }
+
+        });
+
+    }
+
+    searchInput.addEventListener(
+        "keyup",
+        filterWorks
+    );
+
+    statusFilter.addEventListener(
+        "change",
+        filterWorks
+    );
+
+});
+
+</script>
+
+{% endblock %}
+    
