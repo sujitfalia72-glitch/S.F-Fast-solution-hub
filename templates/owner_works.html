@@ -211,6 +211,27 @@ body{
     transform:translateY(-8px);
 
 }
+@media(max-width:768px){
+
+.page-title{
+
+font-size:24px;
+
+}
+
+.stat-value{
+
+font-size:28px;
+
+}
+
+.work-card{
+
+padding:18px!important;
+
+}
+
+}    
 
 </style>
 
@@ -721,8 +742,15 @@ Rejected
             >
 
                 <button
+                    type="submit"
                     class="btn btn-success"
-                    onclick="return confirm('Approve this work?')"
+                    onclick="
+                        if(!confirm('Approve this work?')) return false;
+                        this.disabled=true;
+                        this.innerHTML='<span class=&quot;spinner-border spinner-border-sm me-1&quot;></span>Processing...';
+                        this.form.submit();
+                        return false;
+                     "
                 >
 
                     <i class="bi bi-check-circle-fill me-1"></i>
@@ -743,8 +771,15 @@ Rejected
             >
 
                 <button
+                    type="submit"
                     class="btn btn-danger"
-                    onclick="return confirm('Reject this work?')"
+                    onclick="
+                        if(!confirm('Reject this work?')) return false;
+                        this.disabled=true;
+                        this.innerHTML='<span class=&quot;spinner-border spinner-border-sm me-1&quot;></span>Processing...';
+                        this.form.submit();
+                        return false;
+                     "
                 >
 
                     <i class="bi bi-x-circle-fill me-1"></i>
