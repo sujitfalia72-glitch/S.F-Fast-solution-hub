@@ -7,6 +7,192 @@ Referral Program
 {% block content %}
 
 <style>
+    /* ================= HERO ================= */
+
+.hero-banner{
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+    border-radius:30px;
+    color:#fff;
+    overflow:hidden;
+    margin-bottom:25px;
+    box-shadow:0 20px 40px rgba(37,99,235,.25);
+}
+
+.hero-overlay{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:45px;
+}
+
+.hero-left{
+    max-width:650px;
+}
+
+.hero-badge{
+    background:rgba(255,255,255,.15);
+    padding:8px 18px;
+    border-radius:50px;
+    display:inline-block;
+    margin-bottom:18px;
+    backdrop-filter:blur(12px);
+}
+
+.hero-left h1{
+    font-size:46px;
+    font-weight:800;
+    line-height:1.2;
+}
+
+.hero-left h1 span{
+    color:#FFD700;
+}
+
+.hero-left p{
+    margin-top:18px;
+    font-size:18px;
+    opacity:.95;
+    line-height:1.8;
+}
+
+.hero-buttons{
+    margin-top:30px;
+}
+
+.btn-primary-custom{
+    display:inline-block;
+    background:#fff;
+    color:#2563eb;
+    padding:14px 28px;
+    border-radius:12px;
+    text-decoration:none;
+    font-weight:700;
+    margin-right:15px;
+    transition:.3s;
+}
+
+.btn-primary-custom:hover{
+    transform:translateY(-2px);
+    color:#2563eb;
+}
+
+.btn-outline-custom{
+    display:inline-block;
+    border:2px solid #fff;
+    color:#fff;
+    padding:14px 28px;
+    border-radius:12px;
+    text-decoration:none;
+    font-weight:700;
+    transition:.3s;
+}
+
+.btn-outline-custom:hover{
+    background:#fff;
+    color:#2563eb;
+}
+
+.reward-circle{
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    background:rgba(255,255,255,.15);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:90px;
+    backdrop-filter:blur(12px);
+}
+
+/* ================= STATS ================= */
+
+.stats-card{
+    background:#fff;
+    border-radius:22px;
+    padding:25px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.stats-card:hover{
+    transform:translateY(-5px);
+}
+
+.stats-icon{
+    width:70px;
+    height:70px;
+    margin:auto;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:30px;
+    margin-bottom:18px;
+}
+
+.stats-card h2{
+    font-size:34px;
+    font-weight:800;
+}
+
+.stats-card p{
+    color:#666;
+}
+
+.blue{
+    background:#dbeafe;
+}
+
+.green{
+    background:#dcfce7;
+}
+
+.orange{
+    background:#ffedd5;
+}
+
+.purple{
+    background:#ede9fe;
+}
+
+/* ================= PROGRESS ================= */
+
+.progress-card{
+    background:#fff;
+    border-radius:22px;
+    padding:25px;
+    margin-top:25px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.progress{
+    height:18px;
+    border-radius:20px;
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width:768px){
+
+    .hero-overlay{
+        flex-direction:column;
+        text-align:center;
+        padding:30px;
+    }
+
+    .hero-left h1{
+        font-size:34px;
+    }
+
+    .reward-circle{
+        margin-top:25px;
+        width:120px;
+        height:120px;
+        font-size:60px;
+    }
+
+}
     /* ================= SHARE CARD ================= */
 
 .share-card{
