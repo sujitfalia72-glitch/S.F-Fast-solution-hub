@@ -253,33 +253,92 @@ def transfer_user():
 @owner_only
 def all_works_partial():
 
-    # ================= GET FILTER =================
-    status = request.args.get("status", "").strip()
+    # ================= CURRENT USER =================
+
+    current_user = User.query.get(
+        session.get("user_id")
+    )
+
+    if not current_user:
+
+        return "User not found", 404
+
+
+    # ================= STATUS FILTER =================
+
+    status = request.args.get(
+        "status",
+        ""
+    ).strip()
+
 
     # ================= BASE QUERY =================
+
     query = Work.query.filter(
         Work.is_deleted == False
     )
 
+
+    # ================= ROLE CONTROL =================
+
+
+    # OWNER = ALL WORKS
+
+    if current_user.role == "owner":
+
+        pass
+
+
+    # SUPER ADMIN / ADMIN
+
+    elif current_user.role in [
+        "super_admin",
+        "admin"
+    ]:
+
+        controlled_ids = get_controlled_user_ids(
+            current_user
+        )
+
+
+        query = query.filter(
+            Work.user_id.in_(
+                controlled_ids
+            )
+        )
+
+
+    # NORMAL USER
+
+    else:
+
+        query = query.filter(
+            Work.user_id == current_user.id
+        )
+
+
+
     # ================= STATUS FILTER =================
+
     if status and status != "all":
 
         query = query.filter(
             Work.status == status
         )
 
+
     # ================= LATEST FIRST =================
+
     works = query.order_by(
         Work.id.desc()
     ).all()
 
-    # ================= RENDER =================
+
     return render_template(
         "owner_works.html",
         works=works,
         current_status=status
     )
-
 
 # =================================================
 # ✅ APPROVE WORK
@@ -288,14 +347,75 @@ def all_works_partial():
     '/owner/work/approve/<int:id>',
     methods=['POST']
 )
-@owner_only
+@login_required
 def approve_work(id):
 
     try:
 
+        current_user = User.query.get(
+            session.get("user_id")
+        )
+
+        if not current_user:
+
+            flash(
+                "User not found",
+                "danger"
+            )
+
+            return redirect(
+                url_for("auth.login")
+            )
+
+
         work = Work.query.get_or_404(id)
 
-        # Already Approved
+
+        # ================= PERMISSION CHECK =================
+
+        allowed = False
+
+
+        # OWNER ALL ACCESS
+
+        if current_user.role == "owner":
+
+            allowed = True
+
+
+        # SUPER ADMIN / ADMIN CONTROLLED USERS
+
+        elif current_user.role in [
+            "super_admin",
+            "admin"
+        ]:
+
+            controlled_ids = get_controlled_user_ids(
+                current_user
+            )
+
+            if work.user_id in controlled_ids:
+
+                allowed = True
+
+
+
+        if not allowed:
+
+            flash(
+                "You do not have permission to approve this work",
+                "danger"
+            )
+
+            return redirect(
+                url_for(
+                    'owner.owner_dashboard'
+                )
+            )
+
+
+        # ================= ALREADY APPROVED =================
+
         if work.status == "approved":
 
             flash(
@@ -309,20 +429,28 @@ def approve_work(id):
                 )
             )
 
-        # Approve Work
+
+        # ================= APPROVE =================
+
         work.status = "approved"
+
         work.is_active = True
+
         work.is_deleted = False
 
-        work.approved_by = session.get(
-            "user_id"
-        )
+
+        work.approved_by = current_user.id
+
 
         work.updated_at = datetime.utcnow()
 
+
         db.session.commit()
 
-        # User Notification
+
+
+        # ================= NOTIFICATION =================
+
         send_notification(
             user_id=work.user_id,
             title="Work Approved",
@@ -332,21 +460,26 @@ def approve_work(id):
             priority="high"
         )
 
-        # Realtime Socket
+
+        # ================= SOCKET =================
+
         socketio.emit(
             "work_update",
             {
                 "type": "approved",
                 "work_id": work.id,
                 "title": work.title,
-                "message": f"{work.title} approved successfully"
+                "message":
+                    f"{work.title} approved successfully"
             }
         )
+
 
         flash(
             "Work approved successfully",
             "success"
         )
+
 
     except Exception as e:
 
@@ -362,11 +495,12 @@ def approve_work(id):
             "danger"
         )
 
+
     return redirect(
         url_for(
             'owner.owner_dashboard'
         )
-    )
+            )
 
 
 # =================================================
@@ -376,14 +510,75 @@ def approve_work(id):
     '/owner/work/reject/<int:id>',
     methods=['POST']
 )
-@owner_only
+@login_required
 def reject_work(id):
 
     try:
 
+        current_user = User.query.get(
+            session.get("user_id")
+        )
+
+        if not current_user:
+
+            flash(
+                "User not found",
+                "danger"
+            )
+
+            return redirect(
+                url_for("auth.login")
+            )
+
+
         work = Work.query.get_or_404(id)
 
-        # Already Rejected
+
+        # ================= PERMISSION CHECK =================
+
+        allowed = False
+
+
+        # OWNER = ALL ACCESS
+
+        if current_user.role == "owner":
+
+            allowed = True
+
+
+        # SUPER ADMIN / ADMIN CONTROL
+
+        elif current_user.role in [
+            "super_admin",
+            "admin"
+        ]:
+
+            controlled_ids = get_controlled_user_ids(
+                current_user
+            )
+
+            if work.user_id in controlled_ids:
+
+                allowed = True
+
+
+
+        if not allowed:
+
+            flash(
+                "You do not have permission to reject this work",
+                "danger"
+            )
+
+            return redirect(
+                url_for(
+                    'owner.owner_dashboard'
+                )
+            )
+
+
+        # ================= ALREADY REJECTED =================
+
         if work.status == "rejected":
 
             flash(
@@ -397,19 +592,26 @@ def reject_work(id):
                 )
             )
 
-        # Reject Work
+
+        # ================= REJECT WORK =================
+
         work.status = "rejected"
+
         work.is_active = False
 
-        work.rejected_by = session.get(
-            "user_id"
-        )
+
+        work.rejected_by = current_user.id
+
 
         work.updated_at = datetime.utcnow()
 
+
         db.session.commit()
 
-        # User Notification
+
+
+        # ================= USER NOTIFICATION =================
+
         send_notification(
             user_id=work.user_id,
             title="Work Rejected",
@@ -419,21 +621,27 @@ def reject_work(id):
             priority="high"
         )
 
-        # Realtime Socket
+
+
+        # ================= REALTIME SOCKET =================
+
         socketio.emit(
             "work_update",
             {
                 "type": "rejected",
                 "work_id": work.id,
                 "title": work.title,
-                "message": f"{work.title} rejected"
+                "message":
+                    f"{work.title} rejected"
             }
         )
+
 
         flash(
             "Work rejected successfully",
             "warning"
         )
+
 
     except Exception as e:
 
@@ -449,13 +657,12 @@ def reject_work(id):
             "danger"
         )
 
+
     return redirect(
         url_for(
             'owner.owner_dashboard'
         )
     )
-
-
 # =================================================
 # ✏️ EDIT WORK
 # =================================================
@@ -463,32 +670,96 @@ def reject_work(id):
     '/owner/work/edit/<int:id>',
     methods=['GET', 'POST']
 )
-@owner_only
+@login_required
 def edit_work(id):
 
+    current_user = User.query.get(
+        session.get("user_id")
+    )
+
+    if not current_user:
+
+        flash(
+            "User not found",
+            "danger"
+        )
+
+        return redirect(
+            url_for("auth.login")
+        )
+
+
     work = Work.query.get_or_404(id)
+
+
+    # ================= PERMISSION CHECK =================
+
+    allowed = False
+
+
+    # OWNER ALL ACCESS
+
+    if current_user.role == "owner":
+
+        allowed = True
+
+
+    # SUPER ADMIN / ADMIN
+
+    elif current_user.role in [
+        "super_admin",
+        "admin"
+    ]:
+
+        controlled_ids = get_controlled_user_ids(
+            current_user
+        )
+
+        if work.user_id in controlled_ids:
+
+            allowed = True
+
+
+
+    if not allowed:
+
+        flash(
+            "You do not have permission to edit this work",
+            "danger"
+        )
+
+        return redirect(
+            url_for(
+                "owner.owner_dashboard"
+            )
+        )
+
 
     if request.method == "POST":
 
         try:
 
-            # ================= FORM DATA =================
             title = request.form.get(
                 "title",
                 ""
             ).strip()
+
 
             description = request.form.get(
                 "description",
                 ""
             ).strip()
 
+
             mobile = request.form.get(
                 "mobile",
                 ""
             ).strip()
 
+
+
             # ================= VALIDATION =================
+
             if not title:
 
                 flash(
@@ -502,6 +773,7 @@ def edit_work(id):
                         id=id
                     )
                 )
+
 
             if not description:
 
@@ -517,6 +789,7 @@ def edit_work(id):
                     )
                 )
 
+
             if not mobile:
 
                 flash(
@@ -531,28 +804,42 @@ def edit_work(id):
                     )
                 )
 
+
+
             # ================= UPDATE =================
+
             work.title = title
+
             work.description = description
+
             work.mobile = mobile
 
-            # Re-verify after edit
+
+            # Re approval required
+
             work.status = "pending"
+
             work.is_active = False
 
-            work.edited_by = session.get(
-                "user_id"
-            )
+
+            work.edited_by = current_user.id
+
 
             work.edit_count = (
                 work.edit_count or 0
             ) + 1
 
+
             work.updated_at = datetime.utcnow()
+
+
 
             db.session.commit()
 
+
+
             # ================= NOTIFICATION =================
+
             send_notification(
                 user_id=work.user_id,
                 title="Work Updated",
@@ -562,27 +849,36 @@ def edit_work(id):
                 priority="normal"
             )
 
+
+
             # ================= SOCKET =================
+
             socketio.emit(
                 "work_update",
                 {
                     "type": "edited",
                     "work_id": work.id,
                     "title": work.title,
-                    "message": f"{work.title} edited"
+                    "message":
+                        f"{work.title} edited"
                 }
             )
+
+
 
             flash(
                 "Work updated successfully and moved to pending review",
                 "success"
             )
 
+
             return redirect(
                 url_for(
                     "owner.owner_dashboard"
                 )
             )
+
+
 
         except Exception as e:
 
@@ -593,10 +889,12 @@ def edit_work(id):
                 str(e)
             )
 
+
             flash(
                 "Something went wrong",
                 "danger"
             )
+
 
             return redirect(
                 url_for(
@@ -604,6 +902,7 @@ def edit_work(id):
                     id=id
                 )
             )
+
 
     return render_template(
         "edit_work.html",
