@@ -1,0 +1,1048 @@
+{% extends "owner/base.html" %}
+
+{% block title %}Approval Requests{% endblock %}
+
+{% block content %}
+
+<style>
+
+:root{
+    --primary:#2563eb;
+    --success:#16a34a;
+    --danger:#dc2626;
+    --warning:#d97706;
+    --dark:#0f172a;
+    --border:rgba(255,255,255,.18);
+    --glass:rgba(255,255,255,.14);
+}
+
+body{
+    background:
+        linear-gradient(135deg,#0f172a,#1e3a8a,#2563eb);
+    min-height:100vh;
+}
+
+.approval-wrapper{
+    padding:30px;
+}
+
+.glass-card{
+    background:var(--glass);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    border:1px solid var(--border);
+    border-radius:22px;
+    box-shadow:0 15px 45px rgba(0,0,0,.25);
+    color:#fff;
+}
+
+.page-header{
+    padding:30px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:20px;
+    margin-bottom:30px;
+}
+
+.page-header h2{
+    font-weight:700;
+    margin:0;
+}
+
+.page-header p{
+    margin:0;
+    opacity:.8;
+}
+
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+    margin-bottom:30px;
+}
+
+.stat-card{
+    padding:25px;
+}
+
+.stat-title{
+    font-size:14px;
+    opacity:.75;
+}
+
+.stat-number{
+    font-size:34px;
+    font-weight:700;
+    margin-top:10px;
+}
+
+.filter-card{
+    padding:25px;
+    margin-bottom:30px;
+}
+
+.search-box{
+    position:relative;
+}
+
+.search-box input{
+    height:52px;
+    border-radius:15px;
+    background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.15);
+    color:#fff;
+}
+
+.search-box input::placeholder{
+    color:#ddd;
+}
+
+.search-box input:focus{
+    background:rgba(255,255,255,.16);
+    color:#fff;
+    border-color:#60a5fa;
+    box-shadow:none;
+}
+
+.form-select{
+    height:52px;
+    border-radius:15px;
+    background:rgba(255,255,255,.12);
+    color:#fff;
+    border:1px solid rgba(255,255,255,.15);
+}
+
+.form-select option{
+    color:#000;
+}
+
+.btn-search{
+    height:52px;
+    border-radius:15px;
+    padding:0 25px;
+    font-weight:600;
+}
+.table-card{
+
+    padding:25px;
+
+}
+
+
+.table{
+
+    margin:0;
+
+}
+
+
+.table thead th{
+
+    border-bottom:
+    1px solid rgba(255,255,255,.25);
+
+    font-size:14px;
+
+    opacity:.85;
+
+}
+
+
+.table tbody tr{
+
+    transition:.3s;
+
+}
+
+
+.user-row:hover{
+
+    background:
+    rgba(255,255,255,.08);
+
+    transform:
+    translateY(-2px);
+
+}
+
+
+
+.profile-avatar{
+
+    width:55px;
+
+    height:55px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    border:
+    2px solid rgba(255,255,255,.4);
+
+}
+
+
+
+.role-super{
+
+    background:
+    linear-gradient(
+    45deg,
+    #7c3aed,
+    #c084fc
+    );
+
+}
+
+
+.role-admin{
+
+    background:
+    linear-gradient(
+    45deg,
+    #2563eb,
+    #60a5fa
+    );
+
+}
+
+
+
+.status-active{
+
+    background:#16a34a;
+
+}
+
+
+.status-rejected{
+
+    background:#dc2626;
+
+}
+
+
+.status-pending{
+
+    background:#d97706;
+
+}
+
+
+
+.action-btn{
+
+    border-radius:12px;
+
+    padding:
+    7px 14px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+
+
+.action-btn:hover{
+
+    transform:
+    scale(1.05);
+
+}
+.glass-pagination .page-link{
+
+
+    background:
+    rgba(255,255,255,.12);
+
+
+    backdrop-filter:
+    blur(12px);
+
+
+    border:
+    1px solid rgba(255,255,255,.2);
+
+
+    color:white;
+
+
+    margin:
+    0 4px;
+
+
+    border-radius:
+    12px;
+
+
+    min-width:
+    45px;
+
+
+    text-align:center;
+
+
+    transition:.3s;
+
+
+}
+
+
+
+.glass-pagination .page-link:hover{
+
+
+    background:
+    rgba(255,255,255,.25);
+
+
+    transform:
+    translateY(-2px);
+
+
+}
+
+
+
+.glass-pagination .active .page-link{
+
+
+    background:
+    linear-gradient(
+        45deg,
+        #2563eb,
+        #60a5fa
+    );
+
+
+    border:none;
+
+
+}
+
+
+
+@media(max-width:768px){
+
+
+    .approval-wrapper{
+
+        padding:
+        15px;
+
+    }
+
+
+    .table{
+
+        font-size:
+        13px;
+
+    }
+
+
+    .profile-avatar{
+
+        width:
+        42px;
+
+        height:
+        42px;
+
+    }
+
+
+    .action-btn{
+
+        padding:
+        5px 8px;
+
+        font-size:
+        12px;
+
+    }
+
+
+    .glass-pagination .page-link{
+
+        min-width:
+        35px;
+
+        padding:
+        7px;
+
+    }
+
+
+  }  
+  
+
+</style>
+
+<div class="approval-wrapper">
+
+    <div class="glass-card page-header">
+
+        <div>
+
+            <h2>
+                🛡️ Approval Requests
+            </h2>
+
+            <p>
+                Manage Admin & Super Admin approval requests
+            </p>
+
+        </div>
+
+        <div>
+
+            <span class="badge bg-primary fs-6">
+                {{ users.total }} Total Requests
+            </span>
+
+        </div>
+
+    </div>
+
+    <div class="stats-grid">
+
+        <div class="glass-card stat-card">
+
+            <div class="stat-title">
+                Total Requests
+            </div>
+
+            <div class="stat-number">
+                {{ users.total }}
+            </div>
+
+        </div>
+
+        <div class="glass-card stat-card">
+
+            <div class="stat-title">
+                Current Page
+            </div>
+
+            <div class="stat-number">
+                {{ users.page }}
+            </div>
+
+        </div>
+
+        <div class="glass-card stat-card">
+
+            <div class="stat-title">
+                Total Pages
+            </div>
+
+            <div class="stat-number">
+                {{ users.pages }}
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="glass-card filter-card">
+
+        <form method="GET"
+              action="{{ url_for('owner.approval_requests') }}">
+
+            <div class="row g-3">
+
+                <div class="col-lg-6">
+
+                    <div class="search-box">
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="search"
+                            value="{{ search }}"
+                            placeholder="Search by Name, Phone or Email">
+
+                    </div>
+
+                </div>
+
+                <div class="col-lg-3">
+
+                    <select
+                        class="form-select"
+                        name="status">
+
+                        <option value="all"
+                            {% if status=="all" %}
+                            selected
+                            {% endif %}>
+                            All Status
+                        </option>
+
+                        <option value="pending"
+                            {% if status=="pending" %}
+                            selected
+                            {% endif %}>
+                            Pending
+                        </option>
+
+                        <option value="active"
+                            {% if status=="active" %}
+                            selected
+                            {% endif %}>
+                            Approved
+                        </option>
+
+                        <option value="rejected"
+                            {% if status=="rejected" %}
+                            selected
+                            {% endif %}>
+                            Rejected
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-lg-3">
+
+                    <button
+                        class="btn btn-primary btn-search w-100">
+
+                        🔍 Search
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+  </div>
+  <!-- ============================= -->
+<!-- REQUEST TABLE START -->
+<!-- ============================= -->
+
+<div class="glass-card table-card">
+
+    <div class="table-responsive">
+
+        <table class="table align-middle text-white">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        User
+                    </th>
+
+                    <th>
+                        Contact
+                    </th>
+
+                    <th>
+                        Role
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                    <th>
+                        Request Date
+                    </th>
+
+                    <th class="text-center">
+                        Action
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+
+            {% if users.items %}
+
+
+                {% for u in users.items %}
+
+
+                <tr class="user-row">
+
+
+                    <!-- USER -->
+
+                    <td>
+
+                        <div class="d-flex align-items-center gap-3">
+
+
+                            <img
+                                src="{{ u.profile_img }}"
+                                class="profile-avatar"
+                                onerror="this.src='/static/default.png'"
+                            >
+
+
+                            <div>
+
+                                <h6 class="mb-1">
+                                    {{ u.name }}
+                                </h6>
+
+                                <small class="opacity-75">
+                                    ID: #{{ u.id }}
+                                </small>
+
+                            </div>
+
+
+                        </div>
+
+                    </td>
+
+
+
+                    <!-- CONTACT -->
+
+                    <td>
+
+
+                        <div>
+                            📞 {{ u.phone }}
+                        </div>
+
+
+                        {% if u.email %}
+
+                        <small>
+                            ✉ {{ u.email }}
+                        </small>
+
+                        {% endif %}
+
+
+                    </td>
+
+
+
+
+                    <!-- ROLE -->
+
+                    <td>
+
+
+                        {% if u.role == "super_admin" %}
+
+
+                        <span class="badge role-super">
+                            Super Admin
+                        </span>
+
+
+                        {% else %}
+
+
+                        <span class="badge role-admin">
+                            Admin
+                        </span>
+
+
+                        {% endif %}
+
+
+                    </td>
+
+
+
+
+                    <!-- STATUS -->
+
+                    <td>
+
+
+                        {% if u.status == "active" %}
+
+
+                        <span class="badge status-active">
+                            ✔ Approved
+                        </span>
+
+
+                        {% elif u.status == "rejected" %}
+
+
+                        <span class="badge status-rejected">
+                            ✖ Rejected
+                        </span>
+
+
+                        {% else %}
+
+
+                        <span class="badge status-pending">
+                            ⏳ Pending
+                        </span>
+
+
+                        {% endif %}
+
+
+                    </td>
+
+
+
+
+                    <!-- DATE -->
+
+                    <td>
+
+
+                        {{ 
+                        u.created_at.strftime(
+                        "%d %b %Y"
+                        ) 
+                        }}
+
+
+                    </td>
+
+
+
+
+                    <!-- ACTION -->
+
+
+                    <td>
+
+
+                        <div class="d-flex justify-content-center gap-2">
+
+
+                            {% if u.status != "active" %}
+
+
+                            <form
+                                method="POST"
+                                action="{{ 
+                                url_for(
+                                'owner.approve_user',
+                                id=u.id
+                                )
+                                }}">
+
+
+                                <button
+                                    class="btn btn-success btn-sm action-btn"
+                                    onclick="return confirm('Approve this account?')">
+
+
+                                    ✔ Approve
+
+
+                                </button>
+
+
+                            </form>
+
+
+                            {% endif %}
+
+
+
+
+                            {% if u.status != "rejected" %}
+
+
+                            <form
+                                method="POST"
+                                action="{{ 
+                                url_for(
+                                'owner.reject_user',
+                                id=u.id
+                                )
+                                }}">
+
+
+                                <button
+                                    class="btn btn-danger btn-sm action-btn"
+                                    onclick="return confirm('Reject this account?')">
+
+
+                                    ✖ Reject
+
+
+                                </button>
+
+
+                            </form>
+
+
+                            {% endif %}
+
+
+
+                        </div>
+
+
+                    </td>
+
+
+
+                </tr>
+
+
+
+                {% endfor %}
+
+
+
+            {% else %}
+
+
+                <tr>
+
+                    <td colspan="6"
+                        class="text-center py-5">
+
+
+                        <h4>
+                            📭 No Requests Found
+                        </h4>
+
+
+                        <p class="opacity-75">
+                            There are no approval requests available.
+                        </p>
+
+
+                    </td>
+
+                </tr>
+
+
+            {% endif %}
+
+
+
+            </tbody>
+
+
+        </table>
+
+
+    </div>
+
+
+</div>
+
+  <!-- ============================= -->
+<!-- PAGINATION START -->
+<!-- ============================= -->
+
+<div class="d-flex justify-content-center mt-4">
+
+
+    <nav>
+
+
+        <ul class="pagination glass-pagination">
+
+
+            <!-- PREVIOUS -->
+
+            {% if users.has_prev %}
+
+            <li class="page-item">
+
+
+                <a class="page-link"
+
+                href="{{ url_for(
+                    'owner.approval_requests',
+                    page=users.prev_num,
+                    status=status,
+                    search=search
+                ) }}">
+
+                    ← Previous
+
+                </a>
+
+
+            </li>
+
+            {% endif %}
+
+
+
+
+
+            <!-- PAGE NUMBERS -->
+
+
+            {% for page_num in users.iter_pages(
+                left_edge=1,
+                right_edge=1,
+                left_current=2,
+                right_current=2
+            ) %}
+
+
+                {% if page_num %}
+
+
+                    {% if users.page == page_num %}
+
+
+                    <li class="page-item active">
+
+
+                        <span class="page-link">
+
+                            {{ page_num }}
+
+                        </span>
+
+
+                    </li>
+
+
+                    {% else %}
+
+
+                    <li class="page-item">
+
+
+                        <a class="page-link"
+
+                        href="{{ url_for(
+                            'owner.approval_requests',
+                            page=page_num,
+                            status=status,
+                            search=search
+                        ) }}">
+
+                            {{ page_num }}
+
+                        </a>
+
+
+                    </li>
+
+
+                    {% endif %}
+
+
+
+                {% else %}
+
+
+                <li class="page-item disabled">
+
+
+                    <span class="page-link">
+
+                        ...
+
+                    </span>
+
+
+                </li>
+
+
+                {% endif %}
+
+
+
+            {% endfor %}
+
+
+
+
+
+            <!-- NEXT -->
+
+
+            {% if users.has_next %}
+
+
+            <li class="page-item">
+
+
+                <a class="page-link"
+
+                href="{{ url_for(
+                    'owner.approval_requests',
+                    page=users.next_num,
+                    status=status,
+                    search=search
+                ) }}">
+
+                    Next →
+
+                </a>
+
+
+            </li>
+
+
+            {% endif %}
+
+
+
+        </ul>
+
+
+    </nav>
+
+
+</div>
+
+
+
+<!-- RECORD INFO -->
+
+
+<div class="text-center mt-3 mb-4">
+
+
+    <small class="text-white opacity-75">
+
+
+        Showing
+
+        {{ users.first }}
+
+        -
+
+        {{ users.last }}
+
+        of
+
+        {{ users.total }}
+
+        requests
+
+
+    </small>
+
+
+</div>
+
+</div>
+
+
+{% endblock %}
+
