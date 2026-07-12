@@ -20,7 +20,7 @@ from models.work_model import Work
 from models.booking import Booking
 from models.work_application import WorkApplication
 from models.site_setting import SiteSetting
-
+from flask_login import login_required
 
 owner = Blueprint('owner', __name__)
 
