@@ -720,46 +720,61 @@ body{
 
 <div class="sidebar" id="sidebar">
 
-    <a class="sidebar-btn" href="/user/dashboard">🏠 Dashboard</a>
-
-    <a class="sidebar-btn" href="/profile">👤 My Profile</a>
-
-    <a href="{{ url_for('user.wallet') }}" class="btn btn-primary">
-    Wallet
+    <a class="sidebar-btn" href="/owner/dashboard">
+        🏠 Dashboard
     </a>
 
-    <a class="sidebar-btn" href="/user/post_work">➕ Create Work Post</a>
-
-    <a class="sidebar-btn" href="{{ url_for('work.work_list') }}">💼 Work List</a>
-
-    <a class="sidebar-btn" href="/my_applications">
-    📋 My Applications
+    <a class="sidebar-btn" href="#" onclick="showSection('users')">
+        👥 User Control
     </a>
 
-    <a class="sidebar-btn" href="{{ url_for('booking.my_bookings') }}">
-        📅 My Bookings
+    <a class="sidebar-btn" href="#" onclick="showSection('approvals')">
+        🛡️ Admin Approval
     </a>
 
-    <a href="/user/live-tv" class="menu-item">
-    <i class="fa-solid fa-tv"></i>
-    Live TV
-    </a>
-    
-    <a href="/chamber/chambers" class="menu-title">
-    🏥 S.F Doctor Chamber
+    <a class="sidebar-btn" href="{{ url_for('owner.all_works_partial') }}">
+        💼 Work Control
     </a>
 
-    <a class="sidebar-btn" href="/user/my-appointments">
-    📅 My Appointments
+    <a class="sidebar-btn" href="{{ url_for('application.owner_applications') }}">
+        📋 View Applications
     </a>
 
-    <a class="sidebar-btn" href="/help-line">☎️ Help Line</a>
-
-    <a href="/user/settings" class="sidebar-btn">
-    ⚙️ Settings
+    <a class="sidebar-btn" href="{{ url_for('booking.owner_bookings') }}">
+        📅 Booking Control
     </a>
 
-    <a class="sidebar-btn logout" href="/auth/logout">🚪 Logout</a>
+    <a class="sidebar-btn" href="{{ url_for('owner.withdraw_list') }}">
+        💸 Withdraw Control
+    </a>
+
+    <a class="sidebar-btn" href="/owner/notification/broadcast">
+        📢 Send Live Notification
+    </a>
+
+    <a class="sidebar-btn" href="/live">
+        📺 Live Dashboard
+    </a>
+
+    <a class="sidebar-btn" href="/live/create">
+        ⬆️ Upload Media
+    </a>
+
+    <a class="sidebar-btn" href="/live/tv">
+        ▶️ Watch Live TV
+    </a>
+
+    <a class="sidebar-btn" href="{{ url_for('owner.headline_control') }}">
+        📰 Running Headline
+    </a>
+
+    <a class="sidebar-btn" href="/verification/admin/requests">
+        ✅ Verification Requests
+    </a>
+
+    <a class="sidebar-btn logout" href="/logout">
+        🚪 Logout
+    </a>
 
 </div>
 <!-- ================= TOPBAR ================= -->
