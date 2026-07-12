@@ -1,302 +1,1958 @@
-<div class="reward-banner">
+{% extends "base.html" %}
 
-🎁 Invite Friends • Build Your Network • Unlock More Opportunities
+{% block title %}
+Referral Program
+{% endblock %}
 
-</div>
-
-<div class="referral-card">
-
-    <div class="referral-header">
-        <h3>🎉 Invite Friends & Earn Rewards</h3>
-
-<p>
-Share your personal referral link with friends, family, or colleagues.
-When they join S.F Works Hub using your link, your network grows and you become eligible for referral rewards and future benefits.
-</p>
-    </div>
-    <div class="referral-label">
-
-    <label class="fw-bold mb-2">
-        🔗 Your Personal Referral Link
-    </label>
-
-</div>
-
-<div class="referral-input-box">
-
-    <input
-        type="text"
-        id="refLink"
-        value="{{ url_for('auth.signup', ref=session['user_id'], ref_id=session['user_id'], _external=True) }}"
-        readonly
-    >
-
-    <button
-        class="copy-btn"
-        onclick="copyReferralLink()"
-    >
-        📋 Copy Referral Link
-    </button>
-
-</div>
-
-    <div class="referral-input-box">
-
-        <input
-            type="text"
-            id="refLink"
-            value="{{ url_for('auth.signup', ref=session['user_id'], _external=True) }}"
-            readonly
-        >
-
-        <button class="copy-btn" onclick="copyReferralLink()">
-            📋 Copy
-        </button>
-
-    </div>
-
-    <div class="referral-actions">
-
-        <button class="share-btn" onclick="shareReferral()">
-            🚀 Share Referral
-        </button>
-
-    </div>
-    <div class="referral-info">
-
-    <h5>💎 Why Share Your Referral Link?</h5>
-
-    <ul>
-
-        <li>✅ Invite unlimited friends to join.</li>
-
-        <li>🤝 Build your own referral network.</li>
-
-        <li>💰 Earn referral rewards when eligible.</li>
-
-        <li>📈 Grow your team and unlock future benefits.</li>
-
-        <li>🚀 Share instantly via WhatsApp, Facebook, Telegram or Email.</li>
-
-    </ul>
-
-    </div>
-
-    <div id="copyMessage" class="copy-message">
-        ✅ Referral link copied successfully
-    </div>
-
-</div>
+{% block content %}
 
 <style>
+    /* ================= SHARE CARD ================= */
 
-.referral-card{
+.share-card{
+
     background:#fff;
-    border-radius:20px;
-    padding:25px;
-    box-shadow:0 10px 25px rgba(0,0,0,.08);
-    margin-bottom:20px;
+
+    margin-top:30px;
+
+    border-radius:25px;
+
+    padding:35px;
+
+    box-shadow:0 15px 35px rgba(0,0,0,.08);
+
 }
 
-.referral-header h3{
-    margin:0;
-    font-size:22px;
-    font-weight:700;
-}
+.share-header{
 
-.referral-header p{
-    margin-top:6px;
-    color:#777;
-    font-size:14px;
-}
-
-.referral-input-box{
-    display:flex;
-    gap:10px;
-    margin-top:20px;
-}
-
-.referral-input-box input{
-    flex:1;
-    border:2px solid #e5e5e5;
-    border-radius:12px;
-    padding:12px;
-    font-size:14px;
-    outline:none;
-}
-
-.copy-btn{
-    border:none;
-    background:#2563eb;
-    color:#fff;
-    padding:12px 18px;
-    border-radius:12px;
-    cursor:pointer;
-    font-weight:600;
-    transition:.3s;
-}
-
-.copy-btn:hover{
-    transform:translateY(-2px);
-}
-
-.referral-actions{
-    margin-top:15px;
-}
-
-.share-btn{
-    width:100%;
-    border:none;
-    background:#10b981;
-    color:#fff;
-    padding:14px;
-    border-radius:12px;
-    font-size:15px;
-    font-weight:700;
-    cursor:pointer;
-    transition:.3s;
-}
-
-.share-btn:hover{
-    transform:translateY(-2px);
-}
-
-.copy-message{
-    display:none;
-    margin-top:15px;
-    color:#10b981;
-    font-weight:600;
     text-align:center;
-}
-.referral-info{
 
-    margin-top:25px;
+    margin-bottom:30px;
 
-    background:linear-gradient(
-        135deg,
-        #eef6ff,
-        #f9fcff
-    );
-
-    border-left:5px solid #2563eb;
-
-    padding:20px;
-
-    border-radius:15px;
 }
 
-.referral-info h5{
+.share-header h2{
 
-    font-size:18px;
+    font-size:32px;
+
+    font-weight:800;
+
+}
+
+.share-header p{
+
+    color:#666;
+
+    font-size:17px;
+
+}
+
+.share-label{
+
+    font-size:16px;
 
     font-weight:700;
-
-    margin-bottom:15px;
-}
-
-.referral-info ul{
-
-    margin:0;
-
-    padding-left:20px;
-}
-
-.referral-info li{
 
     margin-bottom:10px;
 
+    display:block;
+
+}
+
+.copy-wrapper{
+
+    display:flex;
+
+    gap:12px;
+
+}
+
+.copy-wrapper input{
+
+    flex:1;
+
+    border:2px solid #ddd;
+
+    border-radius:14px;
+
+    padding:14px;
+
     font-size:15px;
 
-    color:#555;
-
-    line-height:1.7;
 }
-.reward-banner{
 
-    background:linear-gradient(
-        135deg,
-        #2563eb,
-        #7c3aed
-    );
+.copy-btn{
+
+    border:none;
+
+    background:#2563eb;
+
+    color:#fff;
+
+    padding:14px 24px;
+
+    border-radius:14px;
+
+    font-weight:700;
+
+}
+
+.share-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+
+    gap:15px;
+
+    margin-top:30px;
+
+}
+
+.share-btn{
+
+    border:none;
+
+    color:#fff;
+
+    border-radius:15px;
+
+    padding:16px;
+
+    font-size:16px;
+
+    font-weight:700;
+
+    transition:.25s;
+
+}
+
+.share-btn:hover{
+
+    transform:translateY(-3px);
+
+}
+
+.whatsapp{
+
+    background:#25D366;
+
+}
+
+.telegram{
+
+    background:#229ED9;
+
+}
+
+.facebook{
+
+    background:#1877F2;
+
+}
+
+.twitter{
+
+    background:#111827;
+
+}
+
+.email{
+
+    background:#ef4444;
+
+}
+
+.native{
+
+    background:#7c3aed;
+
+}
+
+.qr-box{
+
+    margin-top:35px;
+
+    border:2px dashed #dbeafe;
+
+    border-radius:20px;
+
+    text-align:center;
+
+    padding:35px;
+
+    background:#f8fbff;
+
+}
+
+.qr-icon{
+
+    font-size:60px;
+
+}
+
+.copy-toast{
+
+    display:none;
+
+    margin-top:25px;
+
+    background:#22c55e;
+
+    color:#fff;
+
+    padding:15px;
+
+    border-radius:15px;
+
+    text-align:center;
+
+    font-weight:700;
+
+}
+/* ================= COMMON ================= */
+
+.section-title{
+
+    font-size:34px;
+
+    font-weight:800;
+
+    text-align:center;
+
+    margin-bottom:12px;
+
+}
+
+.section-subtitle{
+
+    text-align:center;
+
+    color:#666;
+
+    margin-bottom:40px;
+
+}
+
+.info-section{
+
+    margin-top:45px;
+
+}
+
+.timeline{
+
+    max-width:900px;
+
+    margin:auto;
+
+}
+
+.timeline-item{
+
+    display:flex;
+
+    gap:20px;
+
+    background:#fff;
+
+    border-radius:20px;
+
+    padding:22px;
+
+    margin-bottom:20px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+}
+
+.timeline-icon{
+
+    width:70px;
+
+    height:70px;
+
+    border-radius:50%;
+
+    background:#2563eb;
+
+    color:#fff;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:28px;
+
+    flex-shrink:0;
+
+}
+
+.timeline-content h5{
+
+    font-weight:700;
+
+}
+
+.timeline-content p{
+
+    color:#666;
+
+    margin-top:8px;
+
+}
+
+/* ================= LEVELS ================= */
+
+.reward-section{
+
+    margin-top:60px;
+
+}
+
+.level-card{
+
+    border-radius:20px;
+
+    padding:25px;
 
     color:#fff;
 
     text-align:center;
 
-    padding:18px;
+    box-shadow:0 15px 30px rgba(0,0,0,.08);
 
-    border-radius:16px;
+    transition:.3s;
 
-    font-size:18px;
-
-    font-weight:700;
-
-    margin-bottom:20px;
-
-    box-shadow:0 10px 25px rgba(37,99,235,.25);
-}
-    
-.referral-label{
-
-    margin-top:20px;
-    margin-bottom:8px;
 }
 
-.referral-label label{
+.level-card:hover{
 
-    font-size:16px;
-    font-weight:700;
-    color:#374151;
- }
+    transform:translateY(-6px);
+
+}
+
+.level-card h3{
+
+    font-size:28px;
+
+    font-weight:800;
+
+}
+
+.level-card h4{
+
+    margin:15px 0;
+
+}
+
+.bronze{
+
+    background:linear-gradient(135deg,#b45309,#d97706);
+
+}
+
+.silver{
+
+    background:linear-gradient(135deg,#64748b,#94a3b8);
+
+}
+
+.gold{
+
+    background:linear-gradient(135deg,#ca8a04,#facc15);
+
+}
+
+.platinum{
+
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+
+}
+
+/* ================= BENEFITS ================= */
+
+.benefits-card{
+
+    margin-top:60px;
+
+    background:#fff;
+
+    padding:35px;
+
+    border-radius:25px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+}
+
+.benefit-list{
+
+    list-style:none;
+
+    padding:0;
+
+}
+
+.benefit-list li{
+
+    padding:12px 0;
+
+    font-size:17px;
+
+    border-bottom:1px solid #eee;
+
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:768px){
+
+.timeline-item{
+
+    flex-direction:column;
+
+    text-align:center;
+
+}
+
+.timeline-icon{
+
+    margin:auto;
+
+}
+
+.section-title{
+
+    font-size:28px;
+
+}
+}
+/* ================= USERS ================= */
+
+.referral-users-section{
+
+margin-top:60px;
+
+background:#fff;
+
+padding:30px;
+
+border-radius:24px;
+
+box-shadow:0 12px 30px rgba(0,0,0,.08);
+
+}
+
+.users-header{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+margin-bottom:25px;
+
+flex-wrap:wrap;
+
+gap:15px;
+
+}
+
+.users-header h2{
+
+font-weight:800;
+
+margin:0;
+
+}
+
+.users-header p{
+
+color:#666;
+
+margin-top:5px;
+
+}
+
+.search-box input{
+
+width:280px;
+
+max-width:100%;
+
+padding:12px 16px;
+
+border:2px solid #e5e7eb;
+
+border-radius:12px;
+
+outline:none;
+
+}
+
+.search-box input:focus{
+
+border-color:#2563eb;
+
+}
+
+.referral-table{
+
+margin-bottom:0;
+
+}
+
+.referral-table thead{
+
+background:#f8fafc;
+
+}
+
+.referral-table th{
+
+padding:16px;
+
+font-weight:700;
+
+}
+
+.referral-table td{
+
+padding:16px;
+
+vertical-align:middle;
+
+}
+
+.user-info{
+
+display:flex;
+
+align-items:center;
+
+gap:12px;
+
+}
+
+.avatar{
+
+width:45px;
+
+height:45px;
+
+border-radius:50%;
+
+background:linear-gradient(135deg,#2563eb,#7c3aed);
+
+color:#fff;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-weight:700;
+
+font-size:18px;
+
+}
+
+.empty-referral{
+
+text-align:center;
+
+padding:60px 20px;
+
+}
+
+.empty-icon{
+
+font-size:70px;
+
+margin-bottom:20px;
+
+}
+
+.empty-referral h4{
+
+font-weight:800;
+
+}
+
+.empty-referral p{
+
+color:#666;
+
+margin:15px 0;
+
+}
+
+.pagination .page-link{
+
+border-radius:10px;
+
+margin:0 4px;
+
+border:none;
+
+padding:10px 18px;
+
+}
+
+.pagination .active .page-link{
+
+background:#2563eb;
+
+}
+
+@media(max-width:768px){
+
+.users-header{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+}
+
+.search-box{
+
+width:100%;
+
+}
+
+.search-box input{
+
+width:100%;
+
+}
+
+    }    
+.analytics-card,
+.leader-card,
+.next-card{
+
+background:#fff;
+
+border-radius:22px;
+
+padding:30px;
+
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+}
+
+.metric-box{
+
+text-align:center;
+
+padding:20px;
+
+}
+
+.metric-box h2{
+
+font-size:40px;
+
+font-weight:800;
+
+color:#2563eb;
+
+}
+
+.metric-box span{
+
+color:#666;
+
+}
+
+.level{
+
+padding:18px;
+
+border-radius:14px;
+
+font-size:24px;
+
+font-weight:800;
+
+text-align:center;
+
+margin-top:25px;
+
+color:#fff;
+
+}
+
+.toast-success{
+
+display:none;
+
+position:fixed;
+
+right:20px;
+
+top:20px;
+
+background:#22c55e;
+
+color:#fff;
+
+padding:16px 22px;
+
+border-radius:12px;
+
+font-weight:700;
+
+z-index:99999;
+
+box-shadow:0 10px 30px rgba(0,0,0,.2);
+
+}
+
+.confetti{
+
+position:fixed;
+
+width:10px;
+
+height:10px;
+
+pointer-events:none;
+
+animation:fall 3s linear forwards;
+
+}
+
+@keyframes fall{
+
+0%{
+
+transform:translateY(-30px) rotate(0deg);
+
+opacity:1;
+
+}
+
+100%{
+
+transform:translateY(100vh) rotate(720deg);
+
+opacity:0;
+
+}
+
+}
 </style>
 
+<!-- ================= HERO ================= -->
+
+<div class="hero-banner">
+
+    <div class="hero-overlay">
+
+        <div class="hero-left">
+
+            <div class="hero-badge">
+                🎁 Referral Program
+            </div>
+
+            <h1>
+                Invite Friends &
+                <span>Earn Rewards</span>
+            </h1>
+
+            <p>
+                Share your personal referral link, build your network,
+                unlock referral levels and earn exciting rewards.
+            </p>
+
+            <div class="hero-buttons">
+
+                <a href="#share-box"
+                   class="btn-primary-custom">
+
+                    Share Now
+
+                </a>
+
+                <a href="#how-it-works"
+                   class="btn-outline-custom">
+
+                    Learn More
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="reward-circle">
+
+            🎉
+
+        </div>
+
+    </div>
+
+</div>
+<!-- ================= STATS ================= -->
+
+<div class="row g-4 mb-4">
+
+    <div class="col-lg-3 col-md-6">
+
+        <div class="stats-card">
+
+            <div class="stats-icon blue">
+                👥
+            </div>
+
+            <h2>{{ referral_count }}</h2>
+
+            <p>Total Referrals</p>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+
+        <div class="stats-card">
+
+            <div class="stats-icon green">
+                💰
+            </div>
+
+            <h2>{{ referral_earnings }}</h2>
+
+            <p>Total Rewards</p>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+
+        <div class="stats-card">
+
+            <div class="stats-icon orange">
+                🎯
+            </div>
+
+            <h2>
+                {{ 50 - referral_count if referral_count < 50 else 0 }}
+            </h2>
+
+            <p>Next Level Target</p>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+
+        <div class="stats-card">
+
+            <div class="stats-icon purple">
+                🏆
+            </div>
+
+            <h2>
+
+                {% if referral_count >= 500 %}
+                    Platinum
+                {% elif referral_count >= 200 %}
+                    Gold
+                {% elif referral_count >= 50 %}
+                    Silver
+                {% else %}
+                    Bronze
+                {% endif %}
+
+            </h2>
+
+            <p>Your Level</p>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- ================= PROGRESS ================= -->
+
+<div class="progress-card">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <h4 class="mb-0">
+            🚀 Referral Progress
+        </h4>
+
+        <strong>
+
+            {{ referral_count }}
+
+            /
+
+            50
+
+        </strong>
+
+    </div>
+
+    {% set progress =
+        (referral_count * 100 / 50)
+        if referral_count < 50
+        else 100
+    %}
+
+    <div class="progress">
+
+        <div
+            class="progress-bar bg-success progress-bar-striped progress-bar-animated"
+            role="progressbar"
+            style="width: {{ progress }}%;"
+            aria-valuenow="{{ progress }}"
+            aria-valuemin="0"
+            aria-valuemax="100">
+
+            {{ progress|round(0) }}%
+
+        </div>
+
+    </div>
+
+    <div class="mt-3 text-muted">
+
+        {% if referral_count < 50 %}
+
+            Invite
+            <strong>{{ 50 - referral_count }}</strong>
+            more friends to unlock the
+            <strong>Silver</strong> level.
+
+        {% elif referral_count < 200 %}
+
+            🎉 Silver unlocked!
+            Keep growing to reach
+            <strong>Gold</strong>.
+
+        {% elif referral_count < 500 %}
+
+            🥇 Gold unlocked!
+            Next destination:
+            <strong>Platinum</strong>.
+
+        {% else %}
+
+            💎 Congratulations!
+            You have reached the highest referral level.
+
+        {% endif %}
+
+    </div>
+
+        </div>
+    <!-- ================= SHARE SECTION ================= -->
+
+<div id="share-box" class="share-card">
+
+    <div class="share-header">
+
+        <h2>
+            🔗 Share Your Referral Link
+        </h2>
+
+        <p>
+            Invite your friends using your personal referral link.
+            Share it on WhatsApp, Telegram, Facebook, X or Email.
+        </p>
+
+    </div>
+
+    <!-- Referral Link -->
+
+    <label class="share-label">
+
+        Your Personal Referral Link
+
+    </label>
+
+    <div class="copy-wrapper">
+
+        <input
+            id="refLink"
+            type="text"
+            readonly
+            value="{{ url_for('auth.signup', ref_id=session['user_id'], _external=True) }}"
+        >
+
+        <button
+            class="copy-btn"
+            onclick="copyReferralLink()">
+
+            📋 Copy
+
+        </button>
+
+    </div>
+
+    <!-- Share Buttons -->
+
+    <div class="share-grid">
+
+        <button
+            class="share-btn whatsapp"
+            onclick="shareWhatsApp()">
+
+            <i class="fab fa-whatsapp"></i>
+
+            WhatsApp
+
+        </button>
+
+        <button
+            class="share-btn telegram"
+            onclick="shareTelegram()">
+
+            <i class="fab fa-telegram"></i>
+
+            Telegram
+
+        </button>
+
+        <button
+            class="share-btn facebook"
+            onclick="shareFacebook()">
+
+            <i class="fab fa-facebook-f"></i>
+
+            Facebook
+
+        </button>
+
+        <button
+            class="share-btn twitter"
+            onclick="shareTwitter()">
+
+            <i class="fab fa-x-twitter"></i>
+
+            X
+
+        </button>
+
+        <button
+            class="share-btn email"
+            onclick="shareEmail()">
+
+            <i class="fas fa-envelope"></i>
+
+            Email
+
+        </button>
+
+        <button
+            class="share-btn native"
+            onclick="shareNative()">
+
+            <i class="fas fa-share-alt"></i>
+
+            More
+
+        </button>
+
+    </div>
+
+    <!-- QR -->
+
+    <div class="qr-box">
+
+        <div class="qr-icon">
+            📱
+        </div>
+
+        <h5>Scan & Join</h5>
+
+        <p>
+            QR Code support will be available in the next update.
+        </p>
+
+    </div>
+
+    <div
+        id="copyToast"
+        class="copy-toast">
+
+        ✅ Referral Link Copied Successfully
+
+    </div>
+
+</div>
+            <!-- ================= HOW IT WORKS ================= -->
+
+<div id="how-it-works" class="info-section">
+
+    <h2 class="section-title">
+        🚀 How the Referral Program Works
+    </h2>
+
+    <p class="section-subtitle">
+        Start inviting your friends today and unlock exciting rewards as your network grows.
+    </p>
+
+    <div class="timeline">
+
+        <div class="timeline-item">
+
+            <div class="timeline-icon">
+                1️⃣
+            </div>
+
+            <div class="timeline-content">
+
+                <h5>Copy Your Referral Link</h5>
+
+                <p>
+                    Copy your unique referral link with one click.
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="timeline-item">
+
+            <div class="timeline-icon">
+                2️⃣
+            </div>
+
+            <div class="timeline-content">
+
+                <h5>Share Everywhere</h5>
+
+                <p>
+                    Share your referral link through WhatsApp, Telegram, Facebook, X, Email or any social platform.
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="timeline-item">
+
+            <div class="timeline-icon">
+                3️⃣
+            </div>
+
+            <div class="timeline-content">
+
+                <h5>Friends Register</h5>
+
+                <p>
+                    Your friends sign up using your personal referral link.
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="timeline-item">
+
+            <div class="timeline-icon">
+                4️⃣
+            </div>
+
+            <div class="timeline-content">
+
+                <h5>Earn Rewards</h5>
+
+                <p>
+                    Increase your referral count, unlock new levels and receive future referral rewards.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- ================= REWARD LEVELS ================= -->
+
+<div class="reward-section">
+
+    <h2 class="section-title">
+        🏆 Referral Levels
+    </h2>
+
+    <p class="section-subtitle">
+        Grow your referral network and unlock higher levels with more rewards.
+    </p>
+
+    <div class="row">
+
+        <div class="col-lg-3 col-md-6 mb-4">
+
+            <div class="level-card bronze">
+
+                <h3>🥉 Bronze</h3>
+
+                <h4>0 - 49 Referrals</h4>
+
+                <p>
+                    Start building your network and begin your referral journey.
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+
+            <div class="level-card silver">
+
+                <h3>🥈 Silver</h3>
+
+                <h4>50+ Referrals</h4>
+
+                <p>
+                    Unlock Silver level and enjoy additional referral benefits.
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+
+            <div class="level-card gold">
+
+                <h3>🥇 Gold</h3>
+
+                <h4>200+ Referrals</h4>
+
+                <p>
+                    Reach Gold status and become one of the top community members.
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+
+            <div class="level-card platinum">
+
+                <h3>💎 Platinum</h3>
+
+                <h4>500+ Referrals</h4>
+
+                <p>
+                    Achieve the highest level with exclusive recognition and premium rewards.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- ================= BENEFITS ================= -->
+
+<div class="benefits-card">
+
+    <h2 class="section-title">
+        🎁 Why Invite Friends?
+    </h2>
+
+    <p class="section-subtitle">
+        Every successful referral helps you grow your network and unlock future opportunities.
+    </p>
+
+    <div class="row">
+
+        <div class="col-md-6">
+
+            <ul class="benefit-list">
+
+                <li>✅ Build your own referral network</li>
+
+                <li>💰 Earn referral rewards</li>
+
+                <li>🚀 Unlock higher referral levels</li>
+
+                <li>🏆 Receive exclusive recognition</li>
+
+                <li>⭐ Access future bonus campaigns</li>
+
+            </ul>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <ul class="benefit-list">
+
+                <li>📈 Increase your earning opportunities</li>
+
+                <li>🌍 Invite unlimited friends</li>
+
+                <li>🔒 Safe & Secure referral tracking</li>
+
+                <li>🎯 Track your referral progress easily</li>
+
+                <li>🎉 Get exciting rewards in future updates</li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- ================= REFERRED USERS ================= -->
+
+<div class="referral-users-section">
+
+    <div class="users-header">
+
+        <div>
+
+            <h2>
+                👥 My Referred Users
+            </h2>
+
+            <p>
+                People who joined using your referral link.
+            </p>
+
+        </div>
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="searchReferral"
+                placeholder="Search by name or phone..."
+                onkeyup="filterReferralUsers()"
+            >
+
+        </div>
+
+    </div>
+
+    {% if referred_users %}
+
+    <div class="table-responsive">
+
+        <table class="table referral-table align-middle">
+
+            <thead>
+
+                <tr>
+
+                    <th>#</th>
+
+                    <th>Name</th>
+
+                    <th>Phone</th>
+
+                    <th>Status</th>
+
+                    <th>Joined</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="referralTableBody">
+
+                {% for u in referred_users %}
+
+                <tr>
+
+                    <td>
+
+                        {{ loop.index + ((pagination.page-1) * pagination.per_page) }}
+
+                    </td>
+
+                    <td>
+
+                        <div class="user-info">
+
+                            <div class="avatar">
+
+                                {{ u.name[:1]|upper }}
+
+                            </div>
+
+                            <div>
+
+                                <strong>
+
+                                    {{ u.name }}
+
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+                    <td>
+
+                        {{ u.phone }}
+
+                    </td>
+
+                                        <td>
+
+                        {% if u.status == "active" %}
+
+                            <span class="badge bg-success">
+
+                                Active
+
+                            </span>
+
+                        {% elif u.status == "pending" %}
+
+                            <span class="badge bg-warning text-dark">
+
+                                Pending
+
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-danger">
+
+                                Blocked
+
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        {{ u.created_at.strftime("%d %b %Y") if u.created_at else "-" }}
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% else %}
+
+    <div class="empty-referral">
+
+        <div class="empty-icon">
+
+            👥
+
+        </div>
+
+        <h4>
+
+            No Referrals Yet
+
+        </h4>
+
+        <p>
+
+            Start sharing your referral link to build your network.
+
+        </p>
+
+        <button
+            class="btn btn-primary"
+            onclick="document.getElementById('share-box').scrollIntoView({behavior:'smooth'})">
+
+            Invite Friends
+
+        </button>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+<!-- ================= PAGINATION ================= -->
+
+{% if pagination.pages > 1 %}
+
+<nav class="mt-4">
+
+    <ul class="pagination justify-content-center">
+
+        {% if pagination.has_prev %}
+
+        <li class="page-item">
+
+            <a
+                class="page-link"
+                href="{{ url_for('user.referral', page=pagination.prev_num) }}">
+
+                Previous
+
+            </a>
+
+        </li>
+
+        {% endif %}
+
+        <li class="page-item active">
+
+            <span class="page-link">
+
+                {{ pagination.page }}
+
+            </span>
+
+        </li>
+
+        {% if pagination.has_next %}
+
+        <li class="page-item">
+
+            <a
+                class="page-link"
+                href="{{ url_for('user.referral', page=pagination.next_num) }}">
+
+                Next
+
+            </a>
+
+        </li>
+
+        {% endif %}
+
+    </ul>
+
+</nav>
+
+{% endif %}
+            <!-- ================= PERFORMANCE ================= -->
+
+<div class="row mt-5">
+
+    <div class="col-lg-8 mb-4">
+
+        <div class="analytics-card">
+
+            <h3>
+                📈 Referral Performance
+            </h3>
+
+            <div class="row mt-4">
+
+                <div class="col-md-4">
+
+                    <div class="metric-box">
+
+                        <h2
+                            class="counter"
+                            data-target="{{ referral_count }}">
+
+                            0
+
+                        </h2>
+
+                        <span>Total Referrals</span>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <div class="metric-box">
+
+                        <h2
+                            class="counter"
+                            data-target="{{ referral_earnings }}">
+
+                            0
+
+                        </h2>
+
+                        <span>Total Rewards</span>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <div class="metric-box">
+
+                        <h2
+                            class="counter"
+                            data-target="{{ 50 - referral_count if referral_count < 50 else 0 }}">
+
+                            0
+
+                        </h2>
+
+                        <span>Next Level</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-4 mb-4">
+
+        <div class="leader-card">
+
+            <h3>
+                🏅 Your Level
+            </h3>
+
+            {% if referral_count >= 500 %}
+
+                <div class="level platinum">
+                    💎 Platinum
+                </div>
+
+            {% elif referral_count >= 200 %}
+
+                <div class="level gold">
+                    🥇 Gold
+                </div>
+
+            {% elif referral_count >= 50 %}
+
+                <div class="level silver">
+                    🥈 Silver
+                </div>
+
+            {% else %}
+
+                <div class="level bronze">
+                    🥉 Bronze
+                </div>
+
+            {% endif %}
+
+            <p class="mt-3">
+
+                Keep inviting more friends to unlock higher rewards.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= NEXT REWARD ================= -->
+
+<div class="next-card">
+
+    <h3>
+        🎯 Next Reward Target
+    </h3>
+
+    <p>
+
+        {% if referral_count < 50 %}
+
+            Invite
+            <strong>{{ 50 - referral_count }}</strong>
+            more friends to unlock the
+            <strong>Silver</strong> level.
+
+        {% elif referral_count < 200 %}
+
+            Invite
+            <strong>{{ 200 - referral_count }}</strong>
+            more friends to unlock the
+            <strong>Gold</strong> level.
+
+        {% elif referral_count < 500 %}
+
+            Invite
+            <strong>{{ 500 - referral_count }}</strong>
+            more friends to unlock the
+            <strong>Platinum</strong> level.
+
+        {% else %}
+
+            🎉 Congratulations! You have reached the highest referral level.
+
+        {% endif %}
+
+    </p>
+
+</div>
+
+<div id="toastSuccess" class="toast-success">
+
+    ✅ Successfully Completed
+
+</div>
+
+<div id="confettiContainer"></div>
 <script>
 
-function copyReferralLink(){
+function getReferralLink() {
+    return document.getElementById("refLink").value;
+}
 
-    const link =
-        document.getElementById("refLink").value;
+/* ================= COPY ================= */
 
-    navigator.clipboard.writeText(link);
+function copyReferralLink() {
 
-    document.getElementById("copyMessage").style.display =
-        "block";
+    const text = getReferralLink();
+
+    navigator.clipboard.writeText(text);
+
+    showToast("Referral Link Copied Successfully");
+
+    launchConfetti();
+}
+
+/* ================= SHARE ================= */
+
+function shareWhatsApp() {
+
+    window.open(
+
+        "https://wa.me/?text=" +
+
+        encodeURIComponent(
+            "Join S.F Works Hub using my referral link:\n\n" +
+            getReferralLink()
+        ),
+
+        "_blank"
+
+    );
+
+}
+
+function shareTelegram() {
+
+    window.open(
+
+        "https://t.me/share/url?url=" +
+
+        encodeURIComponent(getReferralLink()),
+
+        "_blank"
+
+    );
+
+}
+
+function shareFacebook() {
+
+    window.open(
+
+        "https://www.facebook.com/sharer/sharer.php?u=" +
+
+        encodeURIComponent(getReferralLink()),
+
+        "_blank"
+
+    );
+
+}
+
+function shareTwitter() {
+
+    window.open(
+
+        "https://twitter.com/intent/tweet?text=" +
+
+        encodeURIComponent(
+
+            "Join S.F Works Hub using my referral link\n\n" +
+
+            getReferralLink()
+
+        ),
+
+        "_blank"
+
+    );
+
+}
+
+function shareEmail() {
+
+    location.href =
+
+        "mailto:?subject=" +
+
+        encodeURIComponent("Join S.F Works Hub") +
+
+        "&body=" +
+
+        encodeURIComponent(
+
+            "Join using my referral link:\n\n" +
+
+            getReferralLink()
+
+        );
+
+}
+
+function shareNative() {
+
+    if (navigator.share) {
+
+        navigator.share({
+
+            title: "S.F Works Hub",
+
+            text: "Join using my referral link.",
+
+            url: getReferralLink()
+
+        });
+
+    } else {
+
+        copyReferralLink();
+
+    }
+
+}
+    /* ================= SEARCH ================= */
+
+function filterReferralUsers() {
+
+    const input = document
+        .getElementById("searchReferral")
+        .value
+        .toLowerCase();
+
+    const rows = document.querySelectorAll(
+        "#referralTableBody tr"
+    );
+
+    rows.forEach(row => {
+
+        const text = row.innerText.toLowerCase();
+
+        row.style.display =
+            text.includes(input) ? "" : "none";
+
+    });
+
+}
+
+/* ================= COUNTER ================= */
+
+document.querySelectorAll(".counter").forEach(counter => {
+
+    const target =
+        parseInt(counter.dataset.target) || 0;
+
+    let count = 0;
+
+    const speed =
+        Math.max(1, Math.ceil(target / 80));
+
+    const timer = setInterval(() => {
+
+        count += speed;
+
+        if (count >= target) {
+
+            count = target;
+
+            clearInterval(timer);
+
+        }
+
+        counter.innerText = count;
+
+    }, 20);
+
+});
+
+/* ================= TOAST ================= */
+
+function showToast(message) {
+
+    const toast =
+        document.getElementById("toastSuccess");
+
+    if (!toast) return;
+
+    toast.innerHTML = "✅ " + message;
+
+    toast.style.display = "block";
 
     setTimeout(() => {
 
-        document.getElementById("copyMessage").style.display =
-            "none";
+        toast.style.display = "none";
 
     }, 2500);
+
 }
 
-function shareReferral(){
+/* ================= CONFETTI ================= */
 
-    const link =
-        document.getElementById("refLink").value;
+function launchConfetti() {
 
-    if(navigator.share){
+    for (let i = 0; i < 80; i++) {
 
-        navigator.share({
-            title:"S.F Works Hub",
-            text:"Join S.F Works Hub using my referral link and start earning.",
-            url:link
-        });
+        const c =
+            document.createElement("div");
 
-    }else{
+        c.className = "confetti";
 
-        navigator.clipboard.writeText(link);
+        c.style.left =
+            Math.random() * 100 + "vw";
 
-        document.getElementById("copyMessage").style.display =
-            "block";
+        c.style.background =
+            `hsl(${Math.random()*360},100%,50%)`;
+
+        c.style.animationDelay =
+            Math.random() + "s";
+
+        document.body.appendChild(c);
 
         setTimeout(() => {
 
-            document.getElementById("copyMessage").style.display =
-                "none";
+            c.remove();
 
-        }, 2500);
+        }, 3500);
+
     }
+
 }
 
 </script>
+
+{% endblock %}
