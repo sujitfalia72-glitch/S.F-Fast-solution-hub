@@ -127,9 +127,12 @@ body{
 .table-card{
 
     padding:25px;
+    overflow:hidden;
 
 }
-
+.table-responsive{
+    border-radius:20px;
+}
 
 .table{
 
@@ -741,6 +744,9 @@ body{
                                 id=u.id
                                 )
                                 }}">
+                                <input type="hidden"
+                                    name="csrf_token"
+                                    value="{{ csrf_token() }}">
 
 
                                 <button
@@ -1037,12 +1043,9 @@ body{
 
 
     </small>
-
-
 </div>
 
 </div>
-
 
 {% endblock %}
 
