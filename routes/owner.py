@@ -1038,6 +1038,111 @@ def restore_work(id):
         )
 
     return redirect('/owner/dashboard')
+
+@owner.route("/owner/user-control")
+@owner_only
+def user_control():
+
+    page = request.args.get(
+        "page",
+        1,
+        type=int
+    )
+
+    users = User.query.order_by(
+        User.id.desc()
+    ).paginate(
+        page=page,
+        per_page=20,
+        error_out=False
+    )
+
+    admins = User.query.filter(
+        User.role.in_(
+            ["admin", "super_admin"]
+        )
+    ).all()
+
+    return render_template(
+        "owner/user_control.html",
+        users=users,
+        admins=admins
+    )
+
+@owner.route("/owner/users/bulk-action", methods=["POST"])
+@owner_only
+def bulk_user_action():
+
+    action = request.form.get("action")
+
+    user_ids = request.form.getlist("user_ids")
+
+    if not action or not user_ids:
+
+        flash(
+            "Please select users and action.",
+            "warning"
+        )
+
+        return redirect(url_for("owner.user_control"))
+
+    users = User.query.filter(
+        User.id.in_(user_ids)
+    ).all()
+
+    count = 0
+
+    for user in users:
+
+        # Owner Safe
+        if user.role == "owner":
+            continue
+
+        # Self Safe
+        if user.id == session.get("user_id"):
+            continue
+
+        if action == "block":
+
+            user.status = "blocked"
+
+        elif action == "unblock":
+
+            user.status = "active"
+
+        elif action == "activate":
+
+            user.status = "active"
+
+        elif action == "delete":
+
+            user.status = "deleted"
+
+            if hasattr(user, "is_deleted"):
+                user.is_deleted = True
+
+        user.updated_at = datetime.utcnow()
+
+        count += 1
+
+    db.session.commit()
+
+    socketio.emit(
+        "notify",
+        {
+            "type": "success",
+            "message": f"{count} users updated successfully."
+        }
+    )
+
+    flash(
+        f"{count} users updated successfully.",
+        "success"
+    )
+
+    return redirect(
+        url_for("owner.user_control")
+    )
 # =================================================
 # 👤 BLOCK USER
 # =================================================
