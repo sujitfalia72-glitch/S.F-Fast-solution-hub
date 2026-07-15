@@ -7,36 +7,50 @@
 <style>
 
 :root{
+
     --primary:#2563eb;
     --secondary:#4f46e5;
+
     --success:#16a34a;
     --warning:#d97706;
     --danger:#dc2626;
+
     --dark:#0f172a;
     --gray:#64748b;
+
     --border:#e2e8f0;
+
     --bg:#f8fafc;
+
+    --card:#ffffff;
+
 }
 
 body{
+
     background:var(--bg);
+
 }
 
+/* ================= PAGE ================= */
+
 .page-wrapper{
+
     padding:25px;
+
 }
+
+/* ================= HEADER ================= */
 
 .page-header{
 
     background:#fff;
 
-    border-radius:20px;
+    border-radius:22px;
 
     padding:25px;
 
     margin-bottom:25px;
-
-    box-shadow:0 10px 30px rgba(0,0,0,.08);
 
     display:flex;
 
@@ -46,7 +60,9 @@ body{
 
     flex-wrap:wrap;
 
-    gap:15px;
+    gap:20px;
+
+    box-shadow:0 12px 30px rgba(0,0,0,.08);
 
 }
 
@@ -64,9 +80,11 @@ body{
 
 .page-subtitle{
 
+    margin-top:8px;
+
     color:var(--gray);
 
-    margin-top:5px;
+    font-size:15px;
 
 }
 
@@ -80,97 +98,67 @@ body{
 
 }
 
-.stat-card{
+.btn-dashboard{
 
-    background:#fff;
+    border-radius:12px;
 
-    border-radius:18px;
+    padding:10px 18px;
 
-    padding:22px;
-
-    box-shadow:0 10px 25px rgba(0,0,0,.06);
-
-    transition:.25s;
-
-    height:100%;
+    font-weight:600;
 
 }
 
-.stat-card:hover{
+.btn-add{
 
-    transform:translateY(-6px);
+    border-radius:12px;
 
-}
+    padding:10px 18px;
 
-.stat-icon{
-
-    width:60px;
-
-    height:60px;
-
-    border-radius:15px;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    color:#fff;
-
-    font-size:24px;
-
-    margin-bottom:15px;
+    font-weight:600;
 
 }
 
-.icon-primary{
-    background:#2563eb;
-}
+/* ================= COMMON CARD ================= */
 
-.icon-success{
-    background:#16a34a;
-}
-
-.icon-warning{
-    background:#d97706;
-}
-
-.icon-danger{
-    background:#dc2626;
-}
-
-.stat-number{
-
-    font-size:30px;
-
-    font-weight:700;
-
-    color:#111827;
-
-}
-
-.stat-label{
-
-    color:#64748b;
-
-    font-size:15px;
-
-}
-
-.control-card{
+.card-box{
 
     background:#fff;
 
     border-radius:20px;
 
-    padding:20px;
+    padding:22px;
 
-    margin-top:25px;
+    box-shadow:0 8px 25px rgba(0,0,0,.06);
 
-    box-shadow:0 10px 25px rgba(0,0,0,.06);
+    margin-bottom:25px;
 
 }
+
+/* ================= SEARCH ================= */
+
+.search-box{
+
+    border-radius:12px;
+
+    height:48px;
+
+}
+
+.form-select{
+
+    height:48px;
+
+    border-radius:12px;
+
+}
+
+.btn{
+
+    border-radius:12px;
+
+}
+
+/* ================= TABLE ================= */
 
 .table{
 
@@ -192,21 +180,75 @@ body{
 
 }
 
+.table th{
+
+    vertical-align:middle;
+
+}
+
+/* ================= USER IMAGE ================= */
+
+.user-avatar{
+
+    width:45px;
+
+    height:45px;
+
+    object-fit:cover;
+
+    border-radius:50%;
+
+}
+
+/* ================= BADGES ================= */
+
+.badge{
+
+    font-size:13px;
+
+    padding:7px 10px;
+
+}
+
+/* ================= ACTION ================= */
+
 .action-btn{
 
     margin:2px;
 
 }
 
-.search-box{
+/* ================= RESPONSIVE ================= */
 
-    border-radius:12px;
+@media(max-width:768px){
+
+.page-header{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+}
+
+.header-buttons{
+
+    width:100%;
+
+}
+
+.header-buttons .btn{
+
+    width:100%;
+
+}
 
 }
 
 </style>
 
 <div class="container-fluid page-wrapper">
+
+<!-- ================= PAGE HEADER ================= -->
 
 <div class="page-header">
 
@@ -220,7 +262,7 @@ body{
 
 <p class="page-subtitle">
 
-Manage all users, controllers, permissions and account status.
+Manage Users, Controller Transfer, Block, Delete, Profile & Bulk Actions
 
 </p>
 
@@ -230,7 +272,7 @@ Manage all users, controllers, permissions and account status.
 
 <a
 href="{{ url_for('owner.dashboard') }}"
-class="btn btn-dark">
+class="btn btn-dark btn-dashboard">
 
 <i class="fas fa-arrow-left"></i>
 
@@ -240,7 +282,7 @@ Dashboard
 
 <a
 href="{{ url_for('owner.add_user') }}"
-class="btn btn-primary">
+class="btn btn-primary btn-add">
 
 <i class="fas fa-user-plus"></i>
 
@@ -253,220 +295,246 @@ Add User
 </div>
 <!-- ================= STATISTICS ================= -->
 
-<div class="row g-3">
+<div class="row g-4 mb-4">
 
-    <div class="col-xl-3 col-md-6">
+    <div class="col-xl-3 col-lg-6">
 
-        <div class="stat-card">
+        <div class="card-box h-100">
 
-            <div class="stat-icon icon-primary">
-                <i class="fas fa-users"></i>
-            </div>
+            <div class="d-flex justify-content-between align-items-center">
 
-            <div class="stat-number">
-                {{ total_users }}
-            </div>
+                <div>
 
-            <div class="stat-label">
-                Total Users
-            </div>
+                    <h3 class="fw-bold mb-1">
 
-        </div>
+                        {{ total_users }}
 
-    </div>
+                    </h3>
 
-    <div class="col-xl-3 col-md-6">
+                    <p class="text-muted mb-0">
 
-        <div class="stat-card">
+                        Total Users
 
-            <div class="stat-icon icon-success">
-                <i class="fas fa-user-check"></i>
-            </div>
+                    </p>
 
-            <div class="stat-number">
-                {{ active_users }}
-            </div>
+                </div>
 
-            <div class="stat-label">
-                Active Users
+                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
+                     style="width:60px;height:60px;">
+
+                    <i class="fas fa-users fa-lg"></i>
+
+                </div>
+
             </div>
 
         </div>
 
     </div>
 
-    <div class="col-xl-3 col-md-6">
+    <div class="col-xl-3 col-lg-6">
 
-        <div class="stat-card">
+        <div class="card-box h-100">
 
-            <div class="stat-icon icon-warning">
-                <i class="fas fa-user-lock"></i>
-            </div>
+            <div class="d-flex justify-content-between align-items-center">
 
-            <div class="stat-number">
-                {{ blocked_users }}
-            </div>
+                <div>
 
-            <div class="stat-label">
-                Blocked Users
-            </div>
+                    <h3 class="fw-bold text-success mb-1">
 
-        </div>
+                        {{ active_users }}
 
-    </div>
+                    </h3>
 
-    <div class="col-xl-3 col-md-6">
+                    <p class="text-muted mb-0">
 
-        <div class="stat-card">
+                        Active Users
 
-            <div class="stat-icon icon-danger">
-                <i class="fas fa-trash"></i>
-            </div>
+                    </p>
 
-            <div class="stat-number">
-                {{ deleted_users }}
-            </div>
+                </div>
 
-            <div class="stat-label">
-                Deleted Users
+                <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center"
+                     style="width:60px;height:60px;">
+
+                    <i class="fas fa-user-check fa-lg"></i>
+
+                </div>
+
             </div>
 
         </div>
 
     </div>
 
-</div>
+    <div class="col-xl-3 col-lg-6">
 
-<!-- ================= CONTROL PANEL ================= -->
+        <div class="card-box h-100">
 
-<div class="control-card">
+            <div class="d-flex justify-content-between align-items-center">
 
-<div class="row g-3 mb-4">
+                <div>
 
-<div class="col-lg-4">
+                    <h3 class="fw-bold text-warning mb-1">
 
-<input
-type="text"
-id="searchUser"
-class="form-control search-box"
-placeholder="🔍 Search by name, email or phone">
+                        {{ blocked_users }}
 
-</div>
+                    </h3>
 
-<div class="col-lg-2">
+                    <p class="text-muted mb-0">
 
-<select
-id="roleFilter"
-class="form-select">
+                        Blocked Users
 
-<option value="">
+                    </p>
 
-All Roles
+                </div>
 
-</option>
+                <div class="bg-warning text-white rounded-circle d-flex align-items-center justify-content-center"
+                     style="width:60px;height:60px;">
 
-<option value="user">
+                    <i class="fas fa-user-lock fa-lg"></i>
 
-User
+                </div>
 
-</option>
+            </div>
 
-<option value="admin">
-
-Admin
-
-</option>
-
-<option value="super_admin">
-
-Super Admin
-
-</option>
-
-<option value="owner">
-
-Owner
-
-</option>
-
-</select>
-
-</div>
-
-<div class="col-lg-2">
-
-<select
-id="statusFilter"
-class="form-select">
-
-<option value="">
-
-All Status
-
-</option>
-
-<option value="active">
-
-Active
-
-</option>
-
-<option value="blocked">
-
-Blocked
-
-</option>
-
-<option value="deleted">
-
-Deleted
-
-</option>
-
-</select>
-
-</div>
-
-<div class="col-lg-2">
-
-<button
-type="button"
-id="resetFilter"
-class="btn btn-secondary w-100">
-
-<i class="fas fa-rotate-right"></i>
-
-Reset
-
-</button>
-
-</div>
-
-<div class="col-lg-2">
-
-<a
-href="{{ url_for('owner.user_control') }}"
-class="btn btn-primary w-100">
-
-<i class="fas fa-sync"></i>
-
-Refresh
-
-</a>
-
-</div>
+        </div>
 
     </div>
-    <!-- ================= BULK ACTION BAR ================= -->
+
+    <div class="col-xl-3 col-lg-6">
+
+        <div class="card-box h-100">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+
+                    <h3 class="fw-bold text-danger mb-1">
+
+                        {{ deleted_users }}
+
+                    </h3>
+
+                    <p class="text-muted mb-0">
+
+                        Deleted Users
+
+                    </p>
+
+                </div>
+
+                <div class="bg-danger text-white rounded-circle d-flex align-items-center justify-content-center"
+                     style="width:60px;height:60px;">
+
+                    <i class="fas fa-trash fa-lg"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= SEARCH & FILTER ================= -->
+
+<div class="card-box">
+
+    <div class="row g-3">
+
+        <div class="col-lg-4">
+
+            <input
+                type="text"
+                id="searchUser"
+                class="form-control search-box"
+                placeholder="🔍 Search by name, email or phone">
+
+        </div>
+
+        <div class="col-lg-2">
+
+            <select
+                id="roleFilter"
+                class="form-select">
+
+                <option value="">All Roles</option>
+
+                <option value="owner">Owner</option>
+
+                <option value="super_admin">Super Admin</option>
+
+                <option value="admin">Admin</option>
+
+                <option value="user">User</option>
+
+            </select>
+
+        </div>
+
+        <div class="col-lg-2">
+
+            <select
+                id="statusFilter"
+                class="form-select">
+
+                <option value="">All Status</option>
+
+                <option value="active">Active</option>
+
+                <option value="blocked">Blocked</option>
+
+                <option value="deleted">Deleted</option>
+
+            </select>
+
+        </div>
+
+        <div class="col-lg-2">
+
+            <button
+                type="button"
+                id="resetFilter"
+                class="btn btn-secondary w-100">
+
+                <i class="fas fa-rotate-right"></i>
+
+                Reset
+
+            </button>
+
+        </div>
+
+        <div class="col-lg-2">
+
+            <a
+                href="{{ url_for('owner.user_control') }}"
+                class="btn btn-primary w-100">
+
+                <i class="fas fa-sync-alt"></i>
+
+                Refresh
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- ===================================================== -->
+<!-- BULK ACTION TOOLBAR -->
+<!-- ===================================================== -->
+
+<div class="card-box">
 
 <form
     id="bulkActionForm"
-    action="{{ url_for('owner.bulk_user_action') }}"
-    method="POST">
-
-<div class="card border-0 shadow-sm mb-3">
-
-<div class="card-body">
+    method="POST"
+    action="{{ url_for('owner.bulk_user_action') }}">
 
 <div class="row align-items-center g-3">
 
@@ -480,10 +548,10 @@ type="checkbox"
 id="selectAllUsers">
 
 <label
-class="form-check-label fw-bold"
+class="form-check-label fw-semibold"
 for="selectAllUsers">
 
-Select All Users
+Select All
 
 </label>
 
@@ -500,7 +568,7 @@ required>
 
 <option value="">
 
-Choose Action
+Bulk Action
 
 </option>
 
@@ -540,17 +608,17 @@ class="btn btn-danger w-100">
 
 <i class="fas fa-bolt"></i>
 
-Apply Action
+Apply
 
 </button>
 
 </div>
 
-<div class="col-lg-3 text-lg-end">
+<div class="col-lg-3 text-end">
 
 <span
-class="badge bg-primary fs-6"
-id="selectedCount">
+id="selectedCount"
+class="badge bg-primary fs-6">
 
 0 Selected
 
@@ -560,11 +628,23 @@ id="selectedCount">
 
 </div>
 
-</div>
+<hr>
+
+<!-- ===================== -->
+<!-- USER IDS -->
+<!-- ===================== -->
+
+<div id="bulkHiddenInputs"></div>
+
+</form>
 
 </div>
 
-<!-- ================= USERS TABLE ================= -->
+<!-- ===================================================== -->
+<!-- USER TABLE -->
+<!-- ===================================================== -->
+
+<div class="card-box">
 
 <div class="table-responsive">
 
@@ -596,7 +676,7 @@ id="headerCheckbox">
 
 <th>Joined</th>
 
-<th width="300">
+<th width="320">
 
 Actions
 
@@ -608,222 +688,285 @@ Actions
 
 <tbody>
 
+{% if users.items %}
+
 {% for user in users.items %}
-    <tr>
 
-    <td>
-        <input
-            type="checkbox"
-            class="userCheckbox"
-            name="user_ids"
-            value="{{ user.id }}">
-    </td>
+<tr>
 
-    <td>
-        {{ user.id }}
-    </td>
+<td>
 
-    <td>
+<input
+type="checkbox"
+class="userCheckbox"
+value="{{ user.id }}">
 
-        <div class="d-flex align-items-center">
+</td>
 
-            {% if user.profile_image %}
+<td>
 
-            <img
-                src="{{ url_for('static', filename=user.profile_image) }}"
-                class="rounded-circle me-2"
-                width="45"
-                height="45">
+{{ user.id }}
 
-            {% else %}
+</td>
 
-            <img
-                src="{{ url_for('static', filename='img/default_user.png') }}"
-                class="rounded-circle me-2"
-                width="45"
-                height="45">
+<td>
 
-            {% endif %}
+<div class="d-flex align-items-center">
 
-            <div>
+{% if user.profile_image %}
 
-                <strong>{{ user.name }}</strong>
+<img
+src="{{ url_for('static', filename=user.profile_image) }}"
+class="user-avatar me-2">
 
-                <br>
+{% else %}
 
-                <small class="text-muted">
+<img
+src="{{ url_for('static', filename='img/default_user.png') }}"
+class="user-avatar me-2">
 
-                    {{ user.email }}
+{% endif %}
 
-                </small>
+<div>
 
-            </div>
+<div class="fw-bold">
 
-        </div>
+{{ user.name }}
 
-    </td>
+</div>
 
-    <td>
+<small class="text-muted">
 
-        {% if user.role == "owner" %}
+{{ user.email }}
 
-            <span class="badge bg-dark">Owner</span>
+</small>
 
-        {% elif user.role == "super_admin" %}
+</div>
 
-            <span class="badge bg-danger">Super Admin</span>
-
-        {% elif user.role == "admin" %}
-
-            <span class="badge bg-primary">Admin</span>
-
-        {% else %}
-
-            <span class="badge bg-secondary">User</span>
-
-        {% endif %}
+</div>
 
     </td>
-
     <td>
 
-        {% if user.status == "active" %}
+{% if user.role == "owner" %}
 
-            <span class="badge bg-success">Active</span>
+<span class="badge bg-dark">
 
-        {% elif user.status == "blocked" %}
+OWNER
 
-            <span class="badge bg-warning text-dark">Blocked</span>
+</span>
 
-        {% elif user.status == "deleted" %}
+{% elif user.role == "super_admin" %}
 
-            <span class="badge bg-danger">Deleted</span>
+<span class="badge bg-danger">
 
-        {% else %}
+SUPER ADMIN
 
-            <span class="badge bg-secondary">
+</span>
 
-                {{ user.status }}
+{% elif user.role == "admin" %}
 
-            </span>
+<span class="badge bg-primary">
 
-        {% endif %}
+ADMIN
 
-    </td>
+</span>
 
-    <td>
+{% else %}
 
-        {% if user.controller %}
+<span class="badge bg-secondary">
 
-            {{ user.controller.name }}
+USER
 
-        {% else %}
+</span>
 
-            -
+{% endif %}
 
-        {% endif %}
+</td>
 
-    </td>
+<td>
 
-    <td>
+{% if user.status == "active" %}
 
-        {% if user.created_at %}
+<span class="badge bg-success">
 
-            {{ user.created_at.strftime("%d %b %Y") }}
+Active
 
-        {% else %}
+</span>
 
-            -
+{% elif user.status == "blocked" %}
 
-        {% endif %}
+<span class="badge bg-warning text-dark">
 
-    </td>
+Blocked
 
-    <td>
+</span>
 
-        <div class="btn-group btn-group-sm">
+{% elif user.status == "deleted" %}
 
-            <a
-                href="{{ url_for('owner.user_profile', id=user.id) }}"
-                class="btn btn-info"
-                title="Profile">
+<span class="badge bg-danger">
 
-                <i class="fas fa-user"></i>
+Deleted
 
-            </a>
+</span>
 
-            <button
-                type="button"
-                class="btn btn-primary transferBtn"
-                data-id="{{ user.id }}"
-                data-name="{{ user.name }}"
-                data-bs-toggle="modal"
-                data-bs-target="#transferModal"
-                title="Transfer">
+{% else %}
 
-                <i class="fas fa-random"></i>
+<span class="badge bg-secondary">
 
-            </button>
+{{ user.status }}
 
-            {% if user.status != "blocked" %}
+</span>
 
-            <form
-                action="{{ url_for('owner.block_user', id=user.id) }}"
-                method="POST">
+{% endif %}
 
-                <button
-                    class="btn btn-warning"
-                    onclick="return confirm('Block this user?')">
+</td>
 
-                    <i class="fas fa-ban"></i>
+<td>
 
-                </button>
+{% if user.controller %}
 
-            </form>
+{{ user.controller.name }}
 
-            {% else %}
+{% else %}
 
-            <form
-                action="{{ url_for('owner.unblock_user', id=user.id) }}"
-                method="POST">
+-
 
-                <button
-                    class="btn btn-success"
-                    onclick="return confirm('Unblock this user?')">
+{% endif %}
 
-                    <i class="fas fa-check"></i>
+</td>
 
-                </button>
+<td>
 
-            </form>
+{% if user.created_at %}
 
-            {% endif %}
+{{ user.created_at.strftime("%d %b %Y") }}
 
-            {% if user.role != "owner" %}
+{% else %}
 
-            <form
-                action="{{ url_for('owner.delete_user', id=user.id) }}"
-                method="POST">
+-
 
-                <button
-                    class="btn btn-danger"
-                    onclick="return confirm('Delete this user?')">
+{% endif %}
 
-                    <i class="fas fa-trash"></i>
+</td>
 
-                </button>
+<td>
 
-            </form>
+<div class="d-flex flex-wrap gap-1">
 
-            {% endif %}
+<a
+href="{{ url_for('owner.user_profile', id=user.id) }}"
+class="btn btn-info btn-sm"
+title="Profile">
 
-        </div>
+<i class="fas fa-user"></i>
 
-    </td>
+</a>
+
+<button
+type="button"
+class="btn btn-primary btn-sm transferBtn"
+data-id="{{ user.id }}"
+data-name="{{ user.name }}"
+data-bs-toggle="modal"
+data-bs-target="#transferModal"
+title="Transfer">
+
+<i class="fas fa-random"></i>
+
+</button>
+
+{% if user.status != "blocked" %}
+
+<form
+action="{{ url_for('owner.block_user', id=user.id) }}"
+method="POST"
+class="d-inline">
+
+<button
+type="submit"
+class="btn btn-warning btn-sm"
+onclick="return confirm('Block this user?')">
+
+<i class="fas fa-ban"></i>
+
+</button>
+
+</form>
+
+{% else %}
+
+<form
+action="{{ url_for('owner.unblock_user', id=user.id) }}"
+method="POST"
+class="d-inline">
+
+<button
+type="submit"
+class="btn btn-success btn-sm"
+onclick="return confirm('Unblock this user?')">
+
+<i class="fas fa-check"></i>
+
+</button>
+
+</form>
+
+{% endif %}
+
+{% if user.role != "owner" %}
+
+<form
+action="{{ url_for('owner.delete_user', id=user.id) }}"
+method="POST"
+class="d-inline">
+
+<button
+type="submit"
+class="btn btn-danger btn-sm"
+onclick="return confirm('Delete this user?')">
+
+<i class="fas fa-trash"></i>
+
+</button>
+
+</form>
+
+{% endif %}
+
+</div>
+
+</td>
 
 </tr>
 
 {% endfor %}
+
+{% else %}
+
+<tr>
+
+<td colspan="8" class="text-center py-5">
+
+<i class="fas fa-users fa-3x text-muted mb-3"></i>
+
+<h5 class="mt-3">
+
+No Users Found
+
+</h5>
+
+<p class="text-muted">
+
+There are no users available.
+
+</p>
+
+</td>
+
+</tr>
+
+{% endif %}
 
 </tbody>
 
@@ -831,42 +974,284 @@ Actions
 
 </div>
 
+</div>
+<!-- ===================================================== -->
+<!-- TRANSFER USER MODAL -->
+<!-- ===================================================== -->
+
+<div
+class="modal fade"
+id="transferModal"
+tabindex="-1"
+aria-hidden="true">
+
+<div class="modal-dialog modal-dialog-centered">
+
+<div class="modal-content">
+
+<div class="modal-header bg-primary text-white">
+
+<h5 class="modal-title">
+
+<i class="fas fa-random me-2"></i>
+
+Transfer User Controller
+
+</h5>
+
+<button
+type="button"
+class="btn-close btn-close-white"
+data-bs-dismiss="modal">
+
+</button>
+
+</div>
+
+<form
+method="POST"
+action="{{ url_for('owner.transfer_user') }}">
+
+<div class="modal-body">
+
+<input
+type="hidden"
+name="user_id"
+id="transferUserId">
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Selected User
+
+</label>
+
+<input
+type="text"
+class="form-control"
+id="transferUserName"
+readonly>
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Transfer To
+
+</label>
+
+<select
+name="new_controller"
+class="form-select"
+required>
+
+<option value="">
+
+Select Controller
+
+</option>
+
+{% for admin in admins %}
+
+<option value="{{ admin.id }}">
+
+{{ admin.name }}
+
+({{ admin.role }})
+
+</option>
+
+{% endfor %}
+
+</select>
+
+</div>
+
+<div class="alert alert-info mb-0">
+
+<i class="fas fa-info-circle me-2"></i>
+
+Only <b>Admin</b> or <b>Super Admin</b> can become a controller.
+
+</div>
+
+</div>
+
+<div class="modal-footer">
+
+<button
+type="button"
+class="btn btn-secondary"
+data-bs-dismiss="modal">
+
+Cancel
+
+</button>
+
+<button
+type="submit"
+class="btn btn-primary">
+
+<i class="fas fa-random me-1"></i>
+
+Transfer Now
+
+</button>
+
+</div>
+
 </form>
 
-            </div>
+</div>
 
-    <script>
+</div>
+
+</div>
+
+<!-- ===================================================== -->
+<!-- PAGINATION -->
+<!-- ===================================================== -->
+
+{% if users.pages > 1 %}
+
+<nav class="mt-4">
+
+<ul class="pagination justify-content-center">
+
+{% if users.has_prev %}
+
+<li class="page-item">
+
+<a
+class="page-link"
+href="{{ url_for('owner.user_control', page=users.prev_num) }}">
+
+Previous
+
+</a>
+
+</li>
+
+{% endif %}
+
+{% for page_num in users.iter_pages(
+left_edge=1,
+right_edge=1,
+left_current=2,
+right_current=2
+) %}
+
+{% if page_num %}
+
+<li class="page-item {% if page_num==users.page %}active{% endif %}">
+
+<a
+class="page-link"
+href="{{ url_for('owner.user_control', page=page_num) }}">
+
+{{ page_num }}
+
+</a>
+
+</li>
+
+{% else %}
+
+<li class="page-item disabled">
+
+<span class="page-link">
+
+...
+
+</span>
+
+</li>
+
+{% endif %}
+
+{% endfor %}
+
+{% if users.has_next %}
+
+<li class="page-item">
+
+<a
+class="page-link"
+href="{{ url_for('owner.user_control', page=users.next_num) }}">
+
+Next
+
+</a>
+
+</li>
+
+{% endif %}
+
+</ul>
+
+</nav>
+
+{% endif %}
+
+<!-- ===================================================== -->
+<!-- FOOTER INFO -->
+<!-- ===================================================== -->
+
+<div class="text-center text-muted mt-3 mb-4">
+
+Showing
+
+<b>
+
+{{ users.items|length }}
+
+</b>
+
+of
+
+<b>
+
+{{ users.total }}
+
+</b>
+
+Users
+
+</div>
+<script>
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    // ==========================
+    // ==========================================
     // ELEMENTS
-    // ==========================
+    // ==========================================
 
-    const searchInput =
-        document.getElementById("searchUser");
+    const searchInput = document.getElementById("searchUser");
+    const roleFilter = document.getElementById("roleFilter");
+    const statusFilter = document.getElementById("statusFilter");
+    const resetFilter = document.getElementById("resetFilter");
 
-    const roleFilter =
-        document.getElementById("roleFilter");
+    const headerCheckbox = document.getElementById("headerCheckbox");
+    const selectAllUsers = document.getElementById("selectAllUsers");
 
-    const statusFilter =
-        document.getElementById("statusFilter");
+    const selectedCount = document.getElementById("selectedCount");
 
-    const resetButton =
-        document.getElementById("resetFilter");
-
-    const rows =
-        document.querySelectorAll("#userTable tbody tr");
+    const bulkForm = document.getElementById("bulkActionForm");
+    const bulkHiddenInputs =
+        document.getElementById("bulkHiddenInputs");
 
 
-    // ==========================
+    // ==========================================
     // SEARCH + FILTER
-    // ==========================
+    // ==========================================
 
-    function filterUsers(){
+    function filterTable(){
 
         const keyword =
-            searchInput.value.toLowerCase().trim();
+            searchInput.value.toLowerCase();
 
         const role =
             roleFilter.value.toLowerCase();
@@ -874,7 +1259,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const status =
             statusFilter.value.toLowerCase();
 
-        rows.forEach(function(row){
+        document.querySelectorAll(
+            "#userTable tbody tr"
+        ).forEach(function(row){
 
             const text =
                 row.innerText.toLowerCase();
@@ -885,76 +1272,54 @@ document.addEventListener("DOMContentLoaded", function () {
             const statusText =
                 row.cells[4].innerText.toLowerCase();
 
-            const matchSearch =
-                text.includes(keyword);
-
-            const matchRole =
-                role === "" ||
-                roleText.includes(role);
-
-            const matchStatus =
-                status === "" ||
-                statusText.includes(status);
+            const show =
+                text.includes(keyword)
+                &&
+                (role=="" || roleText.includes(role))
+                &&
+                (status=="" || statusText.includes(status));
 
             row.style.display =
-                (
-                    matchSearch &&
-                    matchRole &&
-                    matchStatus
-                )
-                ? ""
-                : "none";
+                show ? "" : "none";
 
         });
 
     }
 
-
-    if(searchInput){
-
+    if(searchInput)
         searchInput.addEventListener(
             "keyup",
-            filterUsers
+            filterTable
         );
 
-    }
-
-    if(roleFilter){
-
+    if(roleFilter)
         roleFilter.addEventListener(
             "change",
-            filterUsers
+            filterTable
         );
 
-    }
-
-    if(statusFilter){
-
+    if(statusFilter)
         statusFilter.addEventListener(
             "change",
-            filterUsers
+            filterTable
         );
 
-    }
 
+    // ==========================================
+    // RESET
+    // ==========================================
 
-    // ==========================
-    // RESET FILTER
-    // ==========================
+    if(resetFilter){
 
-    if(resetButton){
-
-        resetButton.addEventListener(
+        resetFilter.addEventListener(
             "click",
             function(){
 
-                searchInput.value = "";
+                searchInput.value="";
+                roleFilter.value="";
+                statusFilter.value="";
 
-                roleFilter.value = "";
-
-                statusFilter.value = "";
-
-                filterUsers();
+                filterTable();
 
             }
         );
@@ -962,75 +1327,22 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // ==========================
-    // TRANSFER MODAL
-    // ==========================
+    // ==========================================
+    // SELECT ALL
+    // ==========================================
 
-    document
-        .querySelectorAll(".transferBtn")
-        .forEach(function(btn){
+    function updateCounter(){
 
-        btn.addEventListener(
-            "click",
-            function(){
-
-                document.getElementById(
-                    "transferUserId"
-                ).value =
-                this.dataset.id;
-
-                document.getElementById(
-                    "transferUserName"
-                ).value =
-                this.dataset.name;
-
-            }
-        );
-
-    });
-
-});
-
-                </script>
-
-    <script>
-
-document.addEventListener("DOMContentLoaded", function(){
-
-    // ==========================
-    // BULK SELECT
-    // ==========================
-
-    const headerCheckbox =
-        document.getElementById("headerCheckbox");
-
-    const selectAllUsers =
-        document.getElementById("selectAllUsers");
-
-    const userCheckboxes =
-        document.querySelectorAll(".userCheckbox");
-
-    const selectedCount =
-        document.getElementById("selectedCount");
-
-    function updateSelectedCount(){
-
-        let count = 0;
-
-        userCheckboxes.forEach(function(box){
-
-            if(box.checked){
-
-                count++;
-
-            }
-
-        });
+        const checked =
+            document.querySelectorAll(
+                ".userCheckbox:checked"
+            );
 
         if(selectedCount){
 
             selectedCount.innerHTML =
-                count + " Selected";
+                checked.length +
+                " Selected";
 
         }
 
@@ -1038,25 +1350,21 @@ document.addEventListener("DOMContentLoaded", function(){
 
     function toggleAll(state){
 
-        userCheckboxes.forEach(function(box){
+        document
+        .querySelectorAll(".userCheckbox")
+        .forEach(function(box){
 
             box.checked = state;
 
         });
 
-        if(headerCheckbox){
-
+        if(headerCheckbox)
             headerCheckbox.checked = state;
 
-        }
-
-        if(selectAllUsers){
-
+        if(selectAllUsers)
             selectAllUsers.checked = state;
 
-        }
-
-        updateSelectedCount();
+        updateCounter();
 
     }
 
@@ -1086,22 +1394,21 @@ document.addEventListener("DOMContentLoaded", function(){
 
     }
 
-    userCheckboxes.forEach(function(box){
+    document
+    .querySelectorAll(".userCheckbox")
+    .forEach(function(box){
 
         box.addEventListener(
             "change",
-            updateSelectedCount
+            updateCounter
         );
 
     });
 
 
-    // ==========================
-    // BULK FORM VALIDATION
-    // ==========================
-
-    const bulkForm =
-        document.getElementById("bulkActionForm");
+    // ==========================================
+    // BULK FORM
+    // ==========================================
 
     if(bulkForm){
 
@@ -1109,19 +1416,14 @@ document.addEventListener("DOMContentLoaded", function(){
             "submit",
             function(e){
 
-                let total = 0;
+                bulkHiddenInputs.innerHTML="";
 
-                userCheckboxes.forEach(function(box){
+                const checked =
+                    document.querySelectorAll(
+                        ".userCheckbox:checked"
+                    );
 
-                    if(box.checked){
-
-                        total++;
-
-                    }
-
-                });
-
-                if(total === 0){
+                if(checked.length===0){
 
                     e.preventDefault();
 
@@ -1133,9 +1435,24 @@ document.addEventListener("DOMContentLoaded", function(){
 
                 }
 
+                checked.forEach(function(box){
+
+                    let input =
+                        document.createElement("input");
+
+                    input.type="hidden";
+
+                    input.name="user_ids";
+
+                    input.value=box.value;
+
+                    bulkHiddenInputs.appendChild(input);
+
+                });
+
                 if(
                     !confirm(
-                        "Apply selected action?"
+                        "Apply this action?"
                     )
                 ){
 
@@ -1149,9 +1466,37 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 
 
-    // ==========================
+    // ==========================================
+    // TRANSFER MODAL
+    // ==========================================
+
+    document
+    .querySelectorAll(".transferBtn")
+    .forEach(function(btn){
+
+        btn.addEventListener(
+            "click",
+            function(){
+
+                document.getElementById(
+                    "transferUserId"
+                ).value =
+                this.dataset.id;
+
+                document.getElementById(
+                    "transferUserName"
+                ).value =
+                this.dataset.name;
+
+            }
+        );
+
+    });
+
+
+    // ==========================================
     // SOCKET.IO
-    // ==========================
+    // ==========================================
 
     if(typeof io !== "undefined"){
 
@@ -1165,7 +1510,6 @@ document.addEventListener("DOMContentLoaded", function(){
 
                     console.log(data);
 
-                    // চাইলে এখানে Bootstrap Toast ব্যবহার করতে পারেন
                     alert(data.message);
 
                 }
