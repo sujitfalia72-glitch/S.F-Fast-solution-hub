@@ -1039,13 +1039,14 @@ def restore_work(id):
 
     return redirect('/owner/dashboard')
 
+
 @owner.route("/owner/user-control")
 @owner_only
 def user_control():
 
     page = request.args.get(
         "page",
-        1,
+        default=1,
         type=int
     )
 
@@ -1058,15 +1059,39 @@ def user_control():
     )
 
     admins = User.query.filter(
-        User.role.in_(
-            ["admin", "super_admin"]
-        )
+        User.role.in_(["admin", "super_admin"])
+    ).order_by(
+        User.name.asc()
     ).all()
+
+    total_users = User.query.count()
+
+    active_users = User.query.filter_by(
+        status="active"
+    ).count()
+
+    blocked_users = User.query.filter_by(
+        status="blocked"
+    ).count()
+
+    deleted_users = User.query.filter_by(
+        status="deleted"
+    ).count()
 
     return render_template(
         "owner/user_control.html",
+
         users=users,
-        admins=admins
+
+        admins=admins,
+
+        total_users=total_users,
+
+        active_users=active_users,
+
+        blocked_users=blocked_users,
+
+        deleted_users=deleted_users
     )
 
 @owner.route("/owner/users/bulk-action", methods=["POST"])
