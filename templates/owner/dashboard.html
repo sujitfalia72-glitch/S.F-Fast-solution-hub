@@ -724,8 +724,11 @@ body{
         🏠 Dashboard
     </a>
 
-    <a class="sidebar-btn" href="#" onclick="showSection('users')">
+    <a href="{{ url_for('owner.user_control') }}"
+        class="btn btn-outline-primary">
+
         👥 User Control
+
     </a>
 
     <a class="sidebar-btn" href="{{ url_for('owner.approval_requests') }}">
