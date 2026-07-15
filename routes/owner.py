@@ -243,8 +243,7 @@ def transfer_user():
         "message": f"{user.name} transferred successfully 🔁"
     })
 
-    return redirect('/owner/dashboard')
-
+    return redirect(url_for("owner.user_control"))
 
 # =================================================
 # 📋 ALL WORKS
@@ -1258,8 +1257,7 @@ def block_user(id):
             "danger"
         )
 
-    return redirect('/owner/dashboard')
-
+    return redirect(url_for("owner.user_control"))
 
 # =================================================
 # 👤 UNBLOCK USER
@@ -1333,7 +1331,7 @@ def unblock_user(id):
             "danger"
         )
 
-    return redirect('/owner/dashboard')
+    return redirect(url_for("owner.user_control"))
 
 # =================================================
 # 🗑 SOFT DELETE USER
@@ -1430,7 +1428,7 @@ def delete_user(id):
             "danger"
         )
 
-    return redirect('/owner/dashboard')
+    return redirect(url_for("owner.user_control"))
 
 
 # =================================================
