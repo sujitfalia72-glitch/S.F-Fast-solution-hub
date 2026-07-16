@@ -841,86 +841,54 @@ Deleted
 
 <td>
 
-<div class="d-flex flex-wrap gap-1">
+<div class="d-flex flex-wrap gap-2">
 
-<a
-href="{{ url_for('owner.user_profile', id=user.id) }}"
-class="btn btn-info btn-sm"
-title="Profile">
-
-<i class="fas fa-user"></i>
-
+<a href="{{ url_for('owner.user_profile', id=user.id) }}"
+   class="btn btn-info btn-sm">
+    <i class="fas fa-user"></i> Profile
 </a>
 
-<button
-type="button"
-class="btn btn-primary btn-sm transferBtn"
-data-id="{{ user.id }}"
-data-name="{{ user.name }}"
-data-bs-toggle="modal"
-data-bs-target="#transferModal"
-title="Transfer">
-
-<i class="fas fa-random"></i>
-
+<button type="button"
+        class="btn btn-primary btn-sm transferBtn"
+        data-id="{{ user.id }}"
+        data-name="{{ user.name }}"
+        data-bs-toggle="modal"
+        data-bs-target="#transferModal">
+    <i class="fas fa-random"></i> Transfer
 </button>
 
 {% if user.status != "blocked" %}
-
-<form
-action="{{ url_for('owner.block_user', id=user.id) }}"
-method="POST"
-class="d-inline">
-
-<button
-type="submit"
-class="btn btn-warning btn-sm"
-onclick="return confirm('Block this user?')">
-
-<i class="fas fa-ban"></i>
-
-</button>
-
+<form action="{{ url_for('owner.block_user', id=user.id) }}"
+      method="POST"
+      class="d-inline">
+    <button type="submit"
+            class="btn btn-warning btn-sm"
+            onclick="return confirm('Block this user?')">
+        <i class="fas fa-ban"></i> Block
+    </button>
 </form>
-
 {% else %}
-
-<form
-action="{{ url_for('owner.unblock_user', id=user.id) }}"
-method="POST"
-class="d-inline">
-
-<button
-type="submit"
-class="btn btn-success btn-sm"
-onclick="return confirm('Unblock this user?')">
-
-<i class="fas fa-check"></i>
-
-</button>
-
+<form action="{{ url_for('owner.unblock_user', id=user.id) }}"
+      method="POST"
+      class="d-inline">
+    <button type="submit"
+            class="btn btn-success btn-sm"
+            onclick="return confirm('Unblock this user?')">
+        <i class="fas fa-check"></i> Unblock
+    </button>
 </form>
-
 {% endif %}
 
 {% if user.role != "owner" %}
-
-<form
-action="{{ url_for('owner.delete_user', id=user.id) }}"
-method="POST"
-class="d-inline">
-
-<button
-type="submit"
-class="btn btn-danger btn-sm"
-onclick="return confirm('Delete this user?')">
-
-<i class="fas fa-trash"></i>
-
-</button>
-
+<form action="{{ url_for('owner.delete_user', id=user.id) }}"
+      method="POST"
+      class="d-inline">
+    <button type="submit"
+            class="btn btn-danger btn-sm"
+            onclick="return confirm('Delete this user?')">
+        <i class="fas fa-trash"></i> Delete
+    </button>
 </form>
-
 {% endif %}
 
 </div>
