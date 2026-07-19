@@ -724,9 +724,19 @@ body{
         🏠 Dashboard
     </a>
 
-    <a href="/admin/chambers-control">
-            👨‍⚕️ Doctor Chamber Control
+    <li class="nav-item">
+
+    <a
+        href="{{ url_for('owner_chambers.chambers_list') }}"
+        class="nav-link">
+
+        <i class="fas fa-hospital"></i>
+
+        <span>Chamber Control</span>
+
     </a>
+
+    </li>
 
     <a href="{{ url_for('owner.user_control') }}"
         class="btn btn-outline-primary">
