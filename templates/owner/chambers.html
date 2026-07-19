@@ -492,68 +492,65 @@ Owner | Chamber Control
 
                         <td>
 
-                            <div class="d-flex justify-content-center flex-wrap gap-1">
+                            <div class="d-flex flex-wrap justify-content-center gap-2">
 
-                                <!-- VIEW -->
-                                <a
-                                    href="{{ url_for('owner_chambers.chamber_details', chamber_id=chamber.id) }}"
-                                    class="btn btn-primary action-btn"
-                                    title="View">
+    <!-- VIEW -->
+    <a href="{{ url_for('owner_chambers.chamber_details', chamber_id=chamber.id) }}"
+       class="btn btn-primary action-btn"
+       title="View">
 
-                                    <i class="fas fa-eye"></i>
+        <i class="fas fa-eye me-1"></i>
+        View
 
-                                </a>
+    </a>
 
-                                <!-- EDIT -->
-                                <a
-                                    href="{{ url_for('owner_chambers.edit_chamber', chamber_id=chamber.id) }}"
-                                    class="btn btn-warning action-btn"
-                                    title="Edit">
+    <!-- EDIT -->
+    <a href="{{ url_for('owner_chambers.edit_chamber', chamber_id=chamber.id) }}"
+       class="btn btn-warning action-btn"
+       title="Edit">
 
-                                    <i class="fas fa-edit"></i>
+        <i class="fas fa-edit me-1"></i>
+        Edit
 
-                                </a>
+    </a>
 
-                                <!-- BLOCK / UNBLOCK -->
+    <!-- BLOCK / UNBLOCK -->
+    {% if chamber.status == "active" %}
 
-                                {% if chamber.status=="active" %}
+    <a href="{{ url_for('owner_chambers.block_chamber', chamber_id=chamber.id) }}"
+       class="btn btn-dark action-btn"
+       onclick="return confirm('Block this chamber?')"
+       title="Block">
 
-                                <a
-                                    href="{{ url_for('owner_chambers.block_chamber', chamber_id=chamber.id) }}"
-                                    class="btn btn-dark action-btn"
-                                    onclick="return confirm('Block this chamber?')"
-                                    title="Block">
+        <i class="fas fa-ban me-1"></i>
+        Block
 
-                                    <i class="fas fa-ban"></i>
+    </a>
 
-                                </a>
+    {% else %}
 
-                                {% else %}
+    <a href="{{ url_for('owner_chambers.unblock_chamber', chamber_id=chamber.id) }}"
+       class="btn btn-success action-btn"
+       onclick="return confirm('Activate this chamber?')"
+       title="Unblock">
 
-                                <a
-                                    href="{{ url_for('owner_chambers.unblock_chamber', chamber_id=chamber.id) }}"
-                                    class="btn btn-success action-btn"
-                                    onclick="return confirm('Activate this chamber?')"
-                                    title="Activate">
+        <i class="fas fa-check me-1"></i>
+        Unblock
 
-                                    <i class="fas fa-check"></i>
+    </a>
 
-                                </a>
+    {% endif %}
 
-                                {% endif %}
+    <!-- DELETE -->
+    <a href="{{ url_for('owner_chambers.delete_chamber', chamber_id=chamber.id) }}"
+       class="btn btn-danger action-btn"
+       onclick="return confirm('Delete this chamber permanently?')"
+       title="Delete">
 
-                                <!-- DELETE -->
+        <i class="fas fa-trash me-1"></i>
+        Delete
 
-                                <a
-                                    href="{{ url_for('owner_chambers.delete_chamber', chamber_id=chamber.id) }}"
-                                    class="btn btn-danger action-btn"
-                                    onclick="return confirm('Delete this chamber permanently?')"
-                                    title="Delete">
-
-                                    <i class="fas fa-trash"></i>
-
-                                </a>
-                                </a>
+    </a>
 
                             </div>
 
@@ -808,12 +805,16 @@ body{
 }
 
 .action-btn{
-    width:38px;
-    height:38px;
-    display:flex;
+    display:inline-flex;
     align-items:center;
     justify-content:center;
+    gap:6px;
+    padding:8px 14px;
     border-radius:10px;
+    width:auto;
+    height:auto;
+    white-space:nowrap;
+    font-weight:600;
 }
 
 /* ================= BADGE ================= */
