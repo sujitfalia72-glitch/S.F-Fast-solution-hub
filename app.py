@@ -89,7 +89,7 @@ print("Loading routes.admin_panel.chambers")
 from routes.admin_panel.chambers import admin_chambers
 from routes.owner_chambers import owner_chambers
 
-app.register_blueprint(owner_chambers)
+
 print("Loading routes.doctor")
 from routes.doctor import doctor_bp
 
