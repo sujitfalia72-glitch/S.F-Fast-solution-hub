@@ -59,3 +59,12 @@ def role_required(*roles):
         return wrapper
 
     return decorator
+
+def owner_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if session.get("role") != "owner":
+            flash("Owner login required.", "danger")
+            return redirect(url_for("auth.login"))
+        return f(*args, **kwargs)
+    return decorated_function
