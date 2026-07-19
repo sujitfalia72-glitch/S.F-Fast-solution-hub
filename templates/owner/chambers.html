@@ -38,7 +38,7 @@ Owner | Chamber Control
 
             <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
 
-                <a href="{{ url_for('owner.owner_dashboard') }}">
+                <a href="{{ url_for('owner.owner_dashboard') }}"
                    class="btn btn-outline-primary rounded-pill px-4">
 
                     <i class="fas fa-chart-line"></i>
@@ -808,20 +808,18 @@ body{
 
 }
 
-.btn-sm{
-
+.action-btn{
     width:38px;
-
     height:38px;
-
     display:flex;
-
     align-items:center;
-
     justify-content:center;
-
+    border-radius:10px;
 }
-
+.btn-sm{
+    border-radius:10px;
+    padding:6px 12px;
+}    
 /* ================= BADGE ================= */
 
 .badge{
