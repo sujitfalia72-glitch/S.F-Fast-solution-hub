@@ -87,7 +87,7 @@ from routes.chamber.auth import chamber
 
 print("Loading routes.admin_panel.chambers")
 from routes.admin_panel.chambers import admin_chambers
-from routes.owner.chambers import owner_chambers
+from routes.owner_panel.chambers import owner_chambers
 
 
 print("Loading routes.doctor")
