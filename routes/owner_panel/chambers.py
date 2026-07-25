@@ -11,7 +11,8 @@ from extensions import db
 
 from models.user import User
 from models.chamber import Chamber
-
+from models.chamber_profile import ChamberProfile
+from models.doctor import Doctor
 from utils.decorators import owner_required
 
 
@@ -82,26 +83,17 @@ def chambers_list():
 # ==========================================
 # CHAMBER DETAILS
 # ==========================================
-
 @owner_chambers.route("/chamber/<int:chamber_id>")
 @owner_required
 def chamber_details(chamber_id):
 
     chamber = Chamber.query.get_or_404(chamber_id)
 
-    profile = ChamberProfile.query.filter_by(
-        chamber_id=chamber.id
-    ).first()
-
-    doctors = Doctor.query.filter_by(
-        chamber_id=chamber.id
-    ).all()
-
     return render_template(
         "owner/chamber_details.html",
         chamber=chamber,
-        profile=profile,
-        doctors=doctors
+        profile=chamber.profile,
+        doctors=chamber.doctors
     )
 
 # ==========================================
@@ -131,9 +123,12 @@ def edit_chamber(chamber_id):
             chamber.phone
         )
 
-        chamber.address = request.form.get(
-            "address",
-            chamber.address
+        profile = chamber.profile
+
+        if profile:
+            profile.address = request.form.get(
+                "address",
+                profile.address
         )
 
         db.session.commit()
