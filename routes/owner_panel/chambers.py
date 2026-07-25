@@ -87,15 +87,22 @@ def chambers_list():
 @owner_required
 def chamber_details(chamber_id):
 
-    chamber = Chamber.query.get_or_404(
-        chamber_id
-    )
+    chamber = Chamber.query.get_or_404(chamber_id)
+
+    profile = ChamberProfile.query.filter_by(
+        chamber_id=chamber.id
+    ).first()
+
+    doctors = Doctor.query.filter_by(
+        chamber_id=chamber.id
+    ).all()
 
     return render_template(
         "owner/chamber_details.html",
-        chamber=chamber
+        chamber=chamber,
+        profile=profile,
+        doctors=doctors
     )
-
 
 # ==========================================
 # EDIT CHAMBER
