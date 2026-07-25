@@ -258,127 +258,200 @@ body{
 
 <div class="container py-4">
 
-<a href="{{ url_for('owner_chambers.chambers_list') }}" class="back-btn">
+    <!-- ================= BACK ================= -->
 
-← Back to Chambers
+    <a href="{{ url_for('owner_chambers.chambers_list') }}"
+       class="back-btn">
 
-</a>
+        ← Back to Chambers
 
-{% if profile and profile.cover_image %}
+    </a>
 
-<div class="cover">
+    <!-- ================= COVER IMAGE ================= -->
 
-<img src="{{ profile.cover_image }}">
+    <div class="cover">
 
-</div>
+        {% if profile and profile.cover_image %}
 
-{% else %}
+            <img src="{{ profile.cover_image }}"
+                 alt="{{ chamber.name }}">
 
-<div class="cover">
+        {% else %}
 
-<img src="https://via.placeholder.com/1200x260?text=Chamber+Cover">
+            <img src="https://via.placeholder.com/1200x260?text=Chamber+Cover"
+                 alt="Cover">
 
-</div>
+        {% endif %}
 
-{% endif %}
+    </div>
 
-<div class="profile-box">
+    <!-- ================= PROFILE ================= -->
 
-<div class="profile-image">
+    <div class="profile-box">
 
-{% if profile and profile.profile_image %}
+        <div class="profile-image">
 
-<img src="{{ profile.profile_image }}">
+            {% if profile and profile.profile_image %}
 
-{% else %}
+                <img src="{{ profile.profile_image }}"
+                     alt="{{ chamber.name }}">
 
-<img src="https://via.placeholder.com/150?text=Chamber">
+            {% else %}
 
-{% endif %}
+                <img src="https://via.placeholder.com/150?text=Chamber"
+                     alt="Profile">
 
-</div>
+            {% endif %}
 
-<div class="profile-info">
+        </div>
 
-<h2>{{ chamber.name }}</h2>
+        <div class="profile-info">
 
-<p class="info"><b>Username :</b> {{ chamber.username }}</p>
+            <h2>{{ chamber.name }}</h2>
 
-<p class="info"><b>Phone :</b> {{ chamber.phone or "-" }}</p>
+            <p class="info">
+                <strong>Username :</strong>
+                {{ chamber.username }}
+            </p>
 
-<p class="info"><b>Email :</b> {{ profile.email if profile else "-" }}</p>
+            <p class="info">
+                <strong>Phone :</strong>
+                {{ chamber.phone or "-" }}
+            </p>
 
-<p class="info"><b>Website :</b> {{ profile.website if profile else "-" }}</p>
+            <p class="info">
+                <strong>Email :</strong>
+                {{ profile.email if profile else "-" }}
+            </p>
 
-<p class="info"><b>Area :</b> {{ profile.area if profile else "-" }}</p>
+            <p class="info">
+                <strong>Website :</strong>
+                {{ profile.website if profile else "-" }}
+            </p>
 
-<p class="info"><b>Address :</b> {{ profile.address if profile else "-" }}</p>
+            <p class="info">
+                <strong>Area :</strong>
+                {{ profile.area if profile else "-" }}
+            </p>
 
-<p class="info"><b>Description :</b> {{ profile.description if profile else "-" }}</p>
+            <p class="info">
+                <strong>Address :</strong>
+                {{ profile.address if profile else "-" }}
+            </p>
 
-{% if chamber.status=="active" %}
+            <p class="info">
+                <strong>Description :</strong><br>
+                {{ profile.description if profile else "No Description Available" }}
+            </p>
 
-<span class="status active">ACTIVE</span>
+            {% if chamber.status == "active" %}
 
-{% else %}
+                <span class="status active">
 
-<span class="status blocked">BLOCKED</span>
+                    ACTIVE
 
-{% endif %}
+                </span>
 
-</div>
+            {% else %}
 
-</div>
+                <span class="status blocked">
 
-<h3 class="section-title">
+                    BLOCKED
 
-Doctors ({{ doctors|length }})
+                </span>
 
-</h3>
+            {% endif %}
 
-{% if doctors %}
+        </div>
 
-<div class="doctor-grid">
+    </div>
 
+    <!-- ================= DOCTORS ================= -->
+
+    <h3 class="section-title">
+
+        Doctors ({{ doctors|length }})
+
+    </h3>
+
+    {% if doctors %}
+
+    <div class="doctor-grid">
 {% for d in doctors %}
 
 <div class="doctor-card">
 
+    <!-- ================= DOCTOR IMAGE ================= -->
+
     <div class="doctor-image">
 
         {% if d.profile_photo %}
-            <img src="{{ d.profile_photo }}" alt="{{ d.name }}">
+
+            <img src="{{ d.profile_photo }}"
+                 alt="{{ d.name }}">
+
         {% else %}
-            <img src="https://via.placeholder.com/500x300?text=Doctor" alt="Doctor">
+
+            <img src="https://via.placeholder.com/600x400?text=Doctor"
+                 alt="Doctor">
+
         {% endif %}
 
     </div>
+
+    <!-- ================= DOCTOR INFO ================= -->
 
     <div class="doctor-body">
 
         <h4>{{ d.name }}</h4>
 
-        <p><b>Degree:</b> {{ d.degree }}</p>
+        <p>
+            <strong>Degree :</strong>
+            {{ d.degree or "-" }}
+        </p>
 
-        <p><b>Specialization:</b> {{ d.specialization }}</p>
+        <p>
+            <strong>Specialization :</strong>
+            {{ d.specialization or "-" }}
+        </p>
 
-        <p><b>Hospital:</b> {{ d.hospital }}</p>
+        <p>
+            <strong>Hospital :</strong>
+            {{ d.hospital or "-" }}
+        </p>
 
-        <p><b>Experience:</b> {{ d.experience }}</p>
+        <p>
+            <strong>Experience :</strong>
+            {{ d.experience or "-" }}
+        </p>
 
-        <p><b>Fee:</b> ₹{{ d.consultation_fee }}</p>
+        <p>
+            <strong>Consultation Fee :</strong>
+            ₹{{ d.consultation_fee or 0 }}
+        </p>
 
         <div class="action">
 
-            <a href="#" class="btn-custom view">View</a>
+            <a href="{{ url_for('owner_doctors.doctor_details', doctor_id=d.id) }}"
+               class="btn-custom view">
 
-            <a href="#" class="btn-custom edit">Edit</a>
+                View
+
+            </a>
+
+            <a href="{{ url_for('owner_doctors.edit_doctor', doctor_id=d.id) }}"
+               class="btn-custom edit">
+
+                Edit
+
+            </a>
 
         </div>
 
     </div>
 
 </div>
+
 {% endfor %}
 
 </div>
@@ -387,9 +460,11 @@ Doctors ({{ doctors|length }})
 
 <div class="empty">
 
-<h3>No Doctors Added</h3>
+    <h3>No Doctors Found</h3>
 
-<p>This chamber has no doctors yet.</p>
+    <p>
+        This chamber doesn't have any doctors yet.
+    </p>
 
 </div>
 
@@ -398,3 +473,4 @@ Doctors ({{ doctors|length }})
 </div>
 
 {% endblock %}
+
