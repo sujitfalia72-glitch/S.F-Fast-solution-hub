@@ -133,47 +133,37 @@ body{
 }
 
 .doctor-card{
-
     background:#fff;
-
     border-radius:18px;
-
     overflow:hidden;
-
     box-shadow:0 8px 20px rgba(0,0,0,.08);
-
 }
 
-.doctor-card img{
-
+.doctor-image{
     width:100%;
-
     height:220px;
+    overflow:hidden;
+}
 
+.doctor-image img{
+    width:100%;
+    height:220px;
     object-fit:cover;
-
+    display:block;
 }
 
 .doctor-body{
-
     padding:18px;
-
 }
 
 .doctor-body h4{
-
     margin-bottom:8px;
-
 }
 
 .doctor-body p{
-
     margin:5px 0;
-
     color:#64748b;
-
 }
-
 .action{
 
     margin-top:15px;
@@ -336,47 +326,41 @@ Doctors ({{ doctors|length }})
 
 <div class="doctor-card">
 
-{% if d.profile_photo %}
+    <div class="doctor-image">
+        {% if d.profile_photo %}
+            <img src="{{ d.profile_photo }}" alt="{{ d.name }}">
+        {% else %}
+            <img src="https://via.placeholder.com/500x300?text=Doctor" alt="Doctor">
+        {% endif %}
+    </div>
 
-<img src="{{ d.profile_photo }}">
+    <div class="doctor-body">
 
-{% else %}
+        <h4>{{ d.name }}</h4>
 
-<img src="https://via.placeholder.com/500x300?text=Doctor">
+        <p><b>Degree:</b> {{ d.degree }}</p>
 
-{% endif %}
+        <p><b>Specialization:</b> {{ d.specialization }}</p>
 
-<div class="doctor-body">
+        <p><b>Hospital:</b> {{ d.hospital }}</p>
 
-<h4>{{ d.name }}</h4>
+        <p><b>Experience:</b> {{ d.experience }}</p>
 
-<p><b>Degree:</b> {{ d.degree }}</p>
+        <p><b>Fee:</b> ₹{{ d.consultation_fee }}</p>
 
-<p><b>Specialization:</b> {{ d.specialization }}</p>
+        <div class="action">
 
-<p><b>Hospital:</b> {{ d.hospital }}</p>
+            <a href="#" class="btn-custom view">
+                View
+            </a>
 
-<p><b>Experience:</b> {{ d.experience }}</p>
+            <a href="#" class="btn-custom edit">
+                Edit
+            </a>
 
-<p><b>Fee:</b> ₹{{ d.consultation_fee }}</p>
+        </div>
 
-<div class="action">
-
-<a href="#" class="btn-custom view">
-
-View
-
-</a>
-
-<a href="#" class="btn-custom edit">
-
-Edit
-
-</a>
-
-</div>
-
-</div>
+    </div>
 
 </div>
 
