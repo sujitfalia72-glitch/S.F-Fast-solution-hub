@@ -1,52 +1,27 @@
 {% extends "base.html" %}
 
-{% block title %}
-Chamber Details
-{% endblock %}
+{% block title %}Chamber Details{% endblock %}
 
 {% block content %}
 
 <style>
 
 body{
-    background:linear-gradient(135deg,#eef4ff,#f8fbff);
+    background:#f4f7fb;
     font-family:Inter,sans-serif;
 }
 
 .container{
-    max-width:1100px;
+    max-width:1200px;
     margin:auto;
 }
 
-/* HEADER */
-.header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:20px;
-}
-
-.header h2{
-    color:#0f172a;
-}
-
-.btn{
-    background:linear-gradient(135deg,#2563eb,#4f46e5);
-    color:white;
-    padding:10px 16px;
-    border-radius:12px;
-    text-decoration:none;
-    font-weight:600;
-}
-
-/* COVER IMAGE */
 .cover{
-    width:100%;
-    height:200px;
-    margin-bottom:15px;
-    border-radius:15px;
+    height:260px;
+    border-radius:20px;
     overflow:hidden;
-    box-shadow:0 8px 20px rgba(0,0,0,0.05);
+    position:relative;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
 }
 
 .cover img{
@@ -55,190 +30,371 @@ body{
     object-fit:cover;
 }
 
-/* PROFILE CARD */
-.profile-card{
-    background:white;
+.profile-box{
+
+    background:#fff;
+
     border-radius:20px;
-    padding:20px;
+
+    margin-top:-70px;
+
+    position:relative;
+
+    padding:25px;
+
     display:flex;
-    gap:20px;
+
     flex-wrap:wrap;
-    margin-bottom:20px;
-    box-shadow:0 10px 25px rgba(0,0,0,0.05);
+
+    gap:25px;
+
+    align-items:center;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
 }
 
-.profile-img img{
-    width:120px;
-    height:120px;
-    border-radius:15px;
+.profile-image img{
+
+    width:150px;
+
+    height:150px;
+
     object-fit:cover;
+
+    border-radius:20px;
+
+    border:6px solid white;
+
 }
 
-.profile-info h3{
-    margin:0;
-    color:#0f172a;
+.profile-info{
+
+    flex:1;
+
 }
 
-.profile-info p{
+.profile-info h2{
+
+    margin-bottom:10px;
+
+}
+
+.info{
+
+    margin:6px 0;
+
     color:#64748b;
-    margin:5px 0;
+
 }
 
-/* DOCTOR GRID */
+.status{
+
+    display:inline-block;
+
+    padding:6px 14px;
+
+    border-radius:20px;
+
+    color:#fff;
+
+    font-size:13px;
+
+}
+
+.active{
+
+    background:#22c55e;
+
+}
+
+.blocked{
+
+    background:#ef4444;
+
+}
+
 .section-title{
-    margin:20px 0 10px;
-    color:#0f172a;
+
+    margin:35px 0 20px;
+
+    font-weight:bold;
+
 }
 
 .doctor-grid{
+
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:15px;
+
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+
+    gap:20px;
+
 }
 
-.card{
-    background:white;
-    padding:15px;
-    border-radius:16px;
-    box-shadow:0 8px 20px rgba(0,0,0,0.05);
+.doctor-card{
+
+    background:#fff;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+
 }
 
-.card h4{
-    margin:0;
-    color:#0f172a;
+.doctor-card img{
+
+    width:100%;
+
+    height:220px;
+
+    object-fit:cover;
+
 }
 
-.card p{
+.doctor-body{
+
+    padding:18px;
+
+}
+
+.doctor-body h4{
+
+    margin-bottom:8px;
+
+}
+
+.doctor-body p{
+
     margin:5px 0;
+
     color:#64748b;
-    font-size:13px;
+
 }
 
-.card-actions{
-    margin-top:10px;
+.action{
+
+    margin-top:15px;
+
     display:flex;
-    gap:8px;
+
+    gap:10px;
+
 }
 
-.card-actions a{
-    padding:6px 10px;
-    border-radius:8px;
-    font-size:12px;
-    text-decoration:none;
-    color:white;
-}
+.btn-custom{
 
-.view-btn{
-    background:#22c55e;
-}
+    flex:1;
 
-.edit-btn{
-    background:#f59e0b;
-}
-
-/* EMPTY */
-.empty{
     text-align:center;
-    padding:40px;
+
+    padding:10px;
+
+    border-radius:10px;
+
+    color:#fff;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+}
+
+.view{
+
+    background:#2563eb;
+
+}
+
+.edit{
+
+    background:#f59e0b;
+
+}
+
+.back-btn{
+
+    display:inline-block;
+
+    margin-bottom:20px;
+
+    background:#2563eb;
+
+    color:#fff;
+
+    padding:10px 18px;
+
+    border-radius:10px;
+
+    text-decoration:none;
+
+}
+
+.empty{
+
+    background:#fff;
+
+    border-radius:20px;
+
+    padding:60px;
+
+    text-align:center;
+
     color:#64748b;
+
 }
 
 </style>
 
-<div class="container">
+<div class="container py-4">
 
-    <!-- HEADER -->
-    <div class="header">
-        <h2>{{ chamber.name }}</h2>
+<a href="{{ url_for('owner_chambers.chambers_list') }}" class="back-btn">
 
-        <a href="/admin/chambers" class="btn">
-            ← Back
-        </a>
-    </div>
+← Back to Chambers
 
-    <!-- COVER IMAGE -->
-    {% if profile and profile.cover_image %}
-    <div class="cover">
-        <img src="{{ profile.cover_image }}">
-    </div>
-    {% endif %}
+</a>
 
-    <!-- PROFILE -->
-    <div class="profile-card">
+{% if profile and profile.cover_image %}
 
-        <div class="profile-img">
-            {% if profile and profile.image %}
-                <img src="{{ profile.image }}" alt="Profile">
-            {% else %}
-                <img src="https://via.placeholder.com/120">
-            {% endif %}
-        </div>
+<div class="cover">
 
-        <div class="profile-info">
-
-            <h3>{{ chamber.name }}</h3>
-
-            <p>📞 {{ chamber.phone }}</p>
-
-            {% if profile %}
-                <p>📍 {{ profile.address }}</p>
-                <p>✉️ {{ profile.email }}</p>
-                <p>🌐 {{ profile.website }}</p>
-                <p>📝 {{ profile.description }}</p>
-            {% else %}
-                <p>No profile data available</p>
-            {% endif %}
-
-        </div>
-
-    </div>
-
-    <!-- DOCTORS -->
-    <h3 class="section-title">Doctors</h3>
-
-    {% if doctors and doctors|length > 0 %}
-
-    <div class="doctor-grid">
-
-        {% for d in doctors %}
-
-        <div class="card">
-
-            <h4>{{ d.name }}</h4>
-            <p>🎓 {{ d.degree }}</p>
-            <p>🩺 {{ d.specialization }}</p>
-            <p>🏥 {{ d.hospital }}</p>
-            <p>⏳ {{ d.experience }} years experience</p>
-
-            <!-- ACTION BUTTONS -->
-            <!-- ACTION BUTTONS -->
-<div class="card-actions">
-
-    <a href="{{ url_for('admin_chambers.doctor_details', doctor_id=d.id) }}"
-       style="background:#22c55e; padding:6px 10px; border-radius:8px; font-size:12px; text-decoration:none; color:white;">
-        View
-    </a>
-
-    <a href="{{ url_for('admin_chambers.edit_doctor', doctor_id=d.id) }}"
-       style="background:#f59e0b; padding:6px 10px; border-radius:8px; font-size:12px; text-decoration:none; color:white;">
-        Edit
-    </a>
+<img src="{{ profile.cover_image }}">
 
 </div>
 
-        </div>
+{% else %}
 
-        {% endfor %}
+<div class="cover">
 
-    </div>
+<img src="https://via.placeholder.com/1200x260?text=Chamber+Cover">
 
-    {% else %}
+</div>
 
-    <div class="empty">
-        No doctors added yet.
-    </div>
+{% endif %}
 
-    {% endif %}
+<div class="profile-box">
+
+<div class="profile-image">
+
+{% if profile and profile.profile_image %}
+
+<img src="{{ profile.profile_image }}">
+
+{% else %}
+
+<img src="https://via.placeholder.com/150?text=Chamber">
+
+{% endif %}
+
+</div>
+
+<div class="profile-info">
+
+<h2>{{ chamber.name }}</h2>
+
+<p class="info"><b>Username :</b> {{ chamber.username }}</p>
+
+<p class="info"><b>Phone :</b> {{ chamber.phone or "-" }}</p>
+
+<p class="info"><b>Email :</b> {{ profile.email if profile else "-" }}</p>
+
+<p class="info"><b>Website :</b> {{ profile.website if profile else "-" }}</p>
+
+<p class="info"><b>Area :</b> {{ profile.area if profile else "-" }}</p>
+
+<p class="info"><b>Address :</b> {{ profile.address if profile else "-" }}</p>
+
+<p class="info"><b>Description :</b> {{ profile.description if profile else "-" }}</p>
+
+{% if chamber.status=="active" %}
+
+<span class="status active">ACTIVE</span>
+
+{% else %}
+
+<span class="status blocked">BLOCKED</span>
+
+{% endif %}
+
+</div>
+
+</div>
+
+<h3 class="section-title">
+
+Doctors ({{ doctors|length }})
+
+</h3>
+
+{% if doctors %}
+
+<div class="doctor-grid">
+
+{% for d in doctors %}
+
+<div class="doctor-card">
+
+{% if d.profile_photo %}
+
+<img src="{{ d.profile_photo }}">
+
+{% else %}
+
+<img src="https://via.placeholder.com/500x300?text=Doctor">
+
+{% endif %}
+
+<div class="doctor-body">
+
+<h4>{{ d.name }}</h4>
+
+<p><b>Degree:</b> {{ d.degree }}</p>
+
+<p><b>Specialization:</b> {{ d.specialization }}</p>
+
+<p><b>Hospital:</b> {{ d.hospital }}</p>
+
+<p><b>Experience:</b> {{ d.experience }}</p>
+
+<p><b>Fee:</b> ₹{{ d.consultation_fee }}</p>
+
+<div class="action">
+
+<a href="#" class="btn-custom view">
+
+View
+
+</a>
+
+<a href="#" class="btn-custom edit">
+
+Edit
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% else %}
+
+<div class="empty">
+
+<h3>No Doctors Added</h3>
+
+<p>This chamber has no doctors yet.</p>
+
+</div>
+
+{% endif %}
 
 </div>
 
