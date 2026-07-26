@@ -432,18 +432,15 @@ body{
 
         <div class="action">
 
-            <span>{{ d.name }}</span>
+    <a href="{{ url_for('owner_doctors.doctor_details', doctor_id=d.id) }}"
+       class="btn-custom view">
+        View
+    </a>
 
-                View
-
-            </a>
-
-            <a href="{{ url_for('owner_doctors.edit_doctor', doctor_id=d.id) }}"
-               class="btn-custom edit">
-
-                Edit
-
-            </a>
+    <a href="{{ url_for('owner_doctors.edit_doctor', doctor_id=d.id) }}"
+       class="btn-custom edit">
+        Edit
+    </a>
 
         </div>
 
