@@ -1,0 +1,352 @@
+{% extends "base.html" %}
+
+{% block title %}Owner Doctors{% endblock %}
+
+{% block content %}
+
+<style>
+
+body{
+    background:#f4f7fb;
+    font-family:Inter,Arial,sans-serif;
+}
+
+.container{
+    max-width:1300px;
+    margin:auto;
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.title{
+    font-size:30px;
+    font-weight:700;
+    color:#0f172a;
+}
+
+.search-box{
+    display:flex;
+    gap:10px;
+}
+
+.search-box input{
+    width:280px;
+    padding:12px 15px;
+    border:1px solid #dbe2ea;
+    border-radius:10px;
+    outline:none;
+}
+
+.search-box button{
+    border:none;
+    padding:12px 22px;
+    border-radius:10px;
+    background:#2563eb;
+    color:#fff;
+    font-weight:600;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(330px,1fr));
+    gap:25px;
+}
+
+.card{
+    background:#fff;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-6px);
+}
+
+.photo{
+    height:240px;
+    background:#e5e7eb;
+}
+
+.photo img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.body{
+    padding:20px;
+}
+
+.body h3{
+    margin-bottom:12px;
+    color:#0f172a;
+}
+
+.item{
+    margin:8px 0;
+    color:#475569;
+}
+
+.badge{
+    display:inline-block;
+    margin-top:10px;
+    padding:6px 14px;
+    border-radius:30px;
+    color:#fff;
+    font-size:13px;
+    font-weight:700;
+}
+
+.green{
+    background:#16a34a;
+}
+
+.red{
+    background:#dc2626;
+}
+
+.actions{
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+}
+
+.btn{
+    flex:1;
+    text-align:center;
+    text-decoration:none;
+    color:#fff;
+    padding:10px;
+    border-radius:10px;
+    font-weight:600;
+}
+
+.view{
+    background:#2563eb;
+}
+
+.edit{
+    background:#f59e0b;
+}
+
+.delete{
+    background:#dc2626;
+}
+
+.empty{
+    background:#fff;
+    border-radius:20px;
+    padding:80px;
+    text-align:center;
+    color:#64748b;
+}
+
+@media(max-width:768px){
+
+.search-box{
+    width:100%;
+}
+
+.search-box input{
+    width:100%;
+}
+
+.grid{
+    grid-template-columns:1fr;
+}
+
+}
+
+</style>
+
+<div class="container py-4">
+
+<div class="header">
+
+<div class="title">
+Doctors ({{ doctors|length }})
+</div>
+
+<form class="search-box" method="GET">
+
+<input
+type="text"
+name="search"
+placeholder="Search doctor..."
+value="{{ search }}">
+
+<button type="submit">
+
+Search
+
+</button>
+
+</form>
+
+</div>
+
+{% if doctors %}
+
+<div class="grid">
+
+{% for doctor in doctors %}
+
+<div class="card">
+
+<div class="photo">
+
+{% if doctor.profile_photo %}
+
+<img src="{{ doctor.profile_photo }}">
+
+{% else %}
+
+<img src="https://via.placeholder.com/600x400?text=Doctor">
+
+{% endif %}
+
+</div>
+
+<div class="body">
+
+<h3>
+
+{{ doctor.name }}
+
+</h3>
+
+<div class="item">
+
+<strong>Degree :</strong>
+
+{{ doctor.degree }}
+
+</div>
+
+<div class="item">
+
+<strong>Specialization :</strong>
+
+{{ doctor.specialization or "-" }}
+
+</div>
+
+<div class="item">
+
+<strong>Hospital :</strong>
+
+{{ doctor.hospital or "-" }}
+
+</div>
+
+<div class="item">
+
+<strong>Experience :</strong>
+
+{{ doctor.experience or "-" }}
+
+</div>
+
+<div class="item">
+
+<strong>Fee :</strong>
+
+₹{{ doctor.consultation_fee }}
+
+</div>
+
+<div class="item">
+
+<strong>Views :</strong>
+
+{{ doctor.views }}
+
+</div>
+
+{% if doctor.verified %}
+
+<span class="badge green">
+
+Verified
+
+</span>
+
+{% else %}
+
+<span class="badge red">
+
+Not Verified
+
+</span>
+
+{% endif %}
+
+<div class="actions">
+
+<a
+href="{{ url_for('owner_doctors.doctor_details',doctor_id=doctor.id) }}"
+class="btn view">
+
+View
+
+</a>
+
+<a
+href="{{ url_for('owner_doctors.edit_doctor',doctor_id=doctor.id) }}"
+class="btn edit">
+
+Edit
+
+</a>
+
+<a
+href="{{ url_for('owner_doctors.delete_doctor',doctor_id=doctor.id) }}"
+class="btn delete"
+onclick="return confirm('Delete this doctor?')">
+
+Delete
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% else %}
+
+<div class="empty">
+
+<h2>
+
+No Doctors Found
+
+</h2>
+
+<p>
+
+There are no doctors available.
+
+</p>
+
+</div>
+
+{% endif %}
+
+</div>
+
+{% endblock %}
