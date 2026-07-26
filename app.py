@@ -84,7 +84,7 @@ from routes.chamber.chamber import chamber_panel
 
 print("Loading routes.chamber.auth")
 from routes.chamber.auth import chamber
-
+from routes.owner_panel.owner_doctors import owner_doctors
 print("Loading routes.admin_panel.chambers")
 from routes.admin_panel.chambers import admin_chambers
 from routes.owner_panel.chambers import owner_chambers
@@ -205,7 +205,8 @@ def create_app():
         admin_chambers,
         chamber,
         doctor_bp,
-        owner_chambers
+        owner_chambers,
+        owner_doctors
     ]
 
     for bp in blueprints:
