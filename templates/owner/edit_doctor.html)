@@ -1,0 +1,324 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Doctor{% endblock %}
+
+{% block content %}
+
+<style>
+
+body{
+    background:#f4f7fb;
+    font-family:Inter,Arial,sans-serif;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+}
+
+.card{
+    background:#fff;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+    padding:30px;
+}
+
+.title{
+    font-size:30px;
+    font-weight:700;
+    color:#0f172a;
+    margin-bottom:25px;
+}
+
+.form-group{
+    margin-bottom:20px;
+}
+
+.form-label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:600;
+    color:#334155;
+}
+
+.form-control{
+    width:100%;
+    padding:12px 15px;
+    border:1px solid #dbe2ea;
+    border-radius:10px;
+    font-size:15px;
+    outline:none;
+    transition:.3s;
+    box-sizing:border-box;
+}
+
+.form-control:focus{
+    border-color:#2563eb;
+    box-shadow:0 0 0 3px rgba(37,99,235,.15);
+}
+
+textarea.form-control{
+    min-height:140px;
+    resize:vertical;
+}
+
+.row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.image-preview{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.image-preview img{
+    width:180px;
+    height:180px;
+    border-radius:18px;
+    object-fit:cover;
+    border:4px solid #fff;
+    box-shadow:0 6px 18px rgba(0,0,0,.15);
+}
+
+.buttons{
+    display:flex;
+    gap:15px;
+    margin-top:30px;
+    flex-wrap:wrap;
+}
+
+.btn{
+    padding:12px 24px;
+    border:none;
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:600;
+    cursor:pointer;
+}
+
+.save{
+    background:#16a34a;
+    color:#fff;
+}
+
+.cancel{
+    background:#64748b;
+    color:#fff;
+}
+
+@media(max-width:768px){
+
+.row{
+    grid-template-columns:1fr;
+}
+
+}
+
+</style>
+
+<div class="container py-4">
+
+<div class="card">
+
+<div class="title">
+
+Edit Doctor
+
+</div>
+
+<form method="POST">
+
+<div class="image-preview">
+
+{% if doctor.profile_photo %}
+
+<img src="{{ doctor.profile_photo }}">
+
+{% else %}
+
+<img src="https://via.placeholder.com/180?text=Doctor">
+
+{% endif %}
+
+</div>
+
+<div class="form-group">
+
+<label class="form-label">
+
+Doctor Name
+
+</label>
+
+<input
+type="text"
+name="name"
+class="form-control"
+value="{{ doctor.name }}"
+required>
+
+</div>
+
+<div class="row">
+
+<div class="form-group">
+
+<label class="form-label">
+
+Degree
+
+</label>
+
+<input
+type="text"
+name="degree"
+class="form-control"
+value="{{ doctor.degree }}">
+
+</div>
+
+<div class="form-group">
+
+<label class="form-label">
+
+Specialization
+
+</label>
+
+<input
+type="text"
+name="specialization"
+class="form-control"
+value="{{ doctor.specialization or '' }}">
+
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="form-group">
+
+<label class="form-label">
+
+Hospital
+
+</label>
+
+<input
+type="text"
+name="hospital"
+class="form-control"
+value="{{ doctor.hospital or '' }}">
+
+</div>
+
+<div class="form-group">
+
+<label class="form-label">
+
+Experience
+
+</label>
+
+<input
+type="text"
+name="experience"
+class="form-control"
+value="{{ doctor.experience or '' }}">
+
+</div>
+
+</div>
+
+<div class="form-group">
+
+<label class="form-label">
+
+Consultation Fee
+
+</label>
+
+<input
+type="number"
+name="consultation_fee"
+class="form-control"
+value="{{ doctor.consultation_fee }}">
+
+</div>
+
+<div class="form-group">
+
+<label class="form-label">
+
+Profile Photo URL
+
+</label>
+
+<input
+type="text"
+name="profile_photo"
+class="form-control"
+value="{{ doctor.profile_photo or '' }}">
+
+</div>
+
+<div class="form-group">
+
+<label class="form-label">
+
+Cover Photo URL
+
+</label>
+
+<input
+type="text"
+name="cover_photo"
+class="form-control"
+value="{{ doctor.cover_photo or '' }}">
+
+</div>
+
+<div class="form-group">
+
+<label class="form-label">
+
+About Doctor
+
+</label>
+
+<textarea
+name="about"
+class="form-control">{{ doctor.about or '' }}</textarea>
+
+</div>
+
+<div class="buttons">
+
+<button
+type="submit"
+class="btn save">
+
+💾 Save Changes
+
+</button>
+
+<a
+href="{{ url_for('owner_doctors.doctor_details', doctor_id=doctor.id) }}"
+class="btn cancel">
+
+Cancel
+
+</a>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+{% endblock %}
