@@ -12,36 +12,34 @@ body{
 }
 
 .container{
-    max-width:1100px;
+    max-width:1200px;
     margin:auto;
 }
 
 .back-btn{
-    display:inline-block;
-    margin-bottom:20px;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
     padding:10px 18px;
     background:#2563eb;
     color:#fff;
     text-decoration:none;
-    border-radius:10px;
+    border-radius:12px;
     font-weight:600;
+    margin-bottom:20px;
 }
 
 .back-btn:hover{
-    background:#1d4ed8;
     color:#fff;
-}
-
-.card{
-    background:#fff;
-    border-radius:20px;
-    overflow:hidden;
-    box-shadow:0 10px 30px rgba(0,0,0,.08);
+    background:#1d4ed8;
 }
 
 .cover{
-    height:250px;
+    height:280px;
+    border-radius:20px;
+    overflow:hidden;
     background:#e5e7eb;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
 }
 
 .cover img{
@@ -50,26 +48,25 @@ body{
     object-fit:cover;
 }
 
-.content{
-    padding:30px;
-}
-
-.profile{
+.profile-box{
+    background:#fff;
+    margin-top:-70px;
+    border-radius:20px;
+    padding:25px;
     display:flex;
     flex-wrap:wrap;
-    gap:30px;
+    gap:25px;
     align-items:center;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
 }
 
 .photo img{
-    width:180px;
-    height:180px;
+    width:170px;
+    height:170px;
     border-radius:20px;
     object-fit:cover;
     border:5px solid #fff;
-    margin-top:-90px;
-    background:#fff;
-    box-shadow:0 5px 20px rgba(0,0,0,.15);
+    box-shadow:0 8px 20px rgba(0,0,0,.15);
 }
 
 .info{
@@ -86,17 +83,60 @@ body{
     color:#475569;
 }
 
-.actions{
+.badge{
+    display:inline-block;
+    margin-top:10px;
+    padding:8px 18px;
+    border-radius:30px;
+    color:#fff;
+    font-weight:700;
+}
+
+.green{
+    background:#16a34a;
+}
+
+.red{
+    background:#dc2626;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
     margin-top:30px;
+}
+
+.stat{
+    background:#fff;
+    border-radius:18px;
+    padding:25px;
+    text-align:center;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+}
+
+.stat h3{
+    margin:0;
+    color:#2563eb;
+    font-size:34px;
+}
+
+.stat p{
+    margin-top:8px;
+    color:#64748b;
+}
+
+.actions{
     display:flex;
-    gap:12px;
     flex-wrap:wrap;
+    gap:12px;
+    margin-top:30px;
 }
 
 .btn{
-    text-decoration:none;
-    padding:10px 18px;
+    padding:12px 22px;
     border-radius:10px;
+    text-decoration:none;
     color:#fff;
     font-weight:600;
 }
@@ -105,19 +145,33 @@ body{
     background:#f59e0b;
 }
 
-.delete{
+.verify{
+    background:#16a34a;
+}
+
+.unverify{
     background:#dc2626;
+}
+
+.delete{
+    background:#7f1d1d;
 }
 
 @media(max-width:768px){
 
-.profile{
-    flex-direction:column;
+.profile-box{
+    margin-top:20px;
     text-align:center;
+    justify-content:center;
+}
+
+.info{
+    width:100%;
 }
 
 .photo img{
-    margin-top:-70px;
+    width:150px;
+    height:150px;
 }
 
 }
@@ -126,14 +180,12 @@ body{
 
 <div class="container py-4">
 
-<a href="{{ url_for('owner_chambers.chambers_list') }}"
+<a href="{{ url_for('owner_doctors.doctors_list') }}"
 class="back-btn">
 
-← Back
+← Back to Doctors
 
 </a>
-
-<div class="card">
 
 <div class="cover">
 
@@ -143,15 +195,13 @@ class="back-btn">
 
 {% else %}
 
-<img src="https://via.placeholder.com/1200x300?text=Doctor">
+<img src="https://via.placeholder.com/1200x300?text=Doctor+Cover">
 
 {% endif %}
 
 </div>
 
-<div class="content">
-
-<div class="profile">
+<div class="profile-box">
 
 <div class="photo">
 
@@ -161,7 +211,7 @@ class="back-btn">
 
 {% else %}
 
-<img src="https://via.placeholder.com/180?text=Doctor">
+<img src="https://via.placeholder.com/200?text=Doctor">
 
 {% endif %}
 
@@ -173,7 +223,7 @@ class="back-btn">
 
 <div class="item">
 <strong>Degree :</strong>
-{{ doctor.degree or "-" }}
+{{ doctor.degree }}
 </div>
 
 <div class="item">
@@ -193,55 +243,116 @@ class="back-btn">
 
 <div class="item">
 <strong>Consultation Fee :</strong>
-₹{{ doctor.consultation_fee or 0 }}
-</div>
-
-<div class="item">
-<strong>Phone :</strong>
-{{ doctor.phone or "-" }}
-</div>
-
-<div class="item">
-<strong>Email :</strong>
-{{ doctor.email or "-" }}
-</div>
-
-<div class="item">
-<strong>Address :</strong>
-{{ doctor.address or "-" }}
+₹{{ doctor.consultation_fee }}
 </div>
 
 <div class="item">
 <strong>About :</strong><br>
-
 {{ doctor.about or "No description available." }}
+</div>
+
+{% if doctor.verified %}
+
+<span class="badge green">
+
+Verified Doctor
+
+</span>
+
+{% else %}
+
+<span class="badge red">
+
+Not Verified
+
+</span>
+
+{% endif %}
+
+</div>
+
+</div>
+
+<div class="stats">
+
+<div class="stat">
+
+<h3>
+
+{{ doctor.views }}
+
+</h3>
+
+<p>Total Views</p>
+
+</div>
+
+<div class="stat">
+
+<h3>
+
+{{ doctor.consultation_fee }}
+
+</h3>
+
+<p>Consultation Fee</p>
+
+</div>
+
+<div class="stat">
+
+<h3>
+
+{{ doctor.created_at.strftime("%d-%m-%Y") }}
+
+</h3>
+
+<p>Created Date</p>
+
+</div>
 
 </div>
 
 <div class="actions">
 
-<a href="{{ url_for('owner_doctors.edit_doctor', doctor_id=doctor.id) }}"
+<a
+href="{{ url_for('owner_doctors.edit_doctor',doctor_id=doctor.id) }}"
 class="btn edit">
 
 Edit Doctor
 
 </a>
 
-<a href="{{ url_for('owner_doctors.delete_doctor', doctor_id=doctor.id) }}"
+{% if doctor.verified %}
+
+<a
+href="{{ url_for('owner_doctors.unverify_doctor',doctor_id=doctor.id) }}"
+class="btn unverify">
+
+Remove Verification
+
+</a>
+
+{% else %}
+
+<a
+href="{{ url_for('owner_doctors.verify_doctor',doctor_id=doctor.id) }}"
+class="btn verify">
+
+Verify Doctor
+
+</a>
+
+{% endif %}
+
+<a
+href="{{ url_for('owner_doctors.delete_doctor',doctor_id=doctor.id) }}"
 class="btn delete"
 onclick="return confirm('Delete this doctor?')">
 
 Delete Doctor
 
 </a>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
 
 </div>
 
